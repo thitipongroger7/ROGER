@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CUI – Upload & History</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #1E3A8A; --sky: #00ACE9;
+      --slate-50: #F8FAFC; --slate-100: #F1F5F9; --slate-200: #E2E8F0;
+      --slate-400: #94A3B8; --slate-500: #64748B; --slate-900: #0F172A;
+      --green-bg: #ECFDF5; --green-text: #047857;
+      --yellow-bg: #FFFBEB; --yellow-text: #B45309;
+      --red-bg: #FFF1F2; --red-text: #BE123C;
+      --purple: #6941E1;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--slate-50); color: var(--slate-900); min-height: 100vh; display: flex; flex-direction: column; }
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.82); backdrop-filter: blur(10px); border-bottom: 1px solid var(--slate-200); box-shadow: 0 4px 24px rgba(0,0,0,0.08); padding: 0 90px; }
+    .nav-inner { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; }
+    .nav-logos { display: flex; align-items: center; gap: 24px; }
+    .nav-logos img { object-fit: contain; }
+    .nav-divider { width: 1.3px; height: 32px; background: var(--slate-200); }
+    .back-btn { display: flex; align-items: center; gap: 8px; background: var(--slate-100); border: none; border-radius: 8px; padding: 10px 18px; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 14px; color: var(--slate-900); cursor: pointer; text-decoration: none; }
+    .back-btn:hover { background: var(--slate-200); }
+    main { flex: 1; display: grid; grid-template-columns: 320px 1fr; gap: 24px; padding: 28px 90px 40px; max-width: 1440px; margin: 0 auto; width: 100%; }
+    .sidebar { display: flex; flex-direction: column; gap: 20px; }
+    .card { background: white; border: 1px solid var(--slate-200); border-radius: 12px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+    .total-card { padding: 24px; }
+    .total-label { font-size: 13px; font-weight: 600; color: var(--slate-500); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 14px; }
+    .total-value { font-size: 46px; font-weight: 700; color: rgba(15,23,42,0.85); line-height: 1; }
+    .dist-card { padding: 28px; }
+    .dist-title { font-size: 17px; font-weight: 700; color: var(--slate-900); margin-bottom: 24px; }
+    .dist-item { margin-bottom: 18px; }
+    .dist-item:last-child { margin-bottom: 0; }
+    .dist-row { display: flex; justify-content: space-between; margin-bottom: 8px; }
+    .dist-name { font-size: 12px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: .5px; }
+    .dist-pct  { font-size: 12px; font-weight: 700; color: var(--slate-500); }
+    .dist-track { height: 9px; background: var(--slate-100); border-radius: 999px; overflow: hidden; }
+    .dist-fill  { height: 100%; background: #1B1464; border-radius: 999px; transition: width .6s ease; }
+    .right-col { display: flex; flex-direction: column; gap: 24px; }
+    .upload-zone { background: white; border: 2.5px dashed var(--slate-200); border-radius: 14px; padding: 48px 40px; display: flex; flex-direction: column; align-items: center; gap: 16px; cursor: pointer; transition: border-color .2s, background .2s; }
+    .upload-zone:hover, .upload-zone.drag { border-color: var(--sky); background: #f0f9ff; border-style: solid; }
+    .upload-zone.uploading { pointer-events: none; opacity: .7; }
+    .upload-icon { width: 80px; height: 80px; background: var(--slate-50); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .upload-icon svg { width: 42px; height: 42px; stroke: var(--slate-400); fill: none; }
+    .upload-title { font-size: 21px; font-weight: 700; color: var(--slate-900); }
+    .upload-sub { font-size: 15px; color: var(--slate-500); text-align: center; max-width: 500px; line-height: 1.6; }
+    .select-btn { background: var(--slate-100); border: none; border-radius: 10px; padding: 12px 30px; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 16px; color: var(--slate-900); cursor: pointer; margin-top: 8px; transition: background .2s; }
+    .select-btn:hover { background: var(--slate-200); }
+    .toast { position: fixed; bottom: 28px; right: 28px; padding: 16px 22px; border-radius: 12px; font-weight: 600; font-size: 15px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); z-index: 999; transform: translateY(80px); opacity: 0; transition: all .35s ease; max-width: 400px; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { background: #ECFDF5; color: #065F46; border: 1px solid #6EE7B7; }
+    .toast.error   { background: #FEF2F2; color: #B91C1C; border: 1px solid #FCA5A5; }
+    .toast.info    { background: #EFF6FF; color: #1E40AF; border: 1px solid #93C5FD; }
+    .train-progress { display: none; background: white; border: 1px solid var(--slate-200); border-radius: 12px; padding: 20px 24px; }
+    .train-progress.show { display: block; }
+    .train-label { font-size: 14px; font-weight: 700; color: var(--slate-900); margin-bottom: 12px; }
+    .progress-track { height: 8px; background: var(--slate-100); border-radius: 999px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--navy), var(--sky)); border-radius: 999px; animation: progressAnim 2s ease infinite; }
+    @keyframes progressAnim { 0%{width:5%} 50%{width:80%} 100%{width:95%} }
+    .train-sub { font-size: 12px; color: var(--slate-500); margin-top: 8px; }
+
+    /* History */
+    .history-card { background: white; border: 1px solid var(--slate-200); border-radius: 14px; overflow: hidden; }
+    .table-wrap { max-height: 360px; overflow-y: auto; }
+    .table-wrap::-webkit-scrollbar { width: 6px; }
+    .table-wrap::-webkit-scrollbar-track { background: var(--slate-50); }
+    .table-wrap::-webkit-scrollbar-thumb { background: var(--slate-200); border-radius: 999px; }
+    .history-header { display: flex; justify-content: space-between; align-items: center; padding: 22px 28px; border-bottom: 1px solid var(--slate-200); flex-wrap: wrap; gap: 12px; }
+    .history-title { font-size: 17px; font-weight: 700; }
+    .filter-wrap { display: flex; align-items: center; gap: 10px; }
+    .filter-input { height: 38px; padding: 0 12px; border: 1px solid var(--slate-200); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--slate-900); outline: none; width: 180px; }
+    .filter-input:focus { border-color: var(--sky); }
+    .filter-clear { font-size: 13px; font-weight: 600; color: var(--slate-400); cursor: pointer; background: none; border: none; }
+    .filter-clear:hover { color: var(--navy); }
+    table { width: 100%; border-collapse: collapse; }
+    thead { background: var(--slate-50); }
+    th { padding: 14px 20px; text-align: left; font-size: 12px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: .5px; }
+    td { padding: 14px 20px; font-size: 14px; color: #475569; border-top: 1px solid var(--slate-100); vertical-align: middle; }
+    td.num { font-weight: 700; color: var(--slate-900); text-align: center; width: 48px; }
+    tr:hover td { background: var(--slate-50); }
+    .badge { display: inline-block; padding: 3px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+    .badge.CRITICAL { background: var(--red-bg); color: var(--red-text); }
+    .badge.WARNING  { background: var(--yellow-bg); color: var(--yellow-text); }
+    .badge.SAFE     { background: var(--green-bg); color: var(--green-text); }
+    .icon-btn { background: none; border: none; cursor: pointer; padding: 6px; border-radius: 6px; transition: background .15s; font-size: 18px; }
+    .icon-btn:hover { background: var(--slate-100); }
+    .detail-btn { background: var(--slate-100); border: none; border-radius: 6px; padding: 5px 12px; font-size: 12px; font-weight: 600; color: var(--navy); cursor: pointer; transition: background .15s; }
+    .detail-btn:hover { background: var(--slate-200); }
+
+    /* Modal */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 500; align-items: center; justify-content: center; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: white; border-radius: 16px; padding: 32px; width: 540px; max-width: 95vw; max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+    .modal-title { font-size: 18px; font-weight: 700; margin-bottom: 20px; color: var(--slate-900); }
+    .modal-section { font-size: 12px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: .5px; margin: 16px 0 8px; }
+    .param-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .param-item { background: var(--slate-50); border-radius: 8px; padding: 10px 14px; }
+    .param-label { font-size: 11px; font-weight: 700; color: var(--slate-400); text-transform: uppercase; margin-bottom: 4px; }
+    .param-value { font-size: 14px; font-weight: 600; color: var(--slate-900); }
+    .result-box { border-radius: 10px; padding: 14px 18px; margin-top: 8px; }
+    .result-box.CRITICAL { background: var(--red-bg); border: 1.5px solid #EF4444; }
+    .result-box.WARNING  { background: var(--yellow-bg); border: 1.5px solid #EAB308; }
+    .result-box.SAFE     { background: var(--green-bg); border: 1.5px solid #22C55E; }
+    .result-box .rl { font-size: 20px; font-weight: 800; }
+    .result-box.CRITICAL .rl { color: var(--red-text); }
+    .result-box.WARNING  .rl { color: #B45309; }
+    .result-box.SAFE     .rl { color: var(--green-text); }
+    .result-box .sub { font-size: 13px; color: var(--slate-500); margin-top: 4px; }
+    .modal-close { margin-top: 20px; width: 100%; padding: 12px; background: var(--slate-100); border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 15px; cursor: pointer; }
+    .modal-close:hover { background: var(--slate-200); }
+
+    /* Note Modal */
+    .note-modal { background: white; border-radius: 16px; padding: 28px; width: 420px; max-width: 95vw; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+    .note-textarea { width: 100%; height: 120px; border: 1px solid var(--slate-200); border-radius: 8px; padding: 12px; font-family: 'DM Sans', sans-serif; font-size: 14px; resize: none; outline: none; margin-top: 12px; }
+    .note-textarea:focus { border-color: var(--sky); }
+    .note-actions { display: flex; gap: 10px; margin-top: 14px; }
+    .note-save { flex: 1; padding: 11px; background: var(--navy); color: white; border: none; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 14px; cursor: pointer; }
+    .note-cancel { padding: 11px 18px; background: var(--slate-100); border: none; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 14px; cursor: pointer; }
+
+    footer { background: white; border-top: 1px solid var(--slate-200); padding: 22px 90px; display: flex; justify-content: space-between; align-items: center; }
+    .footer-copy { font-size: 13px; color: var(--slate-500); }
+    .footer-links { display: flex; gap: 28px; }
+    .footer-links a { font-size: 13px; color: var(--slate-400); text-decoration: none; }
+  </style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logos">
+      <img src="gcme_logo.png" alt="GCME" style="height:42px; object-fit:contain;"/>
+      <div class="nav-divider"></div>
+      <img src="chula_logo.png" alt="Chulalongkorn University" style="height:42px; object-fit:contain;"/>
+    </div>
+    <a href="cui_prediction.html" style="background:#F1F5F9;border:none;border-radius:10px;padding:10px 20px;display:flex;align-items:center;gap:8px;font-family:DM Sans,sans-serif;font-weight:600;font-size:14px;color:#1E293B;text-decoration:none;"><svg width="22" height="22" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18" fill="#F1F5F9"/><path d="M22 12H26C28 12 30 14 30 16V24C30 26 28 28 26 28H22" stroke="#1E293B" stroke-width="2.2" stroke-linecap="round"/><line x1="10" y1="20" x2="24" y2="20" stroke="#1E293B" stroke-width="2.2" stroke-linecap="round"/><polyline points="16,14 10,20 16,26" fill="none" stroke="#1E293B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Back</a>
+  </div>
+</nav>
+
+<main>
+  <aside class="sidebar">
+    <div class="card total-card">
+      <div class="total-label">Total Datasets</div>
+      <div class="total-value" id="totalDatasets">—</div>
+    </div>
+    <div class="card dist-card">
+      <div class="dist-title">Pipe Distribution by Plant</div>
+      <div id="distItems"><div style="color:var(--slate-400);font-size:14px;">Loading...</div></div>
+    </div>
+  </aside>
+
+  <div class="right-col">
+    <div class="upload-zone" id="dropZone"
+         onclick="document.getElementById('fileInput').click()"
+         ondragover="event.preventDefault(); this.classList.add('drag')"
+         ondragleave="this.classList.remove('drag')"
+         ondrop="handleDrop(event)">
+      <div class="upload-icon">
+        <svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+      </div>
+      <div class="upload-title" id="uploadTitle">Upload Industrial Data</div>
+      <div class="upload-sub">Drag and drop Excel (.xlsx) or CSV (.csv) files here, or click to browse</div>
+      <button class="select-btn" onclick="event.stopPropagation(); document.getElementById('fileInput').click()">Select Files</button>
+      <input type="file" id="fileInput" accept=".xlsx,.csv" style="display:none" onchange="handleFile(this)"/>
+    </div>
+
+    <div class="train-progress" id="trainProgress">
+      <div class="train-label" id="trainLabel">🔄 Training model...</div>
+      <div class="progress-track"><div class="progress-fill"></div></div>
+      <div class="train-sub" id="trainSub">This may take 10–60 seconds depending on data size</div>
+    </div>
+
+    <div class="history-card">
+      <div class="history-header">
+        <div class="history-title">Predict Corrosion Risk History</div>
+        <div class="filter-wrap">
+          <input type="text" class="filter-input" id="filterDate" placeholder="Search by date e.g. 21/03/2568" oninput="renderHistory()"/>
+          <button class="filter-clear" onclick="document.getElementById('filterDate').value=''; renderHistory()">Clear</button>
+        </div>
+      </div>
+      <div class="table-wrap"><table>
+        <thead>
+          <tr>
+            <th style="width:48px;">#</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Result</th>
+            <th>Details</th>
+            <th style="width:52px;">Note</th>
+            <th style="width:52px;">Delete</th>
+          </tr>
+        </thead>
+        <tbody id="historyBody">
+          <tr><td colspan="6" style="text-align:center; color:var(--slate-400); padding:32px;">No prediction history yet.</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-copy">© GCME & CHULA Prediction Systems Project 2025–2026</div>
+  <div class="footer-links"><a href="#">Documentation</a><a href="#">System Requirements</a><a href="#">Support</a></div>
+</footer>
+
+<!-- Detail Modal -->
+<div class="modal-overlay" id="detailOverlay" onclick="if(event.target===this) closeDetail()">
+  <div class="modal">
+    <div class="modal-title">🔍 Prediction Details</div>
+    <div class="modal-section">Date & Time</div>
+    <div id="modalDateTime" style="font-size:15px; font-weight:600; color:var(--slate-900);"></div>
+    <div class="modal-section">Input Parameters</div>
+    <div class="param-grid" id="modalParams"></div>
+    <div class="modal-section">Prediction Result</div>
+    <div id="modalResult"></div>
+    <div class="modal-section" id="modalNoteSection">Note</div>
+    <div id="modalNoteText" style="font-size:14px; color:var(--slate-700); background:var(--slate-50); border-radius:8px; padding:10px 14px; min-height:36px;"></div>
+    <button class="modal-close" onclick="closeDetail()">Close</button>
+  </div>
+</div>
+
+<!-- Note Modal -->
+<div class="modal-overlay" id="noteOverlay" onclick="if(event.target===this) closeNote()">
+  <div class="note-modal">
+    <div class="modal-title">📝 Add / Edit Note</div>
+    <textarea class="note-textarea" id="noteText" placeholder="Type your note here..."></textarea>
+    <div class="note-actions">
+      <button class="note-save" onclick="saveNote()">Save</button>
+      <button class="note-cancel" onclick="closeNote()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const API_BASE = "http://localhost:8000";
+  let currentNoteId = null;
+
+  function showToast(msg, type = 'info') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = `toast ${type} show`;
+    setTimeout(() => t.classList.remove('show'), 4500);
+  }
+
+  // ── Upload ──
+  async function uploadFile(file) {
+    if (!file) return;
+    if (!file.name.endsWith('.xlsx') && !file.name.endsWith('.csv')) {
+      showToast('Only .xlsx and .csv files are supported', 'error'); return;
+    }
+    const zone = document.getElementById('dropZone');
+    const progress = document.getElementById('trainProgress');
+    zone.classList.add('uploading');
+    document.getElementById('uploadTitle').textContent = `📂 ${file.name} — Uploading...`;
+    progress.classList.add('show');
+    showToast(`Uploading "${file.name}"...`, 'info');
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await fetch(`${API_BASE}/api/upload`, { method: 'POST', body: formData });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || 'Error occurred');
+      document.getElementById('trainLabel').textContent = '✅ Training complete!';
+      document.getElementById('trainSub').textContent = `Accuracy: ${data.accuracy}% | Rows: ${data.total_rows?.toLocaleString()} | Features: ${data.features_count}`;
+      showToast(`✅ Training complete! Accuracy: ${data.accuracy}%`, 'success');
+      await loadStats();
+      setTimeout(() => progress.classList.remove('show'), 6000);
+    } catch (err) {
+      document.getElementById('trainLabel').textContent = '❌ Error';
+      document.getElementById('trainSub').textContent = err.message;
+      showToast('❌ ' + err.message, 'error');
+    } finally {
+      zone.classList.remove('uploading');
+      document.getElementById('uploadTitle').textContent = 'Upload Industrial Data';
+      document.getElementById('fileInput').value = '';
+    }
+  }
+
+  function handleFile(input) { uploadFile(input.files[0]); }
+  function handleDrop(e) {
+    e.preventDefault();
+    document.getElementById('dropZone').classList.remove('drag');
+    uploadFile(e.dataTransfer.files[0]);
+  }
+
+  // ── Load Stats ──
+  async function loadStats() {
+    try {
+      const res = await fetch(`${API_BASE}/api/stats`);
+      if (!res.ok) return;
+      const data = await res.json();
+      document.getElementById('totalDatasets').textContent = data.total_datasets?.toLocaleString() || '—';
+      const areaCounts = data.area_counts || {};
+      const total = data.total_datasets || 1;
+      const areas = Object.entries(areaCounts);
+      const distItems = document.getElementById('distItems');
+      if (areas.length === 0) {
+        distItems.innerHTML = `<div style="color:var(--slate-400);font-size:14px;">No data available</div>`;
+      } else {
+        const opacities = [1, 0.8, 0.65, 0.5, 0.4];
+        distItems.innerHTML = areas.map(([name, count], i) => {
+          const pct = Math.round(count / total * 100);
+          return `<div class="dist-item">
+            <div class="dist-row"><span class="dist-name">${name}</span><span class="dist-pct">${pct}%</span></div>
+            <div class="dist-track"><div class="dist-fill" style="width:${pct}%;opacity:${opacities[i]??0.35}"></div></div>
+          </div>`;
+        }).join('');
+      }
+    } catch {}
+  }
+
+  // ── Render History ──
+  function renderHistory() {
+    const history = JSON.parse(localStorage.getItem('predictionHistory') || '[]');
+    const filterVal = document.getElementById('filterDate').value.trim().toLowerCase();
+    const filtered = filterVal ? history.filter(h => h.date.toLowerCase().includes(filterVal)) : history;
+    const tbody = document.getElementById('historyBody');
+    if (filtered.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--slate-400);padding:32px;">${filterVal ? 'No records found.' : 'No prediction history yet.'}</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = filtered.map((h, i) => {
+      const level = h.result?.risk_level || 'SAFE';
+      const noteIcon = h.note ? `<svg width='18' height='18' viewBox='0 0 18 18' fill='none'><rect x='2' y='1' width='12' height='16' rx='2' fill='#94A3B8'/><rect x='4' y='5' width='8' height='2' rx='1' fill='white'/><rect x='4' y='8.5' width='8' height='2' rx='1' fill='white'/><rect x='4' y='12' width='5' height='2' rx='1' fill='white'/></svg>` : `<svg width='18' height='18' viewBox='0 0 18 18' fill='none'><rect x='2' y='1' width='12' height='16' rx='2' fill='#CBD5E1'/><rect x='4' y='5' width='8' height='2' rx='1' fill='white'/><rect x='4' y='8.5' width='8' height='2' rx='1' fill='white'/><rect x='4' y='12' width='5' height='2' rx='1' fill='white'/></svg>`;
+      return `<tr>
+        <td class="num">${filtered.length - i}</td>
+        <td>${h.date}</td>
+        <td>${h.time}</td>
+        <td><span class="badge ${level}">${level}</span></td>
+        <td><button class="detail-btn" onclick="openDetail(${h.id})">View Details</button></td>
+        <td style="text-align:center;"><button class="icon-btn" onclick="openNote(${h.id})" title="Note">${noteIcon}</button></td>
+        <td style="text-align:center;"><button class="icon-btn" onclick="deleteRecord(${h.id})" title="Delete"><svg width='18' height='18' viewBox='0 0 18 18' fill='none'><rect x='2' y='5' width='14' height='12' rx='2' fill='#FEF2F2' stroke='#EF4444' stroke-width='1.2'/><rect x='1' y='3' width='16' height='3.5' rx='1.5' fill='#EF4444'/><rect x='6' y='1' width='6' height='3' rx='1' fill='#EF4444'/><line x1='6' y1='8.5' x2='6' y2='14' stroke='#EF4444' stroke-width='1.5' stroke-linecap='round'/><line x1='9' y1='8.5' x2='9' y2='14' stroke='#EF4444' stroke-width='1.5' stroke-linecap='round'/><line x1='12' y1='8.5' x2='12' y2='14' stroke='#EF4444' stroke-width='1.5' stroke-linecap='round'/></svg></button></td>
+      </tr>`;
+    }).join('');
+  }
+
+  // ── Detail Modal ──
+  function openDetail(id) {
+    const history = JSON.parse(localStorage.getItem('predictionHistory') || '[]');
+    const h = history.find(x => x.id === id);
+    if (!h) return;
+    document.getElementById('modalDateTime').textContent = `${h.date}  ${h.time}`;
+    const paramLabels = {
+      Substrate: 'Substrate', Age_Years: 'Age (Years)',
+      Operating_Temperature_C: 'Temperature', Coating_Prime: 'Prime Coating',
+      Coating_Second: 'Secondary Coating', Top_Coat: 'Top Coat',
+      Insulation_Type: 'Insulation', Vapor_Barrier: 'Vapor Barrier',
+      Environment: 'Environment', Jacket_Damage: 'Jacket Damage',
+    };
+    document.getElementById('modalParams').innerHTML = Object.entries(h.input || {}).map(([k, v]) => `
+      <div class="param-item">
+        <div class="param-label">${paramLabels[k] || k}</div>
+        <div class="param-value">${v}</div>
+      </div>`).join('');
+    const r = h.result || {};
+    const level = r.risk_level || 'SAFE';
+    document.getElementById('modalResult').innerHTML = `
+      <div class="result-box ${level}">
+        <div class="rl">${level}</div>
+        <div class="sub">Probability: ${r.probability_pct ?? '—'}% &nbsp;|&nbsp; Next Inspection: ${r.next_inspection_year ?? '—'}</div>
+      </div>`;
+    document.getElementById('modalNoteText').textContent = h.note || '— No note —';
+    document.getElementById('detailOverlay').classList.add('open');
+  }
+
+  function closeDetail() { document.getElementById('detailOverlay').classList.remove('open'); }
+
+  // ── Note Modal ──
+  function openNote(id) {
+    currentNoteId = id;
+    const history = JSON.parse(localStorage.getItem('predictionHistory') || '[]');
+    const h = history.find(x => x.id === id);
+    document.getElementById('noteText').value = h?.note || '';
+    document.getElementById('noteOverlay').classList.add('open');
+  }
+
+  function closeNote() { document.getElementById('noteOverlay').classList.remove('open'); currentNoteId = null; }
+
+  function saveNote() {
+    if (!currentNoteId) return;
+    const history = JSON.parse(localStorage.getItem('predictionHistory') || '[]');
+    const idx = history.findIndex(x => x.id === currentNoteId);
+    if (idx !== -1) {
+      history[idx].note = document.getElementById('noteText').value.trim();
+      localStorage.setItem('predictionHistory', JSON.stringify(history));
+      showToast('✅ Note saved.', 'success');
+      renderHistory();
+    }
+    closeNote();
+  }
+
+  function deleteRecord(id) {
+    if (!confirm('Are you sure you want to delete this record? This action cannot be undone.')) return;
+    const history = JSON.parse(localStorage.getItem('predictionHistory') || '[]');
+    const updated = history.filter(x => x.id !== id);
+    localStorage.setItem('predictionHistory', JSON.stringify(updated));
+    showToast('Record deleted.', 'info');
+    renderHistory();
+  }
+
+  loadStats();
+  renderHistory();
+</script>
+</body>
+</html>

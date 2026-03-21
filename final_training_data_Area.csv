@@ -1,0 +1,244 @@
+﻿Substrate,Age_Years,Operating_Temperature_C,Coating_Prime,Coating_Second,Top_Coat,Insulation_Type,Vapor_Barrier,Environment,Jacket_Damage,Corrosion_Result,Area
+CS,12,30 - <40,zinc ethyl silicate,zinc silicate,zinc silicate,mineral fiber,Unknow,Marine,No,Yes,Unknow
+CS,12,30 - <40,zinc ethyl silicate,zinc silicate,zinc silicate,mineral fiber,Unknow,Marine,Yes,Yes,Unknow
+CS,12,มากกว่าหรือเท่ากับ 200,zinc ethyl silicate,zinc silicate,zinc silicate,mineral fiber,Unknow,Marine,No,Yes(11%)/No(89%),Unknow
+CS,12,มากกว่าหรือเท่ากับ 200,zinc ethyl silicate,zinc silicate,zinc silicate,mineral fiber,Unknow,Marine,Yes,Yes(29%)/No(71%),Unknow
+CS,12,0 - <10,phenolic epoxy,phenolic epoxy,non top coat,mineral fiber,Unknow,Marine,No,No,Unknow
+CS,12,0 - <10,phenolic epoxy,phenolic epoxy,non top coat,mineral fiber,Unknow,Marine,Yes,No,Unknow
+LTCS,12,0 - <10,phenolic epoxy,phenolic epoxy,non top coat,cellular glass,Unknow,Marine,No,No,Unknow
+LTCS,12,0 - <10,phenolic epoxy,phenolic epoxy,non top coat,cellular glass,Unknow,Marine,Yes,No,Unknow
+LTCS,12,140 - <150,rich zinc epoxy,modified epoxy,polyurethane,mineral fiber,Unknow,Marine,No,No,Unknow
+LTCS,12,140 - <150,rich zinc epoxy,modified epoxy,polyurethane,mineral fiber,Unknow,Marine,Yes,No,Unknow
+CS,12,10 - <20,phenolic epoxy,phenolic epoxy,non top coat,cellular glass,Unknow,Marine,Yes,No,Unknow
+CS,12,0 - <10,phenolic epoxy,phenolic epoxy,non top coat,cellular glass,Unknow,Marine,Yes,No,Unknow
+CS,12,0 - <10,phenolic epoxy,phenolic epoxy,non top coat,cellular glass,Unknow,Marine,No,Yes(11%)/No(89%),Unknow
+LTCS,12,30 - <40,phenolic epoxy,phenolic epoxy,non top coat,mineral fiber,Unknow,Marine,No,No,Unknow
+LTCS,12,30 - <40,phenolic epoxy,phenolic epoxy,non top coat,mineral fiber,Unknow,Marine,Yes,No,Unknow
+CS,12,150 - <160,zinc ethyl silicate,zinc silicate,zinc silicate,mineral fiber,Unknow,Marine,No,Yes(67%)/No(33%),Unknow
+CS,12,130 - <140,rich zinc epoxy,modified epoxy,polyurethane,mineral fiber,Unknow,Marine,Yes,Yes(63%)/No(38%),Unknow
+CS,12,150 - <160,zinc ethyl silicate,zinc silicate,zinc silicate,mineral fiber,Unknow,Marine,Yes,Yes,Unknow
+CS,12,130 - <140,rich zinc epoxy,modified epoxy,polyurethane,mineral fiber,Unknow,Marine,No,Yes(40%)/No(60%),Unknow
+CS,12,150 - <160,rich zinc epoxy,modified epoxy,polyurethane,mineral fiber,Unknow,Marine,Yes,No,Unknow
+CS,12,150 - <160,rich zinc epoxy,modified epoxy,polyurethane,mineral fiber,Unknow,Marine,No,Yes(17%)/No(83%),Unknow
+CS,12,50 - <60,phenolic epoxy,phenolic epoxy,non top coat,mineral fiber,Unknow,Marine,No,No,Unknow
+LTCS,12,70 - <80,rich zinc epoxy,modified epoxy,polyurethane,mineral fiber,Unknow,Marine,No,No,Unknow
+CS,12,50 - <60,phenolic epoxy,phenolic epoxy,non top coat,mineral fiber,Unknow,Marine,Yes,No,Unknow
+LTCS,12,30 - <40,phenolic epoxy,phenolic epoxy,non top coat,cellular glass,Unknow,Marine,Yes,No,Unknow
+LTCS,12,30 - <40,phenolic epoxy,phenolic epoxy,non top coat,cellular glass,Unknow,Marine,No,No,Unknow
+LTCS,12,80 - <90,rich zinc epoxy,modified epoxy,polyurethane,mineral fiber,Unknow,Marine,No,No,Unknow
+LTCS,12,(10) - <0,phenolic epoxy,phenolic epoxy,non top coat,cellular glass,Unknow,Marine,Yes,No,Unknow
+LTCS,12,(10) - <0,phenolic epoxy,phenolic epoxy,non top coat,cellular glass,Unknow,Marine,No,No,Unknow
+CS,25,140 - <150,inorganic zinc,non 2nd coat,epoxy polyamide,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,28,190 - <200,inorganic zinc,non 2nd coat,epoxy polyamide,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,24,180 - <190,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,25,140 - <150,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,26,120 - <130,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes(40%)/No(60%),Unknow
+CS,28,40 - <50,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,26,130 - <140,inorganic zinc,non 2nd coat,epoxy polyamide,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,27,110 - <120,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,26,110 - <120,inorganic zinc,non 2nd coat,epoxy polyamide,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,25,110 - <120,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,25,110 - <120,inorganic zinc,non 2nd coat,epoxy polyamide,mineral fiber,Unknow,Industrial,Unknow,Yes(50%)/No(50%),Unknow
+CS,24,90 - <100,"high-build epoxy, 125 (5)",non 2nd coat,"epoxy, 125 (5)",mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,26,110 - <120,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes(33%)/No(67%),Unknow
+CS,23,0 - <10,inorganic zinc,non 2nd coat,silicone aluminum,Cellular glass,Unknow,Industrial,Unknow,No,Unknow
+CS,25,80 - <90,inorganic zinc,non 2nd coat,epoxy polyamide,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,26,80 - <90,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,26,120 - <130,inorganic zinc,non 2nd coat,epoxy polyamide,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,28,80 - <90,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,25,50 - <60,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,15,140 - <150,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,Yes,Unknow
+CS,23,0 - <10,inorganic zinc,non 2nd coat,epoxy polyamide,Cellular glass,Unknow,Industrial,Unknow,No,Unknow
+CS,27,80 - <90,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,Yes,Unknow
+CS,26,100 - <110,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,Yes(33%)/No(67%),Unknow
+CS,14,180 - <190,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes,Unknow
+CS,27,180 - <190,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,25,มากกว่าหรือเท่ากับ 200,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes(23%)/No(77%),Unknow
+CS,25,80 - <90,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,26,180 - <190,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,14,Cyclic temperature,inorganic zinc,non 2nd coat,silicone,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,27,150 - <160,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,14,160 - <170,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,Yes,Unknow
+CS,25,60 - <70,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,28,60 - <70,inorganic zinc,non 2nd coat,epoxy polyamide,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,26,มากกว่าหรือเท่ากับ 200,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes(24%)/No(76%),Unknow
+CS,27,Cyclic temperature,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,26,มากกว่าหรือเท่ากับ 200,inorganic zinc,non 2nd coat,silicone,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+LOW ALLOY STEEL,23,มากกว่าหรือเท่ากับ 200,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,24,0 - <10,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes,Unknow
+CS,26,150 - <160,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,25,110 - <120,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,25,100 - <110,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,25,100 - <110,inorganic zinc,non 2nd coat,epoxy polyamide,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,27,80 - <90,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,25,30 - <40,"high-build epoxy, 125 (5)",non 2nd coat,"epoxy, 125 (5)",mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,25,110 - <120,"high-build epoxy, 125 (5)",non 2nd coat,"epoxy, 125 (5)",mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,28,110 - <120,"high-build epoxy, 125 (5)",non 2nd coat,"epoxy, 125 (5)",mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,26,110 - <120,"high-build epoxy, 125 (5)",non 2nd coat,"epoxy, 125 (5)",mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,27,140 - <150,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes(14%)/No(86%),Unknow
+CS,19,140 - <150,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes,Unknow
+CS,26,140 - <150,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes(29%)/No(71%),Unknow
+LOW ALLOY STEEL,26,140 - <150,inorganic zinc,non 2nd coat,epoxy polyamide,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,13,140 - <150,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes,Unknow
+CS,24,140 - <150,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes(20%)/No(80%),Unknow
+LOW ALLOY STEEL,24,140 - <150,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,14,130 - <140,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,Yes,Unknow
+CS,26,50 - <60,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes(33%)/No(67%),Unknow
+CS,25,Cyclic temperature,inorganic zinc,non 2nd coat,epoxy polyamide,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+LOW ALLOY STEEL,26,มากกว่าหรือเท่ากับ 200,inorganic zinc,non 2nd coat,non top coat,flexible aerogel blanket,Unknow,Industrial,Unknow,No,Unknow
+CS,25,150 - <160,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+LOW ALLOY STEEL,26,มากกว่าหรือเท่ากับ 200,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes,Unknow
+CS,25,120 - <130,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,26,0 - <10,inorganic zinc,non 2nd coat,non top coat,Cellular glass,Unknow,Industrial,Unknow,Yes,Unknow
+CS,21,(10) - <0,non primer,non 2nd coat,"fusion-bonded epoxy (fbe), 300 (12)",mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,21,(10) - <0,inorganic zinc,non 2nd coat,silicone aluminum,Cellular glass,Unknow,Industrial,Unknow,Yes,Unknow
+CS,25,(10) - <0,inorganic zinc,non 2nd coat,non top coat,Cellular glass,Unknow,Industrial,Unknow,No,Unknow
+CS,27,มากกว่าหรือเท่ากับ 200,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,25,40 - <50,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,25,170 - <180,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes(5%)/No(95%),Unknow
+CS,19,มากกว่าหรือเท่ากับ 200,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,25,มากกว่าหรือเท่ากับ 200,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,26,160 - <170,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes(20%)/No(80%),Unknow
+CS,26,170 - <180,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes(9%)/No(91%),Unknow
+CS,25,130 - <140,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,21,(10) - <0,inorganic zinc,non 2nd coat,non top coat,Cellular glass,Unknow,Industrial,Unknow,Yes,Unknow
+CS,21,30 - <40,non primer,non 2nd coat,"fusion-bonded epoxy (fbe), 300 (12)",Cellular glass,Unknow,Industrial,Unknow,No,Unknow
+CS,21,0 - <10,inorganic zinc,non 2nd coat,non top coat,Cellular glass,Unknow,Industrial,Unknow,Yes(20%)/No(80%),Unknow
+CS,28,30 - <40,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,25,90 - <100,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,25,100 - <110,inorganic zinc,non 2nd coat,silicone,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,27,30 - <40,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes(20%)/No(80%),Unknow
+CS,25,70 - <80,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,26,190 - <200,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes(54%)/No(46%),Unknow
+CS,28,90 - <100,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,28,160 - <170,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,25,160 - <170,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,25,60 - <70,inorganic zinc,non 2nd coat,epoxy polyamide,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,27,130 - <140,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,Yes(33%)/No(67%),Unknow
+CS,26,150 - <160,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes(40%)/No(60%),Unknow
+CS,26,140 - <150,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,27,40 - <50,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,28,มากกว่าหรือเท่ากับ 200,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,25,130 - <140,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,27,0 - <10,inorganic zinc,non 2nd coat,non top coat,Cellular glass,Unknow,Industrial,Unknow,No,Unknow
+CS,27,30 - <40,inorganic zinc,non 2nd coat,non top coat,Cellular glass,Unknow,Industrial,Unknow,No,Unknow
+CS,23,0 - <10,inorganic zinc,non 2nd coat,non top coat,Cellular glass,Unknow,Industrial,Unknow,No,Unknow
+CS,25,30 - <40,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,27,50 - <60,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,22,140 - <150,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,17,140 - <150,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes,Unknow
+CS,26,130 - <140,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,25,190 - <200,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,24,190 - <200,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,27,90 - <100,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,26,90 - <100,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,Yes(22%)/No(78%),Unknow
+CS,27,160 - <170,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,28,140 - <150,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,26,80 - <90,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes(17%)/No(83%),Unknow
+CS,26,90 - <100,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,26,190 - <200,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,24,90 - <100,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,28,120 - <130,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,27,มากกว่าหรือเท่ากับ 200,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes(23%)/No(77%),Unknow
+CS,23,มากกว่าหรือเท่ากับ 200,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,28,มากกว่าหรือเท่ากับ 200,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,14,มากกว่าหรือเท่ากับ 200,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes(33%)/No(67%),Unknow
+CS,12,มากกว่าหรือเท่ากับ 200,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,28,160 - <170,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,28,180 - <190,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,26,160 - <170,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,27,160 - <170,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,20,มากกว่าหรือเท่ากับ 200,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes(67%)/No(33%),Unknow
+CS,28,90 - <100,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,27,130 - <140,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes(50%)/No(50%),Unknow
+CS,28,150 - <160,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,28,150 - <160,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,25,140 - <150,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,27,140 - <150,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,Yes(25%)/No(75%),Unknow
+CS,27,140 - <150,inorganic zinc,non 2nd coat,epoxy polyamide,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,20,170 - <180,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,24,170 - <180,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes(24%)/No(76%),Unknow
+CS,27,170 - <180,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,15,170 - <180,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,24,มากกว่าหรือเท่ากับ 200,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes(8%)/No(92%),Unknow
+CS,17,190 - <200,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,24,150 - <160,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,24,70 - <80,inorganic zinc,non 2nd coat,epoxy polyamide,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,24,70 - <80,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,27,190 - <200,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,24,180 - <190,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,26,130 - <140,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes(50%)/No(50%),Unknow
+CS,24,120 - <130,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,27,Cyclic temperature,inorganic zinc,non 2nd coat,epoxy polyamide,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,26,60 - <70,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,24,160 - <170,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,24,60 - <70,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,26,30 - <40,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,13,80 - <90,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,24,80 - <90,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,24,80 - <90,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,24,130 - <140,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,24,70 - <80,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,24,100 - <110,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,14,150 - <160,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,26,100 - <110,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes,Unknow
+CS,25,120 - <130,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes(33%)/No(67%),Unknow
+CS,24,120 - <130,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes(25%)/No(75%),Unknow
+CS,26,170 - <180,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,26,40 - <50,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes(17%)/No(83%),Unknow
+CS,26,30 - <40,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes(20%)/No(80%),Unknow
+CS,25,30 - <40,inorganic zinc,non 2nd coat,epoxy polyamide,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+LOW ALLOY STEEL,22,120 - <130,heat resisting silicone aluminum paint,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes,Unknow
+CS,25,60 - <70,inorganic zinc,non 2nd coat,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,Yes(25%)/No(75%),Unknow
+CS,23,มากกว่าหรือเท่ากับ 200,inorganic zinc,non 2nd coat,epoxy polyamide,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,21,20 - <30,inorganic zinc,non 2nd coat,non top coat,Cellular glass,Unknow,Industrial,Unknow,Yes,Unknow
+CS,26,20 - <30,inorganic zinc,non 2nd coat,non top coat,Cellular glass,Unknow,Industrial,Unknow,No,Unknow
+CS,21,60 - <70,inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,25,20 - <30,inorganic zinc,non 2nd coat,non top coat,Cellular glass,Unknow,Industrial,Unknow,Yes,Unknow
+CS,26,Cyclic temperature,inorganic zinc,non 2nd coat,epoxy polyamide,mineral fiber,Unknow,Industrial,Unknow,No,Unknow
+CS,27,30 - <40,inorganic zinc,non 2nd coat,epoxy polyamide,mineral fiber,Unknow,Industrial,Unknow,Yes(33%)/No(67%),Unknow
+SS,16,100 - <110,non primer,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Ole3_2
+CS,16,120 - <130,Inorganic zinc,Silicone acrylic,Silicone acrylic Aluminium,mineral fiber,Unknow,Industrial,Unknow,No,Ole3_2
+CS,16,150 - <160,Inorganic zinc,Silicone acrylic,Silicone acrylic Aluminium,mineral fiber,Unknow,Industrial,Unknow,No,Ole3_2
+CS,16,100 - <110,Primed coat with 80 µ,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Ole3_2
+CS,16,140 - <150,Inorganic zinc,Silicone,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Ole3_2
+CS,16,30 - <40,Primed coat with 80 µ,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Ole3_2
+CS,16,130 - <140,Inorganic zinc,Silicone,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Ole3_2
+CS,16,มากกว่าหรือเท่ากับ 200,Silicone primer,Silicone MIO,Silicone are blasted after Aluminium,mineral fiber,Unknow,Industrial,Unknow,No,Ole3_2
+CS,16,120 - <130,Inorganic zinc,Silicone,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,Yes(12.50%)/No(87.50%),Ole3_2
+LOW ALLOY STEEL,16,มากกว่าหรือเท่ากับ 200,Silicone primer,Silicone MIO,Silicone are blasted after Aluminium,mineral fiber,Unknow,Industrial,Unknow,No,Ole3_2
+LOW ALLOY STEEL,16,มากกว่าหรือเท่ากับ 200,Inorganic zinc,High built polyamide epoxy,2 component polyurethane,mineral fiber,Unknow,Industrial,Unknow,No,Ole3_2
+CS,16,170 - <180,Inorganic zinc,Silicone,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,Yes(12.50%)/No(87.50%),Ole3_2
+CS,16,120 - <130,Primed coat with 80 µ,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Ole3_2
+CS,16,130 - <140,Inorganic zinc,Silicone acrylic,Silicone acrylic Aluminium,mineral fiber,Unknow,Industrial,Unknow,Yes(20%)/No(80%),Ole3_2
+CS,16,140 - <150,Inorganic zinc,Silicone acrylic,Silicone acrylic Aluminium,mineral fiber,Unknow,Industrial,Unknow,Yes(33%)/No(67%),Ole3_2
+CS,16,60 - <70,Primed coat with 80 µ,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes(4%)/No(96%),"Ole3_2,3&4"
+CS,16,30 - <40,Inorganic zinc,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes(50%)/No(50%),Ole3_2
+CS,16,100 - <110,non primer,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Ole3_2
+CS,16,140 - <150,Primed coat with 80 µ,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Ole3_3&4
+CS,16,110 - <120,Primed coat with 80 µ,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,Ole3_3&4
+CS,16,120 - <130,Inorganic zinc,Silicone,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,No,Ole3_3&4
+CS,16,10 - <20,Primed coat with 80 µ,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes(50%)/No(50%),Ole3_3&4
+CS,16,(30) - <(20),Primed coat with 80 µ,non 2nd coat,non top coat,Polyisocyanurate,Unknow,Industrial,Unknow,No,Ole3_3&4
+CS,16,80 - <90,Primed coat with 80 µ,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,No,"Ole3_2,3&4"
+CS,16,40 - <50,Primed coat with 80 µ,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes(5%)/No(95%),"Ole3_2,3&4"
+CS,16,มากกว่าหรือเท่ากับ 200,Inorganic zinc,High built polyamide epoxy,2 component polyurethane,mineral fiber,Unknow,Industrial,Unknow,No,Ole3_3&4
+CS,16,20 - <30,Primed coat with 80 µ,non 2nd coat,non top coat,Polyisocyanurate,Unknow,Industrial,Unknow,Yes(45%)/No(55%),Ole3_3&4
+CS,16,70 - <80,Primed coat with 80 µ,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes(4%)/No(96%),"Ole3_2,3&4"
+CS,16,70 - <80,Primed coat with 80 µ,non 2nd coat,non top coat,Polyisocyanurate,Unknow,Industrial,Unknow,No,Ole3_3&4
+CS,16,90 - <100,Primed coat with 80 µ,non 2nd coat,non top coat,mineral fiber,Unknow,Industrial,Unknow,Yes(12.5%)/No(87.5%),"Ole3_2,3&4"
+CS,16,มากกว่าหรือเท่ากับ 200,Inorganic zinc,Silicone,silicone aluminum,mineral fiber,Unknow,Industrial,Unknow,Yes(50%)/No(50%),Ole3_3&4
+CS,16,10 - <20,Primed coat with 80 µ,non 2nd coat,non top coat,Polyisocyanurate,Unknow,Industrial,Unknow,Yes(7%)/No(93%),Ole3_3&4
+CS,16,(20) - <(10),Primed coat with 80 µ,non 2nd coat,non top coat,Polyisocyanurate,Unknow,Industrial,Unknow,No,Ole3_3&4
+CS,16,(40) - <(30),Primed coat with 80 µ,non 2nd coat,non top coat,Polyisocyanurate,Unknow,Industrial,Unknow,Yes(10%)/No(90%),Ole3_3&4
+CS,15,20 - <30,Silicone acrylic,non 2nd coat,non top coat,Mineral fiber,Unknow,Industrial,Unknow,No,LDPE
+SS,15,20 - <30,Epoxy primer,Silicone acrylic,Acrylic aliphatic polyurethane,Unknown,Unknow,Industrial,Unknow,No,LDPE
+SS,15,20 - <30,Epoxy primer,High-solid epoxy polyamide,Acrylic aliphatic polyurethane,Unknown,Unknow,Industrial,Unknow,No,LDPE
+SS,15,50 - <60,Epoxy primer,High-solid epoxy polyamide,Acrylic aliphatic polyurethane,Cellular glass,Unknow,Industrial,Unknow,No,LDPE
+SS,15,40 - <50,Epoxy primer,High-solid epoxy polyamide,Acrylic aliphatic polyurethane,Cellular glass,Unknow,Industrial,Unknow,No,LDPE
+SS,15,70 - <80,Epoxy primer,High-solid epoxy polyamide,Acrylic aliphatic polyurethane,Mineral fiber,Unknow,Industrial,Unknow,No,LDPE
+CS,15,20 - <30,Inorganic zinc,High-solid epoxy polyamide,Acrylic aliphatic polyurethane,Cellular glass,Unknow,Industrial,Unknow,No,LDPE
+LTCS,15,20 - <30,Inorganic zinc,High-solid epoxy polyamide,Acrylic aliphatic polyurethane,Cellular glass,Unknow,Industrial,Unknow,No,LDPE
+CS,15,100 - <110,Inorganic zinc,Silicone acrylic,non top coat,Cellular glass,Unknow,Industrial,Unknow,No,LDPE
+CS,15,100 - <110,Inorganic zinc,Silicone acrylic,non top coat,Mineral fiber,Unknow,Industrial,Unknow,No,LDPE
+SS,15,100 - <110,Epoxy primer,High-solid epoxy polyamide,Acrylic aliphatic polyurethane,Cellular glass,Unknow,Industrial,Unknow,No,LDPE

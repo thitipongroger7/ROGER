@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CUI Predictive Model</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #1E3A8A; --sky: #00ACE9;
+      --slate-50: #F8FAFC; --slate-100: #F1F5F9; --slate-200: #E2E8F0;
+      --slate-400: #94A3B8; --slate-500: #64748B; --slate-700: #334155; --slate-900: #0F172A;
+      --red-bg: #FEF2F2; --red-text: #B91C1C; --red: #EF4444;
+      --yellow-bg: #FEFCE8; --yellow: #EAB308; --orange: #FF740A;
+      --green-bg: #F0FDF4; --green: #22C55E; --green-text: #15803D; --green-light: #ECFDF5; --green-badge: #059669;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--slate-50); color: var(--slate-900); min-height: 100vh; display: flex; flex-direction: column; }
+
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--slate-200); box-shadow: 0 4px 24px rgba(0,0,0,0.08); padding: 0 90px; }
+    .nav-inner { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; }
+    .nav-logos { display: flex; align-items: center; gap: 24px; }
+    .nav-logos img { object-fit: contain; }
+    .nav-divider { width: 1.3px; height: 32px; background: var(--slate-200); }
+    .upload-btn { display: flex; align-items: center; gap: 10px; background: linear-gradient(136deg, var(--navy) 24%, var(--sky) 100%); color: white; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 15px; border: none; cursor: pointer; padding: 11px 22px; border-radius: 10px; box-shadow: inset 0 4px 6px rgba(0,0,0,0.18); transition: opacity .2s, transform .15s; text-decoration: none; }
+    .upload-btn:hover { opacity: .9; transform: translateY(-1px); }
+    .upload-btn svg { width: 18px; height: 18px; }
+
+    main { flex: 1; padding: 24px 90px 40px; display: flex; flex-direction: column; gap: 28px; max-width: 1440px; margin: 0 auto; width: 100%; }
+
+    /* Hero with local background image */
+    .hero { border-radius: 14px; overflow: hidden; position: relative; min-height: 240px; display: flex; align-items: center; background: #0f2460; }
+    .hero-bg { position: absolute; inset: 0; background-image: url('hero_bg.jpg'); background-size: cover; background-position: center center; opacity: 0.55; }
+    .hero-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(15,36,96,0.70) 0%, rgba(30,58,138,0.64) 50%, rgba(26,111,168,0.60) 100%); }
+    .hero-grid { display: none; }
+    .hero-content { position: relative; z-index: 2; padding: 36px 44px; max-width: 700px; }
+    .hero-content h1 { font-size: 32px; font-weight: 800; color: white; line-height: 1.15; margin-bottom: 14px; text-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+    .hero-content p { font-size: 15px; color: rgba(191,219,254,0.9); line-height: 1.7; }
+
+    .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .stat-card { background: white; border: 1px solid var(--slate-200); border-radius: 10px; padding: 18px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); display: flex; align-items: center; justify-content: space-between; transition: box-shadow .2s; }
+    .stat-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+    .stat-label { font-size: 13px; font-weight: 600; color: var(--slate-500); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
+    .stat-value { font-size: 30px; font-weight: 700; color: rgba(15,23,42,0.85); }
+    .stat-unit { font-size: 12px; font-weight: 700; color: rgba(0,0,0,0.45); }
+    .stat-badge { background: var(--green-light); color: var(--green-badge); font-size: 18px; font-weight: 700; padding: 8px 14px; border-radius: 8px; }
+
+    .content-grid { display: grid; grid-template-columns: 1fr 380px; gap: 24px; align-items: start; }
+    .card { background: white; border: 1px solid var(--slate-200); border-radius: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+    .card-header { padding: 28px 32px 0; display: flex; align-items: center; gap: 12px; }
+    .card-title { font-size: 22px; font-weight: 700; color: var(--slate-900); }
+
+    .form-body { padding: 24px 32px 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px 24px; }
+    .field { display: flex; flex-direction: column; gap: 7px; }
+    .field label { font-size: 13px; font-weight: 700; color: var(--slate-700); }
+    .field input { height: 48px; padding: 0 14px; border: 1px solid var(--slate-200); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--slate-900); background: white; outline: none; transition: border-color .18s, box-shadow .18s; width: 100%; }
+    .field input:focus { border-color: var(--sky); box-shadow: 0 0 0 3px rgba(0,172,233,0.12); }
+    .field input::placeholder { color: #9CA3AF; }
+
+    .autocomplete-wrap { position: relative; }
+    .suggestions { display: none; position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: white; border: 1px solid var(--slate-200); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); z-index: 200; overflow: hidden; }
+    .suggestions.open { display: block; }
+    .suggestions div { padding: 12px 14px; font-size: 14px; color: var(--slate-900); cursor: pointer; transition: background .15s; }
+    .suggestions div:hover { background: var(--slate-50); color: var(--navy); font-weight: 600; }
+    .suggestions div + div { border-top: 1px solid var(--slate-100); }
+
+    .result-bar { display: none; margin: 0 32px 24px; padding: 18px 22px; border-radius: 12px; font-weight: 700; font-size: 17px; align-items: center; gap: 12px; animation: slideIn .35s ease; }
+    .result-bar.show { display: flex; }
+    .result-bar.CRITICAL { background: var(--red-bg); color: var(--red-text); border: 1.5px solid var(--red); }
+    .result-bar.WARNING  { background: var(--yellow-bg); color: var(--orange); border: 1.5px solid var(--yellow); }
+    .result-bar.SAFE     { background: var(--green-bg); color: var(--green-text); border: 1.5px solid var(--green); }
+    @keyframes slideIn { from { opacity:0; transform: translateY(-8px); } to { opacity:1; transform: translateY(0); } }
+    .error-bar { display: none; margin: 0 32px 24px; padding: 14px 20px; border-radius: 10px; background: #FFF1F2; border: 1.5px solid #FDA4AF; color: #BE123C; font-size: 14px; font-weight: 600; }
+    .error-bar.show { display: block; }
+
+    .predict-btn { margin: 4px 32px 32px; width: calc(100% - 64px); padding: 18px; background: var(--navy); color: white; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 17px; border: none; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: background .2s, transform .15s, box-shadow .2s; box-shadow: 0 4px 14px rgba(30,58,138,0.3); }
+    .predict-btn:hover:not(:disabled) { background: #162d6e; transform: translateY(-2px); }
+    .predict-btn:disabled { opacity: .6; cursor: not-allowed; }
+
+    .right-col { display: flex; flex-direction: column; gap: 20px; }
+    .risk-card { background: white; border: 1px solid var(--slate-200); border-radius: 14px; padding: 28px; }
+    .risk-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+    .risk-title { font-size: 22px; font-weight: 700; }
+    .risk-item { border-radius: 0 8px 8px 0; padding: 14px 16px; margin-bottom: 14px; transition: opacity .4s; }
+    .risk-item:last-child { margin-bottom: 0; }
+    .risk-item.critical { background: var(--red-bg); border-left: 4px solid var(--red); }
+    .risk-item.warning  { background: var(--yellow-bg); border-left: 4px solid var(--yellow); }
+    .risk-item.safe     { background: var(--green-bg); border-left: 4px solid var(--green); }
+    .risk-item.inactive { opacity: 0.3; }
+    .risk-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+    .risk-name { font-size: 18px; font-weight: 700; }
+    .risk-item.critical .risk-name { color: var(--red-text); }
+    .risk-item.warning  .risk-name { color: var(--orange); }
+    .risk-item.safe     .risk-name { color: var(--green-text); }
+    .risk-icon-svg { width: 22px; height: 22px; flex-shrink: 0; }
+    .risk-desc { font-size: 14px; font-weight: 600; }
+    .risk-item.critical .risk-desc { color: var(--red-text); }
+    .risk-item.warning  .risk-desc { color: var(--orange); }
+    .risk-item.safe     .risk-desc { color: var(--green-text); }
+    .result-detail { display: none; padding: 14px 16px; background: var(--slate-50); border-radius: 8px; margin-top: 12px; font-size: 13px; color: var(--slate-500); }
+    .result-detail.show { display: block; }
+    .result-detail span { font-weight: 700; color: var(--slate-900); }
+
+    .total-card { background: white; border: 1px solid var(--slate-200); border-radius: 14px; padding: 24px 28px; }
+    .total-label { font-size: 14px; font-weight: 600; color: var(--slate-500); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 14px; }
+    .total-value { font-size: 46px; font-weight: 700; color: rgba(15,23,42,0.85); line-height: 1; }
+
+    .model-status { display: flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; }
+    .model-status.ready   { background: var(--green-light); color: var(--green-badge); }
+    .model-status.not-ready { background: #FEF9C3; color: #92400E; }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .model-status.ready   .status-dot { background: var(--green-badge); }
+    .model-status.not-ready .status-dot { background: #D97706; }
+
+    .spinner { display: none; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin .7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    footer { background: white; border-top: 1px solid var(--slate-200); padding: 22px 90px; display: flex; justify-content: space-between; align-items: center; }
+    .footer-copy { font-size: 13px; color: var(--slate-500); }
+    .footer-links { display: flex; gap: 28px; }
+    .footer-links a { font-size: 13px; color: var(--slate-400); text-decoration: none; }
+    .footer-links a:hover { color: var(--navy); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logos">
+      <img src="gcme_logo.png" alt="GCME" style="height:42px; object-fit:contain;"/>
+      <div class="nav-divider"></div>
+      <img src="chula_logo.png" alt="Chulalongkorn University" style="height:42px; object-fit:contain;"/>
+    </div>
+    <a href="upload_history.html" class="upload-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+      </svg>
+      Upload Data
+    </a>
+  </div>
+</nav>
+
+<main>
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <h1>Data Analytics for a Machine Learning Based Corrosion Under Insulation Predictive Model</h1>
+      <p>Senior Engineering Project in collaboration between the Department of Metallurgical Engineering, Chulalongkorn University and GC Maintenance and Engineering (GCME)</p>
+    </div>
+  </div>
+
+  <div class="stat-row" id="statRow"></div>
+
+  <div class="content-grid">
+    <div class="card">
+      <div class="card-header">
+        <!-- Icon: 3 connectors / terminals -->
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <line x1="8.5" y1="2" x2="8.5" y2="34" stroke="#1E3A8A" stroke-width="3" stroke-linecap="round"/>
+          <rect x="4.5" y="8" width="8" height="10" rx="2" fill="white" stroke="#1E3A8A" stroke-width="2"/>
+          <line x1="18" y1="2" x2="18" y2="34" stroke="#1E3A8A" stroke-width="3" stroke-linecap="round"/>
+          <rect x="14" y="13" width="8" height="10" rx="2" fill="white" stroke="#1E3A8A" stroke-width="2"/>
+          <line x1="27.5" y1="2" x2="27.5" y2="34" stroke="#1E3A8A" stroke-width="3" stroke-linecap="round"/>
+          <rect x="23.5" y="6" width="8" height="10" rx="2" fill="white" stroke="#1E3A8A" stroke-width="2"/>
+        </svg>
+        <div class="card-title">Input Parameters</div>
+      </div>
+
+      <div class="form-body">
+        <div class="field">
+          <label>Substrate Material</label>
+          <div class="autocomplete-wrap">
+            <input type="text" id="Substrate" placeholder="e.g. Carbon Steel" autocomplete="off"
+              oninput="filter('Substrate','list-Sub')" onfocus="open_('list-Sub')" onblur="close_('list-Sub')"/>
+            <div class="suggestions" id="list-Sub">
+              <div onmousedown="pick('Substrate','CS')">CS</div>
+              <div onmousedown="pick('Substrate','LTCS')">LTCS</div>
+              <div onmousedown="pick('Substrate','LOW ALLOY STEEL')">LOW ALLOY STEEL</div>
+              <div onmousedown="pick('Substrate','SS')">SS</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Age (Years in Service)</label>
+          <input type="number" id="Age_Years" placeholder="e.g. 15" min="0" max="100"/>
+        </div>
+
+        <div class="field">
+          <label>Temperature Group</label>
+          <div class="autocomplete-wrap">
+            <input type="text" id="Operating_Temperature_C" placeholder="e.g. 30 - <40" autocomplete="off"
+              oninput="filter('Operating_Temperature_C','list-Temp')" onfocus="open_('list-Temp')" onblur="close_('list-Temp')"/>
+            <div class="suggestions" id="list-Temp">
+              <div onmousedown="pick('Operating_Temperature_C','0 - <10')">0 - &lt;10</div>
+              <div onmousedown="pick('Operating_Temperature_C','10 - <20')">10 - &lt;20</div>
+              <div onmousedown="pick('Operating_Temperature_C','20 - <30')">20 - &lt;30</div>
+              <div onmousedown="pick('Operating_Temperature_C','30 - <40')">30 - &lt;40</div>
+              <div onmousedown="pick('Operating_Temperature_C','50 - <60')">50 - &lt;60</div>
+              <div onmousedown="pick('Operating_Temperature_C','70 - <80')">70 - &lt;80</div>
+              <div onmousedown="pick('Operating_Temperature_C','80 - <90')">80 - &lt;90</div>
+              <div onmousedown="pick('Operating_Temperature_C','130 - <140')">130 - &lt;140</div>
+              <div onmousedown="pick('Operating_Temperature_C','140 - <150')">140 - &lt;150</div>
+              <div onmousedown="pick('Operating_Temperature_C','150 - <160')">150 - &lt;160</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Prime Coating</label>
+          <div class="autocomplete-wrap">
+            <input type="text" id="Coating_Prime" placeholder="e.g. zinc ethyl silicate" autocomplete="off"
+              oninput="filter('Coating_Prime','list-Prime')" onfocus="open_('list-Prime')" onblur="close_('list-Prime')"/>
+            <div class="suggestions" id="list-Prime">
+              <div onmousedown="pick('Coating_Prime','zinc ethyl silicate')">zinc ethyl silicate</div>
+              <div onmousedown="pick('Coating_Prime','phenolic epoxy')">phenolic epoxy</div>
+              <div onmousedown="pick('Coating_Prime','rich zinc epoxy')">rich zinc epoxy</div>
+              <div onmousedown="pick('Coating_Prime','inorganic zinc')">inorganic zinc</div>
+              <div onmousedown="pick('Coating_Prime','non primer')">non primer</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Secondary Coating</label>
+          <div class="autocomplete-wrap">
+            <input type="text" id="Coating_Second" placeholder="e.g. zinc silicate" autocomplete="off"
+              oninput="filter('Coating_Second','list-Sec')" onfocus="open_('list-Sec')" onblur="close_('list-Sec')"/>
+            <div class="suggestions" id="list-Sec">
+              <div onmousedown="pick('Coating_Second','zinc silicate')">zinc silicate</div>
+              <div onmousedown="pick('Coating_Second','phenolic epoxy')">phenolic epoxy</div>
+              <div onmousedown="pick('Coating_Second','modified epoxy')">modified epoxy</div>
+              <div onmousedown="pick('Coating_Second','non 2nd coat')">non 2nd coat</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Top Coat</label>
+          <div class="autocomplete-wrap">
+            <input type="text" id="Top_Coat" placeholder="e.g. polyurethane" autocomplete="off"
+              oninput="filter('Top_Coat','list-Top')" onfocus="open_('list-Top')" onblur="close_('list-Top')"/>
+            <div class="suggestions" id="list-Top">
+              <div onmousedown="pick('Top_Coat','zinc silicate')">zinc silicate</div>
+              <div onmousedown="pick('Top_Coat','non top coat')">non top coat</div>
+              <div onmousedown="pick('Top_Coat','polyurethane')">polyurethane</div>
+              <div onmousedown="pick('Top_Coat','epoxy polyamide')">epoxy polyamide</div>
+              <div onmousedown="pick('Top_Coat','silicone aluminum')">silicone aluminum</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Insulation Type</label>
+          <div class="autocomplete-wrap">
+            <input type="text" id="Insulation_Type" placeholder="e.g. mineral fiber" autocomplete="off"
+              oninput="filter('Insulation_Type','list-Ins')" onfocus="open_('list-Ins')" onblur="close_('list-Ins')"/>
+            <div class="suggestions" id="list-Ins">
+              <div onmousedown="pick('Insulation_Type','mineral fiber')">mineral fiber</div>
+              <div onmousedown="pick('Insulation_Type','cellular glass')">cellular glass</div>
+              <div onmousedown="pick('Insulation_Type','flexible aerogel blanket')">flexible aerogel blanket</div>
+              <div onmousedown="pick('Insulation_Type','Polyisocyanurate')">Polyisocyanurate</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Vapor Barrier</label>
+          <div class="autocomplete-wrap">
+            <input type="text" id="Vapor_Barrier" placeholder="e.g. Unknow" autocomplete="off"
+              oninput="filter('Vapor_Barrier','list-Vapor')" onfocus="open_('list-Vapor')" onblur="close_('list-Vapor')"/>
+            <div class="suggestions" id="list-Vapor">
+              <div onmousedown="pick('Vapor_Barrier','Unknow')">Unknow</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Environment</label>
+          <div class="autocomplete-wrap">
+            <input type="text" id="Environment" placeholder="e.g. Marine / Industrial" autocomplete="off"
+              oninput="filter('Environment','list-Env')" onfocus="open_('list-Env')" onblur="close_('list-Env')"/>
+            <div class="suggestions" id="list-Env">
+              <div onmousedown="pick('Environment','Marine')">Marine</div>
+              <div onmousedown="pick('Environment','Industrial')">Industrial</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Jacket Damage</label>
+          <div class="autocomplete-wrap">
+            <input type="text" id="Jacket_Damage" placeholder="e.g. Yes / No" autocomplete="off"
+              oninput="filter('Jacket_Damage','list-Jacket')" onfocus="open_('list-Jacket')" onblur="close_('list-Jacket')"/>
+            <div class="suggestions" id="list-Jacket">
+              <div onmousedown="pick('Jacket_Damage','Yes')">Yes</div>
+              <div onmousedown="pick('Jacket_Damage','No')">No</div>
+              <div onmousedown="pick('Jacket_Damage','Unknow')">Unknow</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="error-bar" id="errorBar"></div>
+      <div class="result-bar" id="resultBar"><span id="resultText"></span></div>
+
+      <button class="predict-btn" id="predictBtn" onclick="predict()">
+        <div class="spinner" id="spinner"></div>
+        <!-- Icon: bar chart -->
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" id="btnIcon">
+          <rect x="1" y="1" width="22" height="22" rx="4" fill="none" stroke="white" stroke-width="2"/>
+          <rect x="5" y="13" width="3.5" height="7" rx="1" fill="white"/>
+          <rect x="10.2" y="9" width="3.5" height="11" rx="1" fill="white"/>
+          <rect x="15.5" y="5" width="3.5" height="15" rx="1" fill="white"/>
+        </svg>
+        Predict Corrosion Risk
+      </button>
+    </div>
+
+    <div class="right-col">
+      <div class="model-status not-ready" id="modelStatus">
+        <div class="status-dot"></div>
+        <span id="modelStatusText">Connecting to backend...</span>
+      </div>
+
+      <div class="risk-card">
+        <div class="risk-header">
+          <!-- Icon: shield with checkmark -->
+          <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
+            <path d="M17 3L5 8V17c0 7 5.5 12.5 12 14.5C24.5 29.5 29 24 29 17V8L17 3Z" fill="none" stroke="#1E3A8A" stroke-width="2.5" stroke-linejoin="round"/>
+            <polyline points="11,17 15,21 23,13" fill="none" stroke="#1E3A8A" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="risk-title">Risk Assessment</div>
+        </div>
+
+        <div class="risk-item critical inactive" id="risk-CRITICAL">
+          <div class="risk-row">
+            <span class="risk-name">CRITICAL</span>
+            <!-- X circle icon red -->
+            <svg class="risk-icon-svg" viewBox="0 0 22 22" fill="none">
+              <circle cx="11" cy="11" r="9" fill="#FEF2F2" stroke="#EF4444" stroke-width="1.5"/>
+              <line x1="7.5" y1="7.5" x2="14.5" y2="14.5" stroke="#EF4444" stroke-width="2" stroke-linecap="round"/>
+              <line x1="14.5" y1="7.5" x2="7.5" y2="14.5" stroke="#EF4444" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="risk-desc">CUI Incident Rate &gt; 50%</div>
+          <div class="result-detail" id="detail-CRITICAL">Probability: <span id="prob-CRITICAL">—</span> &nbsp;|&nbsp; Next Inspection: <span id="year-CRITICAL">—</span></div>
+        </div>
+
+        <div class="risk-item warning inactive" id="risk-WARNING">
+          <div class="risk-row">
+            <span class="risk-name">WARNING</span>
+            <!-- Triangle warning icon yellow -->
+            <svg class="risk-icon-svg" viewBox="0 0 22 22" fill="none">
+              <path d="M11 3L20 19H2L11 3Z" fill="#FEFCE8" stroke="#EAB308" stroke-width="1.5" stroke-linejoin="round"/>
+              <line x1="11" y1="9" x2="11" y2="13.5" stroke="#EAB308" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="11" cy="16" r="1" fill="#EAB308"/>
+            </svg>
+          </div>
+          <div class="risk-desc">CUI Incident Rate 25% – 50%</div>
+          <div class="result-detail" id="detail-WARNING">Probability: <span id="prob-WARNING">—</span> &nbsp;|&nbsp; Next Inspection: <span id="year-WARNING">—</span></div>
+        </div>
+
+        <div class="risk-item safe inactive" id="risk-SAFE">
+          <div class="risk-row">
+            <span class="risk-name">SAFE / OPERATIONAL</span>
+            <!-- Check circle icon green -->
+            <svg class="risk-icon-svg" viewBox="0 0 22 22" fill="none">
+              <circle cx="11" cy="11" r="9" fill="#F0FDF4" stroke="#22C55E" stroke-width="1.5"/>
+              <polyline points="7,11 10,14 15,8" fill="none" stroke="#22C55E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="risk-desc">CUI Incident Rate &lt; 25%</div>
+          <div class="result-detail" id="detail-SAFE">Probability: <span id="prob-SAFE">—</span> &nbsp;|&nbsp; Next Inspection: <span id="year-SAFE">—</span></div>
+        </div>
+      </div>
+
+      <div class="total-card">
+        <div class="total-label">Total Datasets</div>
+        <div class="total-value" id="totalDatasets">—</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-copy">© GCME & CHULA Prediction Systems Project 2025–2026</div>
+  <div class="footer-links">
+    <a href="#">Documentation</a>
+    <a href="#">System Requirements</a>
+    <a href="#">Support</a>
+  </div>
+</footer>
+
+<script>
+  const API_BASE = "http://localhost:8000";
+
+  function open_(listId) { document.getElementById(listId).classList.add('open'); }
+  function close_(listId) { setTimeout(() => document.getElementById(listId).classList.remove('open'), 150); }
+  function pick(inputId, value) {
+    document.getElementById(inputId).value = value;
+    document.querySelectorAll('.suggestions').forEach(s => s.classList.remove('open'));
+  }
+  function filter(inputId, listId) {
+    const q = document.getElementById(inputId).value.toLowerCase();
+    const list = document.getElementById(listId);
+    list.classList.add('open');
+    list.querySelectorAll('div').forEach(d => {
+      d.style.display = d.textContent.toLowerCase().includes(q) ? '' : 'none';
+    });
+  }
+
+  async function loadStats() {
+    try {
+      const res = await fetch(`${API_BASE}/api/stats`);
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      const statRow = document.getElementById('statRow');
+      const areaCounts = data.area_counts || {};
+      const total = data.total_datasets || 1;
+      const areas = Object.entries(areaCounts);
+      if (areas.length === 0) {
+        statRow.innerHTML = `<div class="stat-card" style="grid-column:1/-1"><div class="stat-label">No data yet — please upload a file first</div></div>`;
+      } else {
+        statRow.innerHTML = areas.map(([name, count]) => {
+          const pct = Math.round(count / total * 100);
+          return `<div class="stat-card"><div><div class="stat-label">${name}</div><div><span class="stat-value">${count.toLocaleString()}</span> <span class="stat-unit">Datasets</span></div></div><div class="stat-badge">${pct}%</div></div>`;
+        }).join('');
+      }
+      document.getElementById('totalDatasets').textContent = data.total_datasets?.toLocaleString() || '—';
+      const statusEl = document.getElementById('modelStatus');
+      const statusText = document.getElementById('modelStatusText');
+      if (data.accuracy) {
+        statusEl.className = 'model-status ready';
+        statusText.textContent = `Model ready — Accuracy ${data.accuracy}% | Last trained: ${data.last_trained}`;
+      } else {
+        statusEl.className = 'model-status not-ready';
+        statusText.textContent = 'No model yet — please upload a training file first';
+      }
+    } catch {
+      document.getElementById('modelStatusText').textContent = 'Cannot connect to backend — make sure server is running at ' + API_BASE;
+    }
+  }
+
+  async function predict() {
+    const btn = document.getElementById('predictBtn');
+    const spinner = document.getElementById('spinner');
+    const icon = document.getElementById('btnIcon');
+    const resultBar = document.getElementById('resultBar');
+    const errorBar = document.getElementById('errorBar');
+    const age = document.getElementById('Age_Years').value;
+    if (!age) { errorBar.textContent = 'Please enter Age (Years in Service)'; errorBar.classList.add('show'); return; }
+    errorBar.classList.remove('show');
+    const payload = {
+      Substrate:               document.getElementById('Substrate').value || 'Unknow',
+      Age_Years:               parseFloat(age),
+      Operating_Temperature_C: document.getElementById('Operating_Temperature_C').value || 'Unknow',
+      Coating_Prime:           document.getElementById('Coating_Prime').value || 'Unknow',
+      Coating_Second:          document.getElementById('Coating_Second').value || 'Unknow',
+      Top_Coat:                document.getElementById('Top_Coat').value || 'Unknow',
+      Insulation_Type:         document.getElementById('Insulation_Type').value || 'Unknow',
+      Vapor_Barrier:           document.getElementById('Vapor_Barrier').value || 'Unknow',
+      Environment:             document.getElementById('Environment').value || 'Unknow',
+      Jacket_Damage:           document.getElementById('Jacket_Damage').value || 'Unknow',
+    };
+    btn.disabled = true; spinner.style.display = 'block'; icon.style.display = 'none';
+    resultBar.className = 'result-bar';
+    try {
+      const res = await fetch(`${API_BASE}/api/predict`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || 'Error');
+      const level = data.risk_level;
+      ['CRITICAL','WARNING','SAFE'].forEach(l => {
+        document.getElementById('risk-'+l).classList.add('inactive');
+        document.getElementById('detail-'+l).classList.remove('show');
+      });
+      document.getElementById('risk-'+level).classList.remove('inactive');
+      document.getElementById('prob-'+level).textContent = data.probability_pct+'%';
+      document.getElementById('year-'+level).textContent = data.next_inspection_year;
+      document.getElementById('detail-'+level).classList.add('show');
+      const labels = {
+        CRITICAL: 'CRITICAL — CUI Incident Rate > 50%',
+        WARNING:  'WARNING — CUI Incident Rate 25%–50%',
+        SAFE:     'SAFE / OPERATIONAL — CUI Incident Rate < 25%'
+      };
+      resultBar.classList.add('show', level);
+      document.getElementById('resultText').textContent = labels[level];
+      sessionStorage.setItem('lastResult', JSON.stringify({ ...data, input: payload }));
+      const now = new Date();
+      const record = {
+        id:   Date.now(),
+        date: now.toLocaleDateString('en-GB'),
+        time: now.toLocaleTimeString('en-GB'),
+        input: payload,
+        result: data,
+        note: '',
+      };
+      const history = JSON.parse(localStorage.getItem('predictionHistory') || '[]');
+      history.unshift(record);
+      localStorage.setItem('predictionHistory', JSON.stringify(history));
+    } catch (err) {
+      errorBar.textContent = err.message;
+      errorBar.classList.add('show');
+    } finally {
+      btn.disabled = false; spinner.style.display = 'none'; icon.style.display = 'block';
+    }
+  }
+
+  loadStats();
+</script>
+</body>
+</html>

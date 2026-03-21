@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CUI – Result</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #1E3A8A; --sky: #00ACE9;
+      --slate-50: #F8FAFC; --slate-100: #F1F5F9; --slate-200: #E2E8F0;
+      --slate-400: #94A3B8; --slate-500: #64748B; --slate-700: #475569; --slate-900: #0F172A;
+      --green-bg: #F0FDF4; --green: #22C55E; --green-dark: #15803D; --green-border: #BBF7D0; --green-deep: #166534;
+      --red-bg: #FEF2F2; --red: #EF4444; --red-text: #B91C1C; --red-sub: #DC2626;
+      --yellow-bg: #FEFCE8; --yellow: #EAB308; --yellow-text: #A16207; --yellow-sub: #CA8A04;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--slate-50); color: var(--slate-900); min-height: 100vh; display: flex; flex-direction: column; }
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.82); backdrop-filter: blur(10px); border-bottom: 1px solid var(--slate-200); box-shadow: 0 4px 24px rgba(0,0,0,0.08); padding: 0 90px; }
+    .nav-inner { display: flex; justify-content: space-between; align-items: center; padding: 18px 0; }
+    .nav-logos { display: flex; align-items: center; gap: 24px; }
+    .nav-logos img { height: 42px; object-fit: contain; }
+    .nav-divider { width: 1.3px; height: 32px; background: var(--slate-200); }
+    .upload-btn { display: flex; align-items: center; gap: 10px; background: linear-gradient(136deg, var(--navy) 24%, var(--sky) 100%); color: white; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 15px; border: none; cursor: pointer; padding: 11px 22px; border-radius: 10px; text-decoration: none; }
+    main { flex: 1; padding: 24px 90px 40px; display: flex; flex-direction: column; gap: 24px; max-width: 1440px; margin: 0 auto; width: 100%; }
+    .hero { border-radius: 14px; overflow: hidden; position: relative; min-height: 240px; background: linear-gradient(135deg, #0f2460 0%, #1E3A8A 50%, #1a6fa8 100%); display: flex; align-items: center; }
+    .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 80% 50%, rgba(0,172,233,0.18) 0%, transparent 60%); }
+    .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px); background-size: 40px 40px; }
+    .hero-content { position: relative; z-index: 2; padding: 36px 44px; max-width: 700px; }
+    .hero-content h1 { font-size: 32px; font-weight: 800; color: white; line-height: 1.15; margin-bottom: 14px; }
+    .hero-content p { font-size: 16px; color: #BFDBFE; line-height: 1.6; }
+    .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .stat-card { background: white; border: 1px solid var(--slate-200); border-radius: 10px; padding: 18px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); display: flex; align-items: center; justify-content: space-between; }
+    .stat-label { font-size: 13px; font-weight: 600; color: var(--slate-500); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
+    .stat-value { font-size: 28px; font-weight: 700; color: rgba(15,23,42,0.85); }
+    .stat-unit { font-size: 12px; font-weight: 700; color: rgba(0,0,0,0.45); }
+    .stat-badge { background: #ECFDF5; color: #059669; font-size: 17px; font-weight: 700; padding: 8px 14px; border-radius: 8px; }
+    .content-row { display: grid; grid-template-columns: 1fr 340px; gap: 24px; align-items: start; }
+    .card { background: white; border: 1px solid var(--slate-200); border-radius: 12px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+    .card-header { display: flex; align-items: center; gap: 12px; padding: 28px 28px 0; margin-bottom: 22px; }
+    .card-icon { width: 18px; height: 22px; background: var(--navy); border-radius: 3px; }
+    .card-title { font-size: 22px; font-weight: 700; }
+    .risk-body { padding: 0 28px 28px; display: flex; flex-direction: column; gap: 18px; }
+    .risk-item { border-radius: 0 10px 10px 0; padding: 20px; }
+    .risk-item.active-safe     { background: var(--green-bg); border-left: 7px solid var(--green); box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .risk-item.active-critical { background: var(--red-bg);   border-left: 7px solid var(--red);   box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .risk-item.active-warning  { background: var(--yellow-bg); border-left: 7px solid var(--yellow); box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .risk-item.inactive { opacity: 0.35; background: var(--slate-50); border-left: 3px solid var(--slate-200); }
+    .risk-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .risk-name { font-size: 19px; font-weight: 900; text-transform: uppercase; }
+    .active-safe .risk-name     { color: var(--green-dark); }
+    .active-critical .risk-name { color: var(--red-text); }
+    .active-warning .risk-name  { color: var(--yellow-text); }
+    .inactive .risk-name        { color: var(--slate-500); font-size: 14px; font-weight: 700; }
+    .risk-dot { border-radius: 50%; }
+    .active-safe .risk-dot     { width: 22px; height: 22px; background: var(--green); }
+    .active-critical .risk-dot { width: 22px; height: 22px; background: var(--red); }
+    .active-warning .risk-dot  { width: 22px; height: 22px; background: var(--yellow); }
+    .inactive .risk-dot        { width: 14px; height: 14px; background: var(--slate-300); }
+    .risk-desc { font-size: 14px; font-weight: 600; line-height: 1.7; }
+    .active-safe .risk-desc     { color: var(--green-deep); }
+    .active-critical .risk-desc { color: var(--red-sub); }
+    .active-warning .risk-desc  { color: var(--yellow-sub); }
+    .inactive .risk-desc        { color: var(--slate-400); font-size: 12px; }
+    .risk-meta { display: flex; gap: 20px; padding-top: 14px; margin-top: 4px; border-top: 1px solid; }
+    .active-safe .risk-meta     { border-color: var(--green-border); }
+    .active-critical .risk-meta { border-color: #FCA5A5; }
+    .active-warning .risk-meta  { border-color: #FDE68A; }
+    .meta-item { font-size: 13px; font-weight: 600; }
+    .active-safe .meta-item     { color: var(--green-dark); }
+    .active-critical .meta-item { color: var(--red-text); }
+    .active-warning .meta-item  { color: var(--yellow-text); }
+    .back-link { display: flex; align-items: center; gap: 8px; text-decoration: none; margin-top: 4px; }
+    .back-icon { width: 14px; height: 14px; background: var(--navy); border-radius: 2px; }
+    .back-text { font-size: 14px; font-weight: 700; color: var(--navy); }
+    .back-link:hover .back-text { text-decoration: underline; }
+    .summary-body { padding: 0 28px 28px; }
+    .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--slate-100); }
+    .summary-single { margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--slate-100); }
+    .summary-label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--slate-400); letter-spacing: .5px; margin-bottom: 4px; }
+    .summary-value { font-size: 13px; font-weight: 600; color: var(--slate-900); }
+    .location-box { display: flex; align-items: center; gap: 10px; background: var(--slate-50); border-radius: 7px; padding: 10px 12px; margin-top: 8px; }
+    .loc-icon { width: 12px; height: 16px; background: var(--slate-400); border-radius: 2px; flex-shrink: 0; }
+    .loc-text { font-size: 12px; font-weight: 500; }
+    .export-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; margin-top: 20px; padding: 13px; border: 1.8px solid var(--slate-200); border-radius: 8px; background: white; cursor: pointer; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 15px; color: var(--slate-700); transition: background .2s; }
+    .export-btn:hover { background: var(--slate-50); }
+    .no-result { background: white; border: 1px solid var(--slate-200); border-radius: 14px; padding: 60px 40px; text-align: center; }
+    .no-result h2 { font-size: 22px; font-weight: 700; margin-bottom: 10px; }
+    .no-result p { color: var(--slate-500); margin-bottom: 24px; }
+    .go-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--navy); color: white; padding: 13px 28px; border-radius: 10px; font-weight: 700; font-size: 15px; text-decoration: none; }
+    footer { background: white; border-top: 1px solid var(--slate-200); padding: 22px 90px; display: flex; justify-content: space-between; align-items: center; }
+    .footer-copy { font-size: 13px; color: var(--slate-500); }
+    .footer-links { display: flex; gap: 28px; }
+    .footer-links a { font-size: 13px; color: var(--slate-400); text-decoration: none; }
+  </style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logos">
+      <img src="https://placehold.co/128x42/1E3A8A/white?text=GCME" alt="GCME"/>
+      <div class="nav-divider"></div>
+      <img src="https://placehold.co/115x42/1E3A8A/white?text=CHULA" alt="CHULA"/>
+    </div>
+    <a href="upload_history.html" class="upload-btn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+      </svg>
+      Upload Data
+    </a>
+  </div>
+</nav>
+
+<main id="mainContent"></main>
+
+<footer>
+  <div class="footer-copy">© GCME & CHULA Prediction Systems Project 2025–2026</div>
+  <div class="footer-links">
+    <a href="#">Documentation</a><a href="#">System Requirements</a><a href="#">Support</a>
+  </div>
+</footer>
+
+<script>
+  const raw  = sessionStorage.getItem('lastResult');
+  const main = document.getElementById('mainContent');
+
+  const HERO = `
+    <div class="hero"><div class="hero-grid"></div>
+      <div class="hero-content">
+        <h1>Data Analytics for a Machine Learning Based Corrosion Under Insulation Predictive Model</h1>
+        <p>Senior Engineering Project in collaboration between the Department of Metallurgical Engineering, Chulalongkorn University and GC Maintenance and Engineering (GCME)</p>
+      </div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-card"><div><div class="stat-label">OLEFINE 1</div><div><span class="stat-value">1,200</span> <span class="stat-unit">Datasets</span></div></div><div class="stat-badge">12%</div></div>
+      <div class="stat-card"><div><div class="stat-label">OLEFINE 2</div><div><span class="stat-value">840</span> <span class="stat-unit">Datasets</span></div></div><div class="stat-badge">8%</div></div>
+      <div class="stat-card"><div><div class="stat-label">AROMATICS</div><div><span class="stat-value">244</span> <span class="stat-unit">Datasets</span></div></div><div class="stat-badge">5%</div></div>
+    </div>`;
+
+  if (!raw) {
+    main.innerHTML = HERO + `
+      <div class="no-result">
+        <h2>ยังไม่มีผลการทำนาย</h2>
+        <p>กรุณากลับไปกรอกข้อมูลที่หน้าหลักแล้วกด "Predict Corrosion Risk" ก่อนครับ</p>
+        <a href="cui_prediction.html" class="go-btn">← กลับไปกรอกข้อมูล</a>
+      </div>`;
+  } else {
+    const d     = JSON.parse(raw);
+    const level = d.risk_level;
+    const inp   = d.input || {};
+
+    const cfgMap = {
+      SAFE:     { cls: 'active-safe',     label: 'SAFE / OPERATIONAL' },
+      WARNING:  { cls: 'active-warning',  label: 'WARNING' },
+      CRITICAL: { cls: 'active-critical', label: 'CRITICAL' },
+    };
+    const descMap = {
+      SAFE:     `Standard inspection cycle sufficient. Coating system integrity.<br/>CUI Incident Rate: ${d.probability_pct}% &nbsp;(< 25%)`,
+      WARNING:  `Monitoring Required. Accelerated corrosion trends likely.<br/>CUI Incident Rate: ${d.probability_pct}% &nbsp;(25%–50%)`,
+      CRITICAL: `Immediate Inspection Required. High probability of wall loss.<br/>CUI Incident Rate: ${d.probability_pct}% &nbsp;(> 50%)`,
+    };
+    const others = ['SAFE','WARNING','CRITICAL'].filter(l => l !== level);
+    const shortDesc = { SAFE:'CUI Incident Rate < 25%', WARNING:'CUI Incident Rate 25%–50%', CRITICAL:'CUI Incident Rate > 50%' };
+
+    // บันทึก history
+    const hist = JSON.parse(sessionStorage.getItem('predictionHistory') || '[]');
+    if (!hist.length || JSON.stringify(hist[0]) !== raw) { hist.unshift(d); sessionStorage.setItem('predictionHistory', JSON.stringify(hist.slice(0,20))); }
+
+    const coatings = [inp.Coating_Prime, inp.Coating_Secondary, inp.Coating_Top].filter(v => v && v !== 'Unknow').join(' / ') || '—';
+
+    main.innerHTML = HERO + `
+      <div class="content-row">
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div class="card">
+            <div class="card-header"><div class="card-icon"></div><div class="card-title">Risk Assessment Status</div></div>
+            <div class="risk-body">
+              <div class="risk-item ${cfgMap[level].cls}">
+                <div class="risk-top"><span class="risk-name">${cfgMap[level].label}</span><div class="risk-dot"></div></div>
+                <div class="risk-desc">${descMap[level]}</div>
+                <div class="risk-meta">
+                  <span class="meta-item">📅 Next Inspection: ${d.next_inspection_year}</span>
+                  <span class="meta-item">🎯 Confidence: ${d.confidence_pct}%</span>
+                </div>
+              </div>
+              ${others.map(l => `
+              <div class="risk-item inactive">
+                <div class="risk-top"><span class="risk-name">${cfgMap[l].label}</span><div class="risk-dot"></div></div>
+                <div class="risk-desc">${shortDesc[l]}</div>
+              </div>`).join('')}
+            </div>
+          </div>
+          <a href="cui_prediction.html" class="back-link">
+            <div class="back-icon"></div><span class="back-text">Back to Prediction Form</span>
+          </a>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div class="card-icon"></div><div class="card-title">Input Summary</div></div>
+          <div class="summary-body">
+            <div class="summary-grid">
+              <div><div class="summary-label">Material</div><div class="summary-value">${inp.Substrate || '—'}</div></div>
+              <div><div class="summary-label">Age</div><div class="summary-value">${inp.Age_Years ?? '—'} Years</div></div>
+            </div>
+            <div class="summary-grid">
+              <div><div class="summary-label">Temperature</div><div class="summary-value">${inp.Operating_Temperature_C || '—'}</div></div>
+              <div><div class="summary-label">Water Ingress</div><div class="summary-value">${inp.Water_Ingress_Risk || '—'}</div></div>
+            </div>
+            <div class="summary-single">
+              <div class="summary-label">Coating System</div>
+              <div class="summary-value">${coatings}</div>
+            </div>
+            <div class="summary-grid">
+              <div><div class="summary-label">Insulation</div><div class="summary-value">${inp.Insulation_Type || '—'}</div></div>
+              <div><div class="summary-label">Vapor Barrier</div><div class="summary-value">${inp.Vapor_Barrier || '—'}</div></div>
+            </div>
+            <div class="summary-single" style="border:none;margin:0;padding:0;">
+              <div class="summary-label">Location Reference</div>
+              <div class="location-box"><div class="loc-icon"></div><span class="loc-text">${inp.Location || 'ไม่ระบุ'}</span></div>
+            </div>
+            <button class="export-btn" onclick="alert('Export PDF จะเชื่อมใน Step 4 ครับ')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/>
+              </svg>
+              Export Report (PDF)
+            </button>
+          </div>
+        </div>
+      </div>`;
+  }
+</script>
+</body>
+</html>
