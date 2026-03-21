@@ -1,9 +1,6 @@
 # ==============================================================================
 # FILE: model.py
-# PURPOSE: ML Logic — อิงจาก ML_model6.py
-#          - Random Forest + LabelEncoder (ไม่ใช้ One-Hot)
-#          - Oversampling minority class
-#          - Threshold 0.50
+# PURPOSE: ML Logic — Random Forest + Supabase Storage for persistence
 # ==============================================================================
 
 import re
@@ -17,6 +14,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import StratifiedKFold, cross_val_score
 from sklearn.utils import resample
+from supabase import create_client
 
 warnings.filterwarnings("ignore")
 
@@ -24,6 +22,11 @@ MODEL_SAVE_PATH = os.path.join(os.getcwd(), "cui_model.pkl")
 THRESHOLD       = 0.50
 N_ESTIMATORS    = 500
 RANDOM_STATE    = 42
+
+SUPABASE_URL    = os.environ.get("SUPABASE_URL", "")
+SUPABASE_KEY    = os.environ.get("SUPABASE_KEY", "")
+BUCKET_NAME     = "models"
+MODEL_FILE_NAME = "cui_model.pkl"
 
 CAT_COLS = [
     "Substrate", "Coating_Prime", "Coating_Second",
@@ -78,6 +81,50 @@ def next_inspection_year(prob: float) -> int:
 
 
 # ==============================================================================
+# Supabase helpers
+# ==============================================================================
+def _get_supabase():
+    if not SUPABASE_URL or not SUPABASE_KEY:
+        return None
+    try:
+        return create_client(SUPABASE_URL, SUPABASE_KEY)
+    except Exception as e:
+        print(f"[Supabase] เชื่อมต่อไม่ได้: {e}")
+        return None
+
+
+def _upload_model_to_supabase():
+    sb = _get_supabase()
+    if not sb:
+        return
+    try:
+        with open(MODEL_SAVE_PATH, "rb") as f:
+            data = f.read()
+        sb.storage.from_(BUCKET_NAME).upload(
+            MODEL_FILE_NAME, data,
+            {"upsert": "true", "content-type": "application/octet-stream"}
+        )
+        print("[Supabase] Upload model สำเร็จ ✅")
+    except Exception as e:
+        print(f"[Supabase] Upload ไม่สำเร็จ: {e}")
+
+
+def _download_model_from_supabase():
+    sb = _get_supabase()
+    if not sb:
+        return False
+    try:
+        data = sb.storage.from_(BUCKET_NAME).download(MODEL_FILE_NAME)
+        with open(MODEL_SAVE_PATH, "wb") as f:
+            f.write(data)
+        print("[Supabase] Download model สำเร็จ ✅")
+        return True
+    except Exception as e:
+        print(f"[Supabase] ไม่มี model ใน Supabase หรือ download ไม่สำเร็จ: {e}")
+        return False
+
+
+# ==============================================================================
 # ModelManager
 # ==============================================================================
 class ModelManager:
@@ -100,7 +147,6 @@ class ModelManager:
     def train(self, file_path: str) -> dict:
         print(f"\n[ModelManager] เริ่ม Train จากไฟล์: {file_path}")
 
-        # 1. โหลดข้อมูล
         if file_path.endswith(".xlsx") or file_path.endswith(".xls"):
             df = pd.read_excel(file_path, engine='openpyxl')
         else:
@@ -113,37 +159,31 @@ class ModelManager:
 
         print(f"  โหลดข้อมูลดิบ: {len(df)} แถว")
 
-        # 2. เติมค่าว่าง categorical
         for col in CAT_COLS:
             if col in df.columns:
                 df[col] = df[col].fillna("Unknow").astype(str).str.strip()
             else:
                 df[col] = "Unknow"
 
-        # 3. Parse target
         df["yes_prob"] = df["Corrosion_Result"].apply(parse_corrosion_result)
         df["label"]    = (df["yes_prob"] >= THRESHOLD).astype(int)
         df = df.dropna(subset=["label"])
         print(f"  หลังล้าง Target: {len(df)} แถว")
 
-        # 4. Encode temperature
         df["temp_num"] = df["Operating_Temperature_C"].apply(encode_temperature)
 
-        # 5. Fit LabelEncoders
         self.encoders = {}
         for col in CAT_COLS:
             le = LabelEncoder()
             le.fit(df[col].str.lower())
             self.encoders[col] = le
 
-        # 6. สร้าง Feature Matrix
         X = self._build_features(df)
         y = df["label"]
 
         label_counts = y.value_counts()
         print(f"  Label distribution → Yes: {label_counts.get(1,0)}, No: {label_counts.get(0,0)}")
 
-        # 7. Oversample minority
         X_min_up, y_min_up = resample(
             X[y == 1], y[y == 1],
             replace=True,
@@ -153,7 +193,6 @@ class ModelManager:
         X_bal = pd.concat([X[y == 0], X_min_up]).reset_index(drop=True)
         y_bal = pd.concat([y[y == 0], y_min_up]).reset_index(drop=True)
 
-        # 8. Cross-validation
         rf = RandomForestClassifier(
             n_estimators     = N_ESTIMATORS,
             max_features     = "sqrt",
@@ -167,16 +206,13 @@ class ModelManager:
         cv_f1 = cross_val_score(rf, X_bal, y_bal, cv=cv, scoring="f1")
         print(f"  CV F1: {cv_f1.mean():.3f} ± {cv_f1.std():.3f}")
 
-        # 9. Train จริง
         rf.fit(X_bal, y_bal)
         self.model = rf
 
-        # 10. ประเมิน accuracy บน training data
         y_pred   = rf.predict(X)
         accuracy = float((y_pred == y.values).mean()) * 100
         print(f"  Accuracy (train): {accuracy:.2f}%")
 
-        # 11. อัปเดต stats
         area_counts = {}
         if "Area" in df.columns:
             area_counts = df["Area"].value_counts().to_dict()
@@ -191,6 +227,7 @@ class ModelManager:
         })
 
         self._save_model()
+        _upload_model_to_supabase()  # ← อัพขึ้น Supabase หลัง train
 
         return {
             "accuracy":       round(accuracy, 2),
@@ -203,7 +240,6 @@ class ModelManager:
         if not self.is_trained():
             raise RuntimeError("โมเดลยังไม่ได้ Train")
 
-        # สร้าง DataFrame 1 แถว
         row = {}
         for col in CAT_COLS:
             val = str(input_dict.get(col, "Unknow")).strip()
@@ -260,6 +296,11 @@ class ModelManager:
 
     # ------------------------------------------------------------------
     def _load_model(self):
+        # ลองโหลดจาก Supabase ก่อน
+        if not os.path.exists(MODEL_SAVE_PATH):
+            print("[ModelManager] ไม่มี model local — ลอง download จาก Supabase...")
+            _download_model_from_supabase()
+
         if not os.path.exists(MODEL_SAVE_PATH):
             print("[ModelManager] ยังไม่มี Model — รอ Upload ไฟล์ Train")
             return
@@ -270,7 +311,6 @@ class ModelManager:
             self.encoders = data.get("encoders", {})
             self.stats    = data.get("stats", self.stats)
 
-            # ถ้าเป็น model เก่า (One-Hot) ให้ reset
             if not self.encoders:
                 print("[ModelManager] พบ Model เก่า — ต้อง Train ใหม่")
                 self.model = None
