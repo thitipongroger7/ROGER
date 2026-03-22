@@ -120,6 +120,40 @@
     .footer-links { display: flex; gap: 28px; }
     .footer-links a { font-size: 13px; color: var(--slate-400); text-decoration: none; }
     .footer-links a:hover { color: var(--navy); }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 16px; }
+      .nav-logos img { height: 30px; }
+      .upload-btn { font-size: 13px; padding: 9px 14px; }
+      .upload-btn svg { width: 15px; height: 15px; }
+      main { padding: 16px 16px 32px; gap: 16px; }
+      .hero { min-height: 140px; border-radius: 12px; }
+      .hero-content { padding: 20px 20px; }
+      .hero-content h1 { font-size: 18px; margin-bottom: 8px; }
+      .hero-content p { font-size: 12px; }
+      .model-status { font-size: 12px; padding: 10px 14px; }
+      .stat-row { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .stat-card { padding: 12px 14px; }
+      .stat-value { font-size: 22px; }
+      .stat-badge { font-size: 14px; padding: 6px 10px; }
+      .content-grid { grid-template-columns: 1fr; gap: 16px; }
+      .right-col { order: -1; }
+      .card-header { padding: 18px 18px 0; }
+      .card-title { font-size: 17px; }
+      .form-body { padding: 16px 18px 20px; grid-template-columns: 1fr 1fr; gap: 12px 14px; }
+      .field input { height: 42px; font-size: 13px; }
+      .field label { font-size: 12px; }
+      .predict-btn { margin: 4px 18px 20px; width: calc(100% - 36px); padding: 15px; font-size: 15px; }
+      .result-bar { margin: 0 18px 16px; font-size: 14px; padding: 14px 16px; }
+      .error-bar { margin: 0 18px 16px; }
+      .risk-card { padding: 18px; }
+      .risk-title { font-size: 17px; }
+      .risk-name { font-size: 15px; }
+      .total-card { padding: 16px 18px; }
+      .total-value { font-size: 36px; }
+      footer { padding: 16px 16px; flex-direction: column; gap: 10px; text-align: center; }
+      .footer-links { gap: 16px; }
+    }
   </style>
 </head>
 <body>
