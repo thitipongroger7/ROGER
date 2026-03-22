@@ -90,6 +90,34 @@
     .detail-btn { background: var(--slate-100); border: none; border-radius: 6px; padding: 5px 12px; font-size: 12px; font-weight: 600; color: var(--navy); cursor: pointer; transition: background .15s; }
     .detail-btn:hover { background: var(--slate-200); }
 
+    @media (max-width: 768px) {
+      nav { padding: 0 16px; }
+      .nav-logos img { height: 30px; }
+      .back-btn { font-size: 12px; padding: 8px 14px; }
+      main { grid-template-columns: 1fr; padding: 16px 16px 32px; gap: 16px; }
+      .sidebar { flex-direction: row; flex-wrap: wrap; gap: 12px; }
+      .total-card { flex: 1; min-width: 120px; padding: 16px; }
+      .total-value { font-size: 32px; }
+      .dist-card { flex: 1; min-width: 180px; padding: 16px; }
+      .dist-title { font-size: 14px; margin-bottom: 14px; }
+      .upload-zone { padding: 28px 16px; gap: 10px; }
+      .upload-icon { width: 56px; height: 56px; }
+      .upload-icon svg { width: 28px; height: 28px; }
+      .upload-title { font-size: 16px; }
+      .upload-sub { font-size: 12px; }
+      .select-btn { font-size: 14px; padding: 10px 22px; }
+      .history-header { padding: 14px 16px; }
+      .history-title { font-size: 14px; }
+      .filter-input { width: 140px; font-size: 12px; }
+      th { padding: 10px 10px; font-size: 10px; }
+      td { padding: 10px 10px; font-size: 12px; }
+      .badge { font-size: 10px; padding: 2px 8px; }
+      .detail-btn { font-size: 11px; padding: 4px 8px; }
+      .modal { padding: 20px; }
+      .param-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+    }
+  </style>
+
     /* Modal */
     .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 500; align-items: center; justify-content: center; }
     .modal-overlay.open { display: flex; }
