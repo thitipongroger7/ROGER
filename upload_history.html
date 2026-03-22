@@ -91,9 +91,12 @@
     .detail-btn:hover { background: var(--slate-200); }
 
     @media (max-width: 768px) {
-      nav { padding: 0 16px; }
-      .nav-logos img { height: 30px; }
-      .back-btn { font-size: 12px; padding: 8px 14px; }
+      nav { padding: 0 12px; }
+      .nav-inner { padding: 10px 0; }
+      .nav-logos { gap: 10px; }
+      .nav-img { height: 24px !important; }
+      .nav-divider { height: 22px; }
+      .back-btn { font-size: 12px; padding: 7px 12px; }
       main { grid-template-columns: 1fr; padding: 16px 16px 32px; gap: 16px; }
       .sidebar { flex-direction: row; flex-wrap: wrap; gap: 12px; }
       .total-card { flex: 1; min-width: 120px; padding: 16px; }
@@ -115,10 +118,9 @@
       .detail-btn { font-size: 11px; padding: 4px 8px; }
       .modal { padding: 20px; }
       .param-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+      footer { padding: 14px 16px; flex-direction: column; text-align: center; }
+      .footer-links { gap: 14px; flex-wrap: wrap; justify-content: center; }
     }
-  </style>
-
-    /* Modal */
     .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 500; align-items: center; justify-content: center; }
     .modal-overlay.open { display: flex; }
     .modal { background: white; border-radius: 16px; padding: 32px; width: 540px; max-width: 95vw; max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
@@ -148,7 +150,7 @@
     .note-save { flex: 1; padding: 11px; background: var(--navy); color: white; border: none; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 14px; cursor: pointer; }
     .note-cancel { padding: 11px 18px; background: var(--slate-100); border: none; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 14px; cursor: pointer; }
 
-    footer { background: white; border-top: 1px solid var(--slate-200); padding: 22px 90px; display: flex; justify-content: space-between; align-items: center; }
+    footer { background: white; border-top: 1px solid var(--slate-200); padding: 22px 90px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
     .footer-copy { font-size: 13px; color: var(--slate-500); }
     .footer-links { display: flex; gap: 28px; }
     .footer-links a { font-size: 13px; color: var(--slate-400); text-decoration: none; }
@@ -158,9 +160,9 @@
 <nav>
   <div class="nav-inner">
     <div class="nav-logos">
-      <img src="gcme_logo.png" alt="GCME" style="height:42px; object-fit:contain;"/>
+      <img src="gcme_logo.png" alt="GCME" style="height:42px; object-fit:contain;" class="nav-img"/>
       <div class="nav-divider"></div>
-      <img src="chula_logo.png" alt="Chulalongkorn University" style="height:42px; object-fit:contain;"/>
+      <img src="chula_logo.png" alt="Chulalongkorn University" style="height:42px; object-fit:contain; background:transparent; mix-blend-mode:multiply;" class="nav-img"/>
     </div>
     <a href="cui_prediction.html" style="background:#F1F5F9;border:none;border-radius:10px;padding:10px 20px;display:flex;align-items:center;gap:8px;font-family:DM Sans,sans-serif;font-weight:600;font-size:14px;color:#1E293B;text-decoration:none;"><svg width="22" height="22" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18" fill="#F1F5F9"/><path d="M22 12H26C28 12 30 14 30 16V24C30 26 28 28 26 28H22" stroke="#1E293B" stroke-width="2.2" stroke-linecap="round"/><line x1="10" y1="20" x2="24" y2="20" stroke="#1E293B" stroke-width="2.2" stroke-linecap="round"/><polyline points="16,14 10,20 16,26" fill="none" stroke="#1E293B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Back</a>
   </div>
