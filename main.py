@@ -1,5 +1,4 @@
-# ============================================================================== FileResponse
-from pydantic import BaseModel
+# ==============================================================================
 # FILE: main.py
 # PURPOSE: FastAPI Backend — รับข้อมูลจาก UI แล้วส่งให้ ML Model ทำนาย
 # ==============================================================================
@@ -7,7 +6,8 @@ from pydantic import BaseModel
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import JSONResponse, HTMLResponse, FileResponse
+from fastapi.responses import FileResponse
+from pydantic import BaseModel
 from typing import Optional
 import uvicorn
 import os
@@ -126,7 +126,7 @@ async def upload_and_train(file: UploadFile = File(...)):
 
 
 # ==============================================================================
-# ENDPOINT 3: Predict
+# ENDPOINT 3: Predict + บันทึกประวัติอัตโนมัติ
 # ==============================================================================
 @app.post("/api/predict")
 def predict(data: PredictRequest):
@@ -138,7 +138,8 @@ def predict(data: PredictRequest):
     try:
         input_dict = data.dict()
         result     = manager.predict(input_dict)
-        return {
+
+        response = {
             "status":               "success",
             "prediction":           result["prediction"],
             "probability":          round(result["probability"], 4),
@@ -148,6 +149,37 @@ def predict(data: PredictRequest):
             "confidence_pct":       result["confidence_pct"],
             "input_summary":        input_dict,
         }
+
+        # ✅ บันทึกประวัติอัตโนมัติหลัง predict สำเร็จ
+        try:
+            sb = get_supabase()
+            if sb:
+                now = datetime.now()
+                record_id = int(now.timestamp() * 1000)
+                record = {
+                    "id":   record_id,
+                    "date": now.strftime("%Y-%m-%d"),
+                    "time": now.strftime("%H:%M:%S"),
+                    "input": input_dict,
+                    "result": {
+                        "prediction":           result["prediction"],
+                        "probability_pct":      round(result["probability"] * 100, 2),
+                        "risk_level":           result["risk_level"],
+                        "next_inspection_year": result["next_inspection_year"],
+                        "confidence_pct":       result["confidence_pct"],
+                    },
+                    "note": ""
+                }
+                sb.storage.from_("models").upload(
+                    f"history/{record_id}.json",
+                    json.dumps(record).encode(),
+                    {"upsert": "true", "content-type": "application/json"}
+                )
+        except Exception:
+            pass  # ไม่ให้ error ตรงนี้มากระทบผลทำนาย
+
+        return response
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"เกิดข้อผิดพลาดในการทำนาย: {str(e)}")
 
@@ -161,7 +193,7 @@ def get_stats():
 
 
 # ==============================================================================
-# ENDPOINT 5: History — บันทึกประวัติ
+# ENDPOINT 5: History — บันทึกประวัติ (manual)
 # ==============================================================================
 @app.post("/api/history")
 def save_history(record: HistoryRecord):
