@@ -122,10 +122,14 @@
     .footer-links a:hover { color: var(--navy); }
 
     @media (max-width: 768px) {
-      nav { padding: 0 16px; }
-      .nav-logos img { height: 30px; }
-      .upload-btn { font-size: 13px; padding: 9px 14px; }
-      .upload-btn svg { width: 15px; height: 15px; }
+      nav { padding: 0 12px; }
+      .nav-inner { padding: 10px 0; }
+      .nav-logos { gap: 10px; }
+      .nav-logos img { height: 24px; }
+      .nav-divider { height: 22px; }
+      .chula-logo-bg { background: transparent !important; padding: 0 !important; }
+      .upload-btn { font-size: 12px; padding: 8px 12px; border-radius: 8px; }
+      .upload-btn svg { width: 14px; height: 14px; }
       main { padding: 16px 16px 32px; gap: 16px; }
       .hero { min-height: 140px; border-radius: 12px; }
       .hero-content { padding: 20px 20px; }
@@ -163,7 +167,7 @@
     <div class="nav-logos">
       <img src="gcme_logo.png" alt="GCME" style="height:42px; object-fit:contain;"/>
       <div class="nav-divider"></div>
-      <img src="chula_logo.png" alt="Chulalongkorn University" style="height:42px; object-fit:contain;"/>
+      <img src="chula_logo.png" alt="Chulalongkorn University" style="height:42px; object-fit:contain; mix-blend-mode:multiply;"/>
     </div>
     <a href="upload_history.html" class="upload-btn">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
