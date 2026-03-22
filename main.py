@@ -1,4 +1,5 @@
-# ==============================================================================
+# ============================================================================== FileResponse
+from pydantic import BaseModel
 # FILE: main.py
 # PURPOSE: FastAPI Backend — รับข้อมูลจาก UI แล้วส่งให้ ML Model ทำนาย
 # ==============================================================================
@@ -6,10 +7,13 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
-from pydantic import BaseModel
+from fastapi.responses import
+from typing import Optional
 import uvicorn
 import os
+import json
+from datetime import datetime
+from supabase import create_client
 
 from model import ModelManager
 
@@ -23,6 +27,17 @@ app.add_middleware(
 )
 
 manager = ModelManager()
+
+SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
+SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
+
+def get_supabase():
+    if not SUPABASE_URL or not SUPABASE_KEY:
+        return None
+    try:
+        return create_client(SUPABASE_URL, SUPABASE_KEY)
+    except Exception:
+        return None
 
 # Serve static files (HTML, images, etc.)
 @app.get("/cui_prediction.html", include_in_schema=False)
@@ -45,19 +60,30 @@ def serve_hero(): return FileResponse(os.path.join(os.getcwd(), "hero_bg.jpg"))
 
 
 # ==============================================================================
-# Schema — ตรงกับคอลัมน์ใน Excel ทุกตัว
+# Schema
 # ==============================================================================
 class PredictRequest(BaseModel):
     Substrate:               str
     Age_Years:               float
     Operating_Temperature_C: str
     Coating_Prime:           str
-    Coating_Second:          str    # ← แก้จาก Coating_Secondary
-    Top_Coat:                str    # ← แก้จาก Coating_Top
+    Coating_Second:          str
+    Top_Coat:                str
     Insulation_Type:         str
     Vapor_Barrier:           str
-    Environment:             str    # ← แก้จาก Location
-    Jacket_Damage:           str    # ← แก้จาก Water_Ingress_Risk
+    Environment:             str
+    Jacket_Damage:           str
+
+class HistoryRecord(BaseModel):
+    id:     int
+    date:   str
+    time:   str
+    input:  dict
+    result: dict
+    note:   Optional[str] = ""
+
+class NoteUpdate(BaseModel):
+    note: str
 
 
 # ==============================================================================
@@ -132,6 +158,85 @@ def predict(data: PredictRequest):
 @app.get("/api/stats")
 def get_stats():
     return manager.get_stats()
+
+
+# ==============================================================================
+# ENDPOINT 5: History — บันทึกประวัติ
+# ==============================================================================
+@app.post("/api/history")
+def save_history(record: HistoryRecord):
+    sb = get_supabase()
+    if not sb:
+        raise HTTPException(status_code=500, detail="Supabase ไม่พร้อมใช้งาน")
+    try:
+        sb.storage.from_("models").upload(
+            f"history/{record.id}.json",
+            json.dumps(record.dict()).encode(),
+            {"upsert": "true", "content-type": "application/json"}
+        )
+        return {"status": "saved"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ==============================================================================
+# ENDPOINT 6: History — ดึงประวัติทั้งหมด
+# ==============================================================================
+@app.get("/api/history")
+def get_history():
+    sb = get_supabase()
+    if not sb:
+        return []
+    try:
+        files = sb.storage.from_("models").list("history")
+        records = []
+        for f in files:
+            try:
+                data = sb.storage.from_("models").download(f"history/{f['name']}")
+                records.append(json.loads(data.decode()))
+            except Exception:
+                continue
+        records.sort(key=lambda x: x.get("id", 0), reverse=True)
+        return records
+    except Exception:
+        return []
+
+
+# ==============================================================================
+# ENDPOINT 7: History — อัพเดต note
+# ==============================================================================
+@app.patch("/api/history/{record_id}/note")
+def update_note(record_id: int, body: NoteUpdate):
+    sb = get_supabase()
+    if not sb:
+        raise HTTPException(status_code=500, detail="Supabase ไม่พร้อมใช้งาน")
+    try:
+        data = sb.storage.from_("models").download(f"history/{record_id}.json")
+        record = json.loads(data.decode())
+        record["note"] = body.note
+        sb.storage.from_("models").upload(
+            f"history/{record_id}.json",
+            json.dumps(record).encode(),
+            {"upsert": "true", "content-type": "application/json"}
+        )
+        return {"status": "updated"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ==============================================================================
+# ENDPOINT 8: History — ลบประวัติ
+# ==============================================================================
+@app.delete("/api/history/{record_id}")
+def delete_history(record_id: int):
+    sb = get_supabase()
+    if not sb:
+        raise HTTPException(status_code=500, detail="Supabase ไม่พร้อมใช้งาน")
+    try:
+        sb.storage.from_("models").remove([f"history/{record_id}.json"])
+        return {"status": "deleted"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 # ==============================================================================
