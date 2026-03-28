@@ -31,6 +31,10 @@ manager = ModelManager()
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
 
+# ตั้งค่า Username และ Password ที่นี่เลยครับ
+LOGIN_USERNAME = os.environ.get("LOGIN_USERNAME", "admin")
+LOGIN_PASSWORD = os.environ.get("LOGIN_PASSWORD", "cui2024")
+
 def get_supabase():
     if not SUPABASE_URL or not SUPABASE_KEY:
         return None
@@ -40,6 +44,12 @@ def get_supabase():
         return None
 
 # Serve static files (HTML, images, etc.)
+@app.get("/", include_in_schema=False)
+def serve_login(): return FileResponse(os.path.join(os.getcwd(), "login.html"))
+
+@app.get("/login.html", include_in_schema=False)
+def serve_login_page(): return FileResponse(os.path.join(os.getcwd(), "login.html"))
+
 @app.get("/cui_prediction.html", include_in_schema=False)
 def serve_main(): return FileResponse(os.path.join(os.getcwd(), "cui_prediction.html"))
 
@@ -52,11 +62,20 @@ def serve_result(): return FileResponse(os.path.join(os.getcwd(), "result.html")
 @app.get("/gcme_logo.png", include_in_schema=False)
 def serve_gcme(): return FileResponse(os.path.join(os.getcwd(), "gcme_logo.png"))
 
+@app.get("/gcme_logo_nobg.png", include_in_schema=False)
+def serve_gcme_nobg(): return FileResponse(os.path.join(os.getcwd(), "gcme_logo_nobg.png"))
+
 @app.get("/chula_logo.png", include_in_schema=False)
 def serve_chula(): return FileResponse(os.path.join(os.getcwd(), "chula_logo.png"))
 
+@app.get("/chula_logo_nobg.png", include_in_schema=False)
+def serve_chula_nobg(): return FileResponse(os.path.join(os.getcwd(), "chula_logo_nobg.png"))
+
 @app.get("/hero_bg.jpg", include_in_schema=False)
 def serve_hero(): return FileResponse(os.path.join(os.getcwd(), "hero_bg.jpg"))
+
+@app.get("/refinery_new.png", include_in_schema=False)
+def serve_refinery(): return FileResponse(os.path.join(os.getcwd(), "refinery_new.png"))
 
 
 # ==============================================================================
@@ -73,6 +92,10 @@ class PredictRequest(BaseModel):
     Vapor_Barrier:           str
     Environment:             str
     Jacket_Damage:           str
+
+class LoginRequest(BaseModel):
+    username: str
+    password: str
 
 class HistoryRecord(BaseModel):
     id:     int
@@ -96,6 +119,16 @@ def health_check():
         "model_trained": manager.is_trained(),
         "message": "CUI Prediction API is running"
     }
+
+
+# ==============================================================================
+# ENDPOINT LOGIN
+# ==============================================================================
+@app.post("/api/login")
+def login(data: LoginRequest):
+    if data.username == LOGIN_USERNAME and data.password == LOGIN_PASSWORD:
+        return {"success": True, "message": "Login สำเร็จ"}
+    raise HTTPException(status_code=401, detail="Username หรือ Password ไม่ถูกต้อง")
 
 
 # ==============================================================================
