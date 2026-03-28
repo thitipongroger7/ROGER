@@ -561,16 +561,16 @@
 
   // ── Auth Guard ──────────────────────────────────────────────────────────────
   window.addEventListener('DOMContentLoaded', function() {
-    const ok = sessionStorage.getItem('cui_logged_in') || localStorage.getItem('cui_logged_in');
-    if (!ok) window.location.replace('/login.html');
+    var session  = sessionStorage.getItem('cui_logged_in') === 'true';
+    var remember = localStorage.getItem('cui_remember') === 'true';
+    if (!session && !remember) window.location.replace('/login.html');
   });
 
   // ── Logout ──────────────────────────────────────────────────────────────────
   function doLogout() {
     localStorage.removeItem('cui_remember');
-    localStorage.removeItem('cui_logged_in');
     sessionStorage.removeItem('cui_logged_in');
-    window.location.href = '/login.html';
+    window.location.replace('/login.html');
   }
 </script>
 </body>
