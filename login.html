@@ -132,16 +132,17 @@
 <div id="error-msg" style="display:none; color:#c0392b; font-size:0.8rem; background:#fdecea; padding:8px 12px; border-left:3px solid #c0392b;">
   Invalid Username or Password
 </div>
-<button onclick="doLogin()" class="w-full py-4 font-headline font-bold uppercase tracking-[0.2em] text-sm hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-2" style="background:#29418e; color:#ffffff;">
+<button id="login-btn" onclick="doLogin()" class="w-full py-4 font-headline font-bold uppercase tracking-[0.2em] text-sm hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-2" style="background:#29418e; color:#ffffff;">
   <span id="btn-text">Sign In</span>
   <span class="material-symbols-outlined text-base">arrow_forward</span>
 </button>
 <script>
 // ถ้า "Stay signed in" เคยติ๊กไว้ → ข้ามไปหน้าหลักได้เลย
-// ใช้แค่ localStorage['cui_remember'] เป็นตัวชี้วัด
 if (localStorage.getItem('cui_remember') === 'true') {
   window.location.replace('/cui_prediction.html');
 }
+
+var _submitting = false;
 
 function showError(msg) {
   var el = document.getElementById('error-msg');
@@ -154,20 +155,32 @@ function hideError() {
 }
 
 async function doLogin() {
+  if (_submitting) return;
+
   var username = document.getElementById('username-input').value.trim();
   var password = document.getElementById('password-input').value.trim();
   var remember = document.getElementById('remember-cb').checked;
   var btnText  = document.getElementById('btn-text');
+  var loginBtn = document.getElementById('login-btn');
 
-  hideError();
-
-  if (!username || !password) {
+  // Validation — แสดง error แล้วหยุดทันที ไม่ทำอะไรต่อ
+  if (!username && !password) {
     showError('Please enter your username and password.');
     return;
   }
+  if (!username) {
+    showError('Please enter your username.');
+    return;
+  }
+  if (!password) {
+    showError('Please enter your password.');
+    return;
+  }
 
+  hideError();
+  _submitting = true;
   btnText.textContent = 'Signing in...';
-  document.querySelector('button[onclick]').disabled = true;
+  loginBtn.disabled = true;
 
   try {
     var res  = await fetch('/api/login', {
@@ -178,10 +191,8 @@ async function doLogin() {
     var data = await res.json();
 
     if (res.ok && data.success) {
-      // เซ็ต session เสมอ (หาย เมื่อปิด browser ถ้าไม่ได้ remember)
       sessionStorage.setItem('cui_logged_in', 'true');
       if (remember) {
-        // remember → เก็บ localStorage ด้วย (คงอยู่จนกว่าจะ logout)
         localStorage.setItem('cui_remember', 'true');
       } else {
         localStorage.removeItem('cui_remember');
@@ -190,12 +201,14 @@ async function doLogin() {
     } else {
       showError('Incorrect username or password. Please try again.');
       btnText.textContent = 'Sign In';
-      document.querySelector('button[onclick]').disabled = false;
+      loginBtn.disabled = false;
+      _submitting = false;
     }
   } catch(e) {
     showError('Connection error. Please check your network and try again.');
     btnText.textContent = 'Sign In';
-    document.querySelector('button[onclick]').disabled = false;
+    loginBtn.disabled = false;
+    _submitting = false;
   }
 }
 
