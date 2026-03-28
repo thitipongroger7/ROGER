@@ -176,7 +176,7 @@
       </svg>
       Upload Data
     </a>
-    <button onclick="window.location.href='/login.html'" class="upload-btn" style="background:#64748B; box-shadow: inset 0 4px 6px rgba(0,0,0,0.18);">
+    <button onclick="doLogout()" class="upload-btn" style="background:#64748B; box-shadow: inset 0 4px 6px rgba(0,0,0,0.18);">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="width:18px;height:18px;">
         <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/>
       </svg>
@@ -558,6 +558,20 @@
   }
 
   loadStats();
+
+  // ── Auth Guard ──────────────────────────────────────────────────────────────
+  (function() {
+    const ok = sessionStorage.getItem('cui_logged_in') || localStorage.getItem('cui_logged_in');
+    if (!ok) window.location.href = '/login.html';
+  })();
+
+  // ── Logout ──────────────────────────────────────────────────────────────────
+  function doLogout() {
+    localStorage.removeItem('cui_remember');
+    localStorage.removeItem('cui_logged_in');
+    sessionStorage.removeItem('cui_logged_in');
+    window.location.href = '/login.html';
+  }
 </script>
 </body>
 </html>
