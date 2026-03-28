@@ -137,11 +137,19 @@
   <span class="material-symbols-outlined text-base">arrow_forward</span>
 </button>
 <script>
+// ตรวจสอบตอน load — ถ้า remember ไว้แล้ว ข้ามไปหน้าหลักเลย
+(function() {
+  if (localStorage.getItem('cui_remember') === 'true') {
+    window.location.href = '/cui_prediction.html';
+  }
+})();
+
 async function doLogin() {
-  var username = document.getElementById('username-input').value.trim();
-  var password = document.getElementById('password-input').value.trim();
-  var errMsg   = document.getElementById('error-msg');
-  var btnText  = document.getElementById('btn-text');
+  var username   = document.getElementById('username-input').value.trim();
+  var password   = document.getElementById('password-input').value.trim();
+  var remember   = document.getElementById('remember-cb').checked;
+  var errMsg     = document.getElementById('error-msg');
+  var btnText    = document.getElementById('btn-text');
 
   if (!username || !password) {
     errMsg.style.display = 'block';
@@ -160,6 +168,17 @@ async function doLogin() {
     var data = await res.json();
     if (res.ok && data.success) {
       errMsg.style.display = 'none';
+      // ถ้าติ๊ก Stay signed in → เก็บไว้ใน localStorage (ถาวรจนกว่าจะ logout)
+      // ถ้าไม่ติ๊ก → เก็บแค่ sessionStorage (ปิด tab แล้วหาย)
+      if (remember) {
+        localStorage.setItem('cui_remember', 'true');
+        localStorage.setItem('cui_logged_in', 'true');
+        sessionStorage.setItem('cui_logged_in', 'true');
+      } else {
+        localStorage.removeItem('cui_remember');
+        localStorage.removeItem('cui_logged_in');
+        sessionStorage.setItem('cui_logged_in', 'true');
+      }
       window.location.href = '/cui_prediction.html';
     } else {
       errMsg.style.display = 'block';
