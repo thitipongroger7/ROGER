@@ -560,10 +560,10 @@
   loadStats();
 
   // ── Auth Guard ──────────────────────────────────────────────────────────────
-  (function() {
+  window.addEventListener('DOMContentLoaded', function() {
     const ok = sessionStorage.getItem('cui_logged_in') || localStorage.getItem('cui_logged_in');
-    if (!ok) window.location.href = '/login.html';
-  })();
+    if (!ok) window.location.replace('/login.html');
+  });
 
   // ── Logout ──────────────────────────────────────────────────────────────────
   function doLogout() {
