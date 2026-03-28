@@ -137,60 +137,68 @@
   <span class="material-symbols-outlined text-base">arrow_forward</span>
 </button>
 <script>
-// ตรวจสอบตอน load — ถ้า remember ไว้แล้ว ข้ามไปหน้าหลักเลย
-(function() {
-  if (localStorage.getItem('cui_remember') === 'true') {
-    window.location.href = '/cui_prediction.html';
-  }
-})();
+// ถ้า "Stay signed in" เคยติ๊กไว้ → ข้ามไปหน้าหลักได้เลย
+// ใช้แค่ localStorage['cui_remember'] เป็นตัวชี้วัด
+if (localStorage.getItem('cui_remember') === 'true') {
+  window.location.replace('/cui_prediction.html');
+}
+
+function showError(msg) {
+  var el = document.getElementById('error-msg');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+function hideError() {
+  document.getElementById('error-msg').style.display = 'none';
+}
 
 async function doLogin() {
-  var username   = document.getElementById('username-input').value.trim();
-  var password   = document.getElementById('password-input').value.trim();
-  var remember   = document.getElementById('remember-cb').checked;
-  var errMsg     = document.getElementById('error-msg');
-  var btnText    = document.getElementById('btn-text');
+  var username = document.getElementById('username-input').value.trim();
+  var password = document.getElementById('password-input').value.trim();
+  var remember = document.getElementById('remember-cb').checked;
+  var btnText  = document.getElementById('btn-text');
+
+  hideError();
 
   if (!username || !password) {
-    errMsg.style.display = 'block';
-    errMsg.textContent   = 'Please enter your Username and Password';
+    showError('Please enter your username and password.');
     return;
   }
 
   btnText.textContent = 'Signing in...';
+  document.querySelector('button[onclick]').disabled = true;
 
   try {
     var res  = await fetch('/api/login', {
-      method: 'POST',
+      method:  'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username: username, password: password })
+      body:    JSON.stringify({ username: username, password: password })
     });
     var data = await res.json();
+
     if (res.ok && data.success) {
-      errMsg.style.display = 'none';
-      // ถ้าติ๊ก Stay signed in → เก็บไว้ใน localStorage (ถาวรจนกว่าจะ logout)
-      // ถ้าไม่ติ๊ก → เก็บแค่ sessionStorage (ปิด tab แล้วหาย)
+      // เซ็ต session เสมอ (หาย เมื่อปิด browser ถ้าไม่ได้ remember)
+      sessionStorage.setItem('cui_logged_in', 'true');
       if (remember) {
+        // remember → เก็บ localStorage ด้วย (คงอยู่จนกว่าจะ logout)
         localStorage.setItem('cui_remember', 'true');
-        localStorage.setItem('cui_logged_in', 'true');
-        sessionStorage.setItem('cui_logged_in', 'true');
       } else {
         localStorage.removeItem('cui_remember');
-        localStorage.removeItem('cui_logged_in');
-        sessionStorage.setItem('cui_logged_in', 'true');
       }
-      window.location.href = '/cui_prediction.html';
+      window.location.replace('/cui_prediction.html');
     } else {
-      errMsg.style.display = 'block';
-      errMsg.textContent   = 'Invalid Username or Password';
-      btnText.textContent  = 'Sign In';
+      showError('Incorrect username or password. Please try again.');
+      btnText.textContent = 'Sign In';
+      document.querySelector('button[onclick]').disabled = false;
     }
   } catch(e) {
-    errMsg.style.display = 'block';
-    errMsg.textContent   = 'An error occurred. Please try again.';
-    btnText.textContent  = 'Sign In';
+    showError('Connection error. Please check your network and try again.');
+    btnText.textContent = 'Sign In';
+    document.querySelector('button[onclick]').disabled = false;
   }
 }
+
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Enter') doLogin();
 });
