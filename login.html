@@ -99,14 +99,14 @@
 <label class="block text-[10px] font-bold uppercase tracking-widest mb-1 group-focus-within:text-blue-700 transition-colors" style="color:#555566;">Username</label>
 <div class="relative">
 <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline text-lg group-focus-within:text-primary transition-colors">badge</span>
-<input class="w-full border-none rounded-none py-4 pl-12 pr-4 placeholder:text-gray-400 focus:ring-0 focus:border-b-2 transition-all font-headline tracking-wider" style="background:#f0f2f8; color:#1a1a2e; border-bottom: 2px solid transparent;" onfocus="this.style.borderBottomColor='#435aa8'" onblur="this.style.borderBottomColor='transparent'" placeholder="ID-000000" type="text"/>
+<input id="username-input" class="w-full border-none rounded-none py-4 pl-12 pr-4 placeholder:text-gray-400 focus:ring-0 focus:border-b-2 transition-all font-headline tracking-wider" style="background:#f0f2f8; color:#1a1a2e; border-bottom: 2px solid transparent;" onfocus="this.style.borderBottomColor='#435aa8'" onblur="this.style.borderBottomColor='transparent'" placeholder="ID-000000" type="text"/>
 </div>
 </div>
 <div class="group relative">
 <label class="block text-[10px] font-bold uppercase tracking-widest mb-1 group-focus-within:text-blue-700 transition-colors" style="color:#555566;">Password</label>
 <div class="relative">
 <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline text-lg group-focus-within:text-primary transition-colors">lock</span>
-<input class="w-full border-none rounded-none py-4 pl-12 pr-4 placeholder:text-gray-400 focus:ring-0 focus:border-b-2 transition-all font-headline" style="background:#f0f2f8; color:#1a1a2e; border-bottom: 2px solid transparent;" onfocus="this.style.borderBottomColor='#435aa8'" onblur="this.style.borderBottomColor='transparent'" placeholder="••••••••" type="password"/>
+<input id="password-input" class="w-full border-none rounded-none py-4 pl-12 pr-4 placeholder:text-gray-400 focus:ring-0 focus:border-b-2 transition-all font-headline" style="background:#f0f2f8; color:#1a1a2e; border-bottom: 2px solid transparent;" onfocus="this.style.borderBottomColor='#435aa8'" onblur="this.style.borderBottomColor='transparent'" placeholder="••••••••" type="password"/>
 </div>
 </div>
 </div>
@@ -129,10 +129,53 @@
 <span class="text-xs font-medium transition-colors" style="color:#1a1a2e;">Stay signed in</span>
 </label>
 </div>
-<button class="w-full py-4 font-headline font-bold uppercase tracking-[0.2em] text-sm hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-2" style="background:#29418e; color:#ffffff;">
-                        Sign In
-                        <span class="material-symbols-outlined text-base">arrow_forward</span>
+<div id="error-msg" style="display:none; color:#c0392b; font-size:0.8rem; background:#fdecea; padding:8px 12px; border-left:3px solid #c0392b;">
+  Username หรือ Password ไม่ถูกต้อง
+</div>
+<button onclick="doLogin()" class="w-full py-4 font-headline font-bold uppercase tracking-[0.2em] text-sm hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-2" style="background:#29418e; color:#ffffff;">
+  <span id="btn-text">เข้าสู่ระบบ</span>
+  <span class="material-symbols-outlined text-base">arrow_forward</span>
 </button>
+<script>
+async function doLogin() {
+  var username = document.getElementById('username-input').value.trim();
+  var password = document.getElementById('password-input').value.trim();
+  var errMsg   = document.getElementById('error-msg');
+  var btnText  = document.getElementById('btn-text');
+
+  if (!username || !password) {
+    errMsg.style.display = 'block';
+    errMsg.textContent   = 'กรุณากรอก Username และ Password';
+    return;
+  }
+
+  btnText.textContent = 'กำลังเข้าสู่ระบบ...';
+
+  try {
+    var res  = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: username, password: password })
+    });
+    var data = await res.json();
+    if (res.ok && data.success) {
+      errMsg.style.display = 'none';
+      window.location.href = '/cui_prediction.html';
+    } else {
+      errMsg.style.display = 'block';
+      errMsg.textContent   = 'Username หรือ Password ไม่ถูกต้อง';
+      btnText.textContent  = 'เข้าสู่ระบบ';
+    }
+  } catch(e) {
+    errMsg.style.display = 'block';
+    errMsg.textContent   = 'เกิดข้อผิดพลาด กรุณาลองใหม่';
+    btnText.textContent  = 'เข้าสู่ระบบ';
+  }
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') doLogin();
+});
+</script>
 </form>
 </div>
 <div class="pt-12 border-t" style="border-color:#e0e0ee;">
