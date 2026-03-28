@@ -32,8 +32,8 @@ SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
 
 # ตั้งค่า Username และ Password ที่นี่เลยครับ
-LOGIN_USERNAME = os.environ.get("LOGIN_USERNAME", "admin")
-LOGIN_PASSWORD = os.environ.get("LOGIN_PASSWORD", "cui2024")
+LOGIN_USERNAME = os.environ.get("LOGIN_USERNAME", "admin").strip()
+LOGIN_PASSWORD = os.environ.get("LOGIN_PASSWORD", "cui2024").strip()
 
 def get_supabase():
     if not SUPABASE_URL or not SUPABASE_KEY:
@@ -126,7 +126,7 @@ def health_check():
 # ==============================================================================
 @app.post("/api/login")
 def login(data: LoginRequest):
-    if data.username == LOGIN_USERNAME and data.password == LOGIN_PASSWORD:
+    if data.username.strip() == LOGIN_USERNAME and data.password.strip() == LOGIN_PASSWORD:
         return {"success": True, "message": "Login สำเร็จ"}
     raise HTTPException(status_code=401, detail="Username หรือ Password ไม่ถูกต้อง")
 
