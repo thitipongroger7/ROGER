@@ -129,21 +129,132 @@
 <span class="text-xs font-medium transition-colors" style="color:#1a1a2e;">Stay signed in</span>
 </label>
 </div>
-<div id="error-msg" style="display:none; color:#c0392b; font-size:0.85rem; font-weight:600; background:#fdecea; padding:12px 16px; border-left:4px solid #c0392b; border-radius:4px; margin-bottom:4px;">
-  Invalid Username or Password
-</div>
+<div id="error-msg" style="display:none; color:#c0392b; font-size:0.85rem; font-weight:600; background:#fdecea; padding:12px 16px; border-left:4px solid #c0392b; border-radius:4px; margin-bottom:4px;"></div>
 <button id="login-btn" onclick="doLogin()" class="w-full py-4 font-headline font-bold uppercase tracking-[0.2em] text-sm hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-2" style="background:#29418e; color:#ffffff;">
   <span id="btn-text">Sign In</span>
   <span class="material-symbols-outlined text-base">arrow_forward</span>
 </button>
+</form>
+</div>
+<div class="pt-12 border-t" style="border-color:#e0e0ee;">
+<div class="flex flex-col gap-4">
+<p class="text-[10px] font-bold uppercase tracking-[0.3em]" style="color:#aaaacc;">Collaborative Engineering</p>
+<div class="flex items-center gap-6">
+<img alt="GCME Logo" src="gcme_logo_nobg.png" style="height:48px; width:auto; object-fit:contain;"/>
+<div class="w-px h-10" style="background:#ccccdd;"></div>
+<img alt="Chulalongkorn University Logo" src="chula_logo_nobg.png" style="height:48px; width:auto; object-fit:contain;"/>
+</div>
+</div>
+</div>
+</section>
+<section class="hidden md:block w-[60%] relative overflow-hidden bg-background">
+
+  <!-- CSS Animations -->
+  <style>
+    @keyframes kenburns {
+      0%   { transform: scale(1.0) translate(0%, 0%); }
+      25%  { transform: scale(1.08) translate(-1.5%, 0.5%); }
+      50%  { transform: scale(1.12) translate(-1%, -1%); }
+      75%  { transform: scale(1.06) translate(0.5%, -0.5%); }
+      100% { transform: scale(1.0) translate(0%, 0%); }
+    }
+    @keyframes lightSweep {
+      0%   { opacity: 0; transform: translateX(-100%) skewX(-15deg); }
+      50%  { opacity: 0.12; }
+      100% { opacity: 0; transform: translateX(300%) skewX(-15deg); }
+    }
+    @keyframes flickerVignette {
+      0%, 100% { opacity: 0.55; }
+      45%       { opacity: 0.50; }
+      50%       { opacity: 0.58; }
+      55%       { opacity: 0.50; }
+    }
+    @keyframes scanline {
+      0%   { transform: translateY(-100%); }
+      100% { transform: translateY(100vh); }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 16px rgba(0,255,120,0.3), inset 0 0 12px rgba(0,255,120,0.1); }
+      50%       { box-shadow: 0 0 28px rgba(0,255,120,0.6), inset 0 0 20px rgba(0,255,120,0.2); }
+    }
+
+    .refinery-img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      animation: kenburns 20s ease-in-out infinite;
+      transform-origin: center center;
+    }
+    .light-sweep {
+      position: absolute; inset: 0; z-index: 5;
+      background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.15) 50%, transparent 60%);
+      animation: lightSweep 8s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .scanline-effect {
+      position: absolute; inset: 0; z-index: 4; pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.03) 2px,
+        rgba(0,0,0,0.03) 4px
+      );
+    }
+    .live-badge {
+      animation: pulseGlow 2s ease-in-out infinite;
+    }
+  </style>
+
+  <!-- Layers -->
+  <img alt="Refinery at Dusk" class="refinery-img" src="refinery_new.png"/>
+  <div class="scanline-effect"></div>
+  <div class="light-sweep"></div>
+  <div class="absolute inset-0 bg-gradient-to-r from-black/25 via-transparent to-transparent z-10"></div>
+  <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent z-10"></div>
+  <div class="absolute inset-0 z-10" style="background: rgba(0,0,0,0.18);"></div>
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-full px-8 space-y-8">
+<div class="flex flex-col gap-4 w-full ml-auto text-right">
+<div class="live-badge inline-flex self-end items-center gap-2 px-4 py-2 border backdrop-blur-md" style="background: rgba(0,255,120,0.2); border-color: rgba(0,255,120,0.7);">
+<span class="w-2 h-2 rounded-full animate-pulse" style="background:#00ff88; box-shadow: 0 0 8px #00ff88, 0 0 16px #00ff88;"></span>
+<span class="font-bold uppercase tracking-widest" style="font-size:0.7rem; color:#00ff88; text-shadow: 0 0 12px rgba(0,255,136,1), 0 0 24px rgba(0,255,136,0.6);">Real-time Analysis Active</span>
+</div>
+<h2 class="font-headline font-bold tracking-tight leading-tight" style="filter: drop-shadow(0 0 8px rgba(0,0,0,0.7)) drop-shadow(0 0 4px rgba(0,0,0,0.5));">
+  <span style="font-size:2.2rem; color:#ffffff; display:block; white-space:nowrap;">Data Analytics for a Machine Learning Based</span>
+  <span style="font-size:3.4rem; color:#ffffff; display:block; white-space:nowrap; line-height:1.15;">Corrosion Under Insulation</span>
+  <span style="font-size:3.4rem; color:#ffffff; display:block; white-space:nowrap; line-height:1.15;">Predictive Model</span>
+</h2>
+<p class="font-body leading-relaxed drop-shadow-lg" style="font-size:1.1rem; color:#ffffff; text-shadow: 0 2px 8px rgba(0,0,0,0.95); background: rgba(0,0,0,0.35); backdrop-filter: blur(4px); padding: 12px 16px; border-left: 2px solid rgba(255,255,255,0.4);">
+  Senior Engineering Project in collaboration between the<br/>
+  <span style="color:#ffffff; font-weight:600;">Department of Metallurgical Engineering,<br/>Chulalongkorn University</span>
+  <span style="color:#ffffff;"> and </span>
+  <span style="color:#ffffff; font-weight:600;">GC Maintenance and Engineering (GCME)</span>
+</p>
+</div>
+</div>
+<div class="absolute bottom-12 right-12 z-20 flex gap-12">
+<div class="flex flex-col gap-1">
+<span class="text-[10px] uppercase tracking-widest text-outline">System Latency</span>
+<span class="font-headline font-medium text-primary tracking-wider">14ms</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-[10px] uppercase tracking-widest text-outline">Active Nodes</span>
+<span class="font-headline font-medium text-primary tracking-wider">2,842</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-[10px] uppercase tracking-widest text-outline">Encryption</span>
+<span class="font-headline font-medium text-primary tracking-wider">AES-256</span>
+</div>
+</div>
+<div class="absolute inset-0 z-0 opacity-20" style="background-image: radial-gradient(circle at 2px 2px, #444651 1px, transparent 0); background-size: 40px 40px;"></div>
+</section>
+</main>
+
 <script>
-// redirect เฉพาะเมื่อ remember ถูกเซ็ต และยังไม่ได้อยู่ที่ login page แล้ว
-// ใช้ DOMContentLoaded เพื่อให้ DOM พร้อมก่อน
-document.addEventListener('DOMContentLoaded', function() {
-  if (localStorage.getItem('cui_remember') === 'true') {
-    window.location.replace('/cui_prediction.html');
-  }
-});
+// ── Remember Me: redirect ถ้าเคย stay signed in ──────────────────────────────
+if (localStorage.getItem('cui_remember') === 'true') {
+  window.location.replace('/cui_prediction.html');
+}
 
 var _submitting = false;
 
@@ -151,8 +262,6 @@ function showError(msg) {
   var el = document.getElementById('error-msg');
   el.textContent = msg;
   el.style.display = 'block';
-  // scroll ให้เห็น error ชัดๆ
-  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 function hideError() {
@@ -168,7 +277,6 @@ async function doLogin() {
   var btnText  = document.getElementById('btn-text');
   var loginBtn = document.getElementById('login-btn');
 
-  // Validation — แสดง error แล้วหยุดทันที ไม่ทำอะไรต่อ
   if (!username && !password) {
     showError('Please enter your username and password.');
     return;
@@ -221,58 +329,5 @@ document.addEventListener('keydown', function(e) {
   if (e.key === 'Enter') doLogin();
 });
 </script>
-</form>
-</div>
-<div class="pt-12 border-t" style="border-color:#e0e0ee;">
-<div class="flex flex-col gap-4">
-<p class="text-[10px] font-bold uppercase tracking-[0.3em]" style="color:#aaaacc;">Collaborative Engineering</p>
-<div class="flex items-center gap-6">
-<img alt="GCME Logo" src="gcme_logo_nobg.png" style="height:48px; width:auto; object-fit:contain;"/>
-<div class="w-px h-10" style="background:#ccccdd;"></div>
-<img alt="Chulalongkorn University Logo" src="chula_logo_nobg.png" style="height:48px; width:auto; object-fit:contain;"/>
-</div>
-</div>
-</div>
-</section>
-<section class="hidden md:block w-[60%] relative overflow-hidden bg-background">
-<div class="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-transparent z-10"></div>
-<div class="absolute inset-0 bg-gradient-to-t from-black/40 via-black/15 to-black/5 z-10"></div>
-<div class="absolute inset-0 z-10" style="backdrop-filter: blur(1px); background: rgba(0,0,0,0.15);"></div>
-<img alt="Refinery at Dusk" class="absolute inset-0 w-full h-full object-cover scale-105 brightness-110 contrast-105" src="refinery_new.png"/>
-<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-full px-8 space-y-8">
-<div class="flex flex-col gap-4 w-full ml-auto text-right">
-<div class="inline-flex self-end items-center gap-2 px-4 py-2 border backdrop-blur-md" style="background: rgba(0,255,120,0.2); border-color: rgba(0,255,120,0.7); box-shadow: 0 0 16px rgba(0,255,120,0.3), inset 0 0 12px rgba(0,255,120,0.1);">
-<span class="w-2 h-2 rounded-full animate-pulse" style="background:#00ff88; box-shadow: 0 0 8px #00ff88, 0 0 16px #00ff88;"></span>
-<span class="font-bold uppercase tracking-widest" style="font-size:0.7rem; color:#00ff88; text-shadow: 0 0 12px rgba(0,255,136,1), 0 0 24px rgba(0,255,136,0.6);">Real-time Analysis Active</span>
-</div>
-<h2 class="font-headline font-bold tracking-tight leading-tight" style="filter: drop-shadow(0 0 8px rgba(0,0,0,0.7)) drop-shadow(0 0 4px rgba(0,0,0,0.5));">
-  <span style="font-size:2.2rem; color:#ffffff; display:block; white-space:nowrap;">Data Analytics for a Machine Learning Based</span>
-  <span style="font-size:3.4rem; color:#ffffff; display:block; white-space:nowrap; line-height:1.15;">Corrosion Under Insulation</span>
-  <span style="font-size:3.4rem; color:#ffffff; display:block; white-space:nowrap; line-height:1.15;">Predictive Model</span>
-</h2>
-<p class="font-body leading-relaxed drop-shadow-lg" style="font-size:1.1rem; color:#ffffff; text-shadow: 0 2px 8px rgba(0,0,0,0.95); background: rgba(0,0,0,0.35); backdrop-filter: blur(4px); padding: 12px 16px; border-left: 2px solid rgba(255,255,255,0.4);">
-  Senior Engineering Project in collaboration between the<br/>
-  <span style="color:#ffffff; font-weight:600;">Department of Metallurgical Engineering,<br/>Chulalongkorn University</span>
-  <span style="color:#ffffff;"> and </span>
-  <span style="color:#ffffff; font-weight:600;">GC Maintenance and Engineering (GCME)</span>
-</p>
-</div>
-</div>
-<div class="absolute bottom-12 right-12 z-20 flex gap-12">
-<div class="flex flex-col gap-1">
-<span class="text-[10px] uppercase tracking-widest text-outline">System Latency</span>
-<span class="font-headline font-medium text-primary tracking-wider">14ms</span>
-</div>
-<div class="flex flex-col gap-1">
-<span class="text-[10px] uppercase tracking-widest text-outline">Active Nodes</span>
-<span class="font-headline font-medium text-primary tracking-wider">2,842</span>
-</div>
-<div class="flex flex-col gap-1">
-<span class="text-[10px] uppercase tracking-widest text-outline">Encryption</span>
-<span class="font-headline font-medium text-primary tracking-wider">AES-256</span>
-</div>
-</div>
-<div class="absolute inset-0 z-0 opacity-20" style="background-image: radial-gradient(circle at 2px 2px, #444651 1px, transparent 0); background-size: 40px 40px;"></div>
-</section>
-</main>
+
 </body></html>
