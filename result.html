@@ -71,7 +71,6 @@
     .active-critical .meta-item { color: var(--red-text); }
     .active-warning .meta-item  { color: var(--yellow-text); }
     .back-link { display: flex; align-items: center; gap: 8px; text-decoration: none; margin-top: 4px; }
-    .back-icon { width: 14px; height: 14px; background: var(--navy); border-radius: 2px; }
     .back-text { font-size: 14px; font-weight: 700; color: var(--navy); }
     .back-link:hover .back-text { text-decoration: underline; }
     .summary-body { padding: 0 28px 28px; }
@@ -190,7 +189,8 @@
             </div>
           </div>
           <a href="cui_prediction.html" class="back-link">
-            <div class="back-icon"></div><span class="back-text">Back to Prediction Form</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+            <span class="back-text">Back to Prediction Form</span>
           </a>
         </div>
 
@@ -227,6 +227,12 @@
         </div>
       </div>`;
   }
+
+  // ── Auth Guard ──────────────────────────────────────────────────────────────
+  (function() {
+    const ok = sessionStorage.getItem('cui_logged_in') || localStorage.getItem('cui_logged_in');
+    if (!ok) window.location.href = '/login.html';
+  })();
 </script>
 </body>
 </html>
