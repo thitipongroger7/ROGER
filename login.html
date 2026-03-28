@@ -130,10 +130,10 @@
 </label>
 </div>
 <div id="error-msg" style="display:none; color:#c0392b; font-size:0.8rem; background:#fdecea; padding:8px 12px; border-left:3px solid #c0392b;">
-  Username หรือ Password ไม่ถูกต้อง
+  Invalid Username or Password
 </div>
 <button onclick="doLogin()" class="w-full py-4 font-headline font-bold uppercase tracking-[0.2em] text-sm hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-2" style="background:#29418e; color:#ffffff;">
-  <span id="btn-text">เข้าสู่ระบบ</span>
+  <span id="btn-text">Sign In</span>
   <span class="material-symbols-outlined text-base">arrow_forward</span>
 </button>
 <script>
@@ -145,11 +145,11 @@ async function doLogin() {
 
   if (!username || !password) {
     errMsg.style.display = 'block';
-    errMsg.textContent   = 'กรุณากรอก Username และ Password';
+    errMsg.textContent   = 'Please enter your Username and Password';
     return;
   }
 
-  btnText.textContent = 'กำลังเข้าสู่ระบบ...';
+  btnText.textContent = 'Signing in...';
 
   try {
     var res  = await fetch('/api/login', {
@@ -163,13 +163,13 @@ async function doLogin() {
       window.location.href = '/cui_prediction.html';
     } else {
       errMsg.style.display = 'block';
-      errMsg.textContent   = 'Username หรือ Password ไม่ถูกต้อง';
-      btnText.textContent  = 'เข้าสู่ระบบ';
+      errMsg.textContent   = 'Invalid Username or Password';
+      btnText.textContent  = 'Sign In';
     }
   } catch(e) {
     errMsg.style.display = 'block';
-    errMsg.textContent   = 'เกิดข้อผิดพลาด กรุณาลองใหม่';
-    btnText.textContent  = 'เข้าสู่ระบบ';
+    errMsg.textContent   = 'An error occurred. Please try again.';
+    btnText.textContent  = 'Sign In';
   }
 }
 document.addEventListener('keydown', function(e) {
