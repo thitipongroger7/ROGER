@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CorrosionAI | Secure Access</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "background": "#131317",
+                        "primary": "#b6c4ff",
+                        "on-tertiary": "#562000",
+                        "tertiary-fixed-dim": "#ffb692",
+                        "on-tertiary-container": "#f16700",
+                        "outline": "#8f909c",
+                        "secondary-fixed-dim": "#ffb1c6",
+                        "on-tertiary-fixed-variant": "#7a3000",
+                        "on-secondary": "#650031",
+                        "error": "#ffb4ab",
+                        "on-primary-fixed-variant": "#29418e",
+                        "on-background": "#e4e1e7",
+                        "surface-container": "#1f1f23",
+                        "error-container": "#93000a",
+                        "tertiary": "#ffb692",
+                        "on-primary-fixed": "#001550",
+                        "surface-dim": "#131317",
+                        "on-error": "#690005",
+                        "on-secondary-container": "#ff9bb9",
+                        "inverse-on-surface": "#303034",
+                        "inverse-surface": "#e4e1e7",
+                        "secondary-container": "#871f4a",
+                        "surface-container-lowest": "#0e0e12",
+                        "primary-container": "#002271",
+                        "on-primary": "#0b2977",
+                        "on-primary-container": "#778de0",
+                        "surface-container-high": "#2a2a2e",
+                        "outline-variant": "#444651",
+                        "secondary-fixed": "#ffd9e1",
+                        "surface-bright": "#39393d",
+                        "surface-container-highest": "#353439",
+                        "on-surface": "#e4e1e7",
+                        "tertiary-container": "#4c1b00",
+                        "secondary": "#ffb1c6",
+                        "primary-fixed": "#dce1ff",
+                        "tertiary-fixed": "#ffdbcb",
+                        "on-tertiary-fixed": "#341100",
+                        "surface": "#131317",
+                        "primary-fixed-dim": "#b6c4ff",
+                        "on-secondary-fixed-variant": "#841d48",
+                        "on-surface-variant": "#c5c5d3",
+                        "on-secondary-fixed": "#3f001c",
+                        "surface-variant": "#353439",
+                        "surface-container-low": "#1b1b1f",
+                        "inverse-primary": "#435aa8",
+                        "on-error-container": "#ffdad6"
+                    },
+                    fontFamily: {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(19, 19, 23, 0.7);
+            backdrop-filter: blur(20px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary/30">
+<main class="flex min-h-screen w-full overflow-hidden">
+<section class="w-full md:w-[40%] p-8 md:p-16 flex flex-col justify-between relative z-10 shadow-[24px_0_48px_rgba(0,0,0,0.15)]" style="background:#ffffff;">
+<div class="flex flex-col gap-12">
+<div class="space-y-2">
+<h1 class="font-headline text-4xl font-light tracking-tight" style="color:#1a1a2e;">
+                        Predictive <span class="font-bold italic" style="color:#f16700;">Intelligence</span>
+</h1>
+<p class="font-body text-sm max-w-sm leading-relaxed" style="color:#555566;">
+                        Access the next generation of corrosion monitoring and asset integrity analysis powered by deep learning.
+                    </p>
+</div>
+<form class="space-y-6 max-w-md">
+<div class="space-y-4">
+<div class="group relative">
+<label class="block text-[10px] font-bold uppercase tracking-widest mb-1 group-focus-within:text-blue-700 transition-colors" style="color:#555566;">Username</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline text-lg group-focus-within:text-primary transition-colors">badge</span>
+<input class="w-full border-none rounded-none py-4 pl-12 pr-4 placeholder:text-gray-400 focus:ring-0 focus:border-b-2 transition-all font-headline tracking-wider" style="background:#f0f2f8; color:#1a1a2e; border-bottom: 2px solid transparent;" onfocus="this.style.borderBottomColor='#435aa8'" onblur="this.style.borderBottomColor='transparent'" placeholder="ID-000000" type="text"/>
+</div>
+</div>
+<div class="group relative">
+<label class="block text-[10px] font-bold uppercase tracking-widest mb-1 group-focus-within:text-blue-700 transition-colors" style="color:#555566;">Password</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline text-lg group-focus-within:text-primary transition-colors">lock</span>
+<input class="w-full border-none rounded-none py-4 pl-12 pr-4 placeholder:text-gray-400 focus:ring-0 focus:border-b-2 transition-all font-headline" style="background:#f0f2f8; color:#1a1a2e; border-bottom: 2px solid transparent;" onfocus="this.style.borderBottomColor='#435aa8'" onblur="this.style.borderBottomColor='transparent'" placeholder="••••••••" type="password"/>
+</div>
+</div>
+</div>
+<div class="flex items-center py-2">
+<label class="flex items-center gap-2 cursor-pointer group">
+<div style="position:relative; width:18px; height:18px; flex-shrink:0;">
+<input id="remember-cb" type="checkbox" style="position:absolute; opacity:0; width:100%; height:100%; cursor:pointer; margin:0; z-index:1;"
+  onchange="
+    var box = document.getElementById('cb-box');
+    var check = document.getElementById('cb-check');
+    if(this.checked){ box.style.background='#29418e'; box.style.borderColor='#29418e'; check.style.display='block'; }
+    else{ box.style.background='white'; box.style.borderColor='#333'; check.style.display='none'; }
+  "/>
+<div id="cb-box" style="width:18px; height:18px; border:2px solid #333; background:white; display:flex; align-items:center; justify-content:center; border-radius:2px;">
+<svg id="cb-check" style="display:none; width:11px; height:11px;" viewBox="0 0 12 12" fill="none">
+<polyline points="1.5,6 4.5,9.5 10.5,2.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+</div>
+</div>
+<span class="text-xs font-medium transition-colors" style="color:#1a1a2e;">Stay signed in</span>
+</label>
+</div>
+<button class="w-full py-4 font-headline font-bold uppercase tracking-[0.2em] text-sm hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-2" style="background:#29418e; color:#ffffff;">
+                        Sign In
+                        <span class="material-symbols-outlined text-base">arrow_forward</span>
+</button>
+</form>
+</div>
+<div class="pt-12 border-t" style="border-color:#e0e0ee;">
+<div class="flex flex-col gap-4">
+<p class="text-[10px] font-bold uppercase tracking-[0.3em]" style="color:#aaaacc;">Collaborative Engineering</p>
+<div class="flex items-center gap-6">
+<img alt="GCME Logo" src="gcme_logo_nobg.png" style="height:48px; width:auto; object-fit:contain;"/>
+<div class="w-px h-10" style="background:#ccccdd;"></div>
+<img alt="Chulalongkorn University Logo" src="chula_logo_nobg.png" style="height:48px; width:auto; object-fit:contain;"/>
+</div>
+</div>
+</div>
+</section>
+<section class="hidden md:block w-[60%] relative overflow-hidden bg-background">
+<div class="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-transparent z-10"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 via-black/15 to-black/5 z-10"></div>
+<div class="absolute inset-0 z-10" style="backdrop-filter: blur(1px); background: rgba(0,0,0,0.15);"></div>
+<img alt="Refinery at Dusk" class="absolute inset-0 w-full h-full object-cover scale-105 brightness-110 contrast-105" src="refinery_new.png"/>
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-full px-8 space-y-8">
+<div class="flex flex-col gap-4 w-full ml-auto text-right">
+<div class="inline-flex self-end items-center gap-2 px-4 py-2 border backdrop-blur-md" style="background: rgba(0,255,120,0.2); border-color: rgba(0,255,120,0.7); box-shadow: 0 0 16px rgba(0,255,120,0.3), inset 0 0 12px rgba(0,255,120,0.1);">
+<span class="w-2 h-2 rounded-full animate-pulse" style="background:#00ff88; box-shadow: 0 0 8px #00ff88, 0 0 16px #00ff88;"></span>
+<span class="font-bold uppercase tracking-widest" style="font-size:0.7rem; color:#00ff88; text-shadow: 0 0 12px rgba(0,255,136,1), 0 0 24px rgba(0,255,136,0.6);">Real-time Analysis Active</span>
+</div>
+<h2 class="font-headline font-bold tracking-tight leading-tight" style="filter: drop-shadow(0 0 8px rgba(0,0,0,0.7)) drop-shadow(0 0 4px rgba(0,0,0,0.5));">
+  <span style="font-size:2.2rem; color:#ffffff; display:block; white-space:nowrap;">Data Analytics for a Machine Learning Based</span>
+  <span style="font-size:3.4rem; color:#ffffff; display:block; white-space:nowrap; line-height:1.15;">Corrosion Under Insulation</span>
+  <span style="font-size:3.4rem; color:#ffffff; display:block; white-space:nowrap; line-height:1.15;">Predictive Model</span>
+</h2>
+<p class="font-body leading-relaxed drop-shadow-lg" style="font-size:1.1rem; color:#ffffff; text-shadow: 0 2px 8px rgba(0,0,0,0.95); background: rgba(0,0,0,0.35); backdrop-filter: blur(4px); padding: 12px 16px; border-left: 2px solid rgba(255,255,255,0.4);">
+  Senior Engineering Project in collaboration between the<br/>
+  <span style="color:#ffffff; font-weight:600;">Department of Metallurgical Engineering,<br/>Chulalongkorn University</span>
+  <span style="color:#ffffff;"> and </span>
+  <span style="color:#ffffff; font-weight:600;">GC Maintenance and Engineering (GCME)</span>
+</p>
+</div>
+</div>
+<div class="absolute bottom-12 right-12 z-20 flex gap-12">
+<div class="flex flex-col gap-1">
+<span class="text-[10px] uppercase tracking-widest text-outline">System Latency</span>
+<span class="font-headline font-medium text-primary tracking-wider">14ms</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-[10px] uppercase tracking-widest text-outline">Active Nodes</span>
+<span class="font-headline font-medium text-primary tracking-wider">2,842</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-[10px] uppercase tracking-widest text-outline">Encryption</span>
+<span class="font-headline font-medium text-primary tracking-wider">AES-256</span>
+</div>
+</div>
+<div class="absolute inset-0 z-0 opacity-20" style="background-image: radial-gradient(circle at 2px 2px, #444651 1px, transparent 0); background-size: 40px 40px;"></div>
+</section>
+</main>
+</body></html>
