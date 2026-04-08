@@ -233,6 +233,10 @@ class NoteUpdate(BaseModel):
 # ==============================================================================
 # ENDPOINT 1: Health Check
 # ==============================================================================
+@app.head("/")
+def head_root():
+    return {}
+
 @app.get("/health")
 def health_check():
     return {
