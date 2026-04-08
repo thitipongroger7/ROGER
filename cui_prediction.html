@@ -72,10 +72,10 @@
     .card { background: white; border: 1px solid var(--slate-200); border-radius: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
     .card-header { padding: 26px 30px 0; display: flex; align-items: center; gap: 12px; }
     .card-title { font-size: 20px; font-weight: 700; color: var(--slate-900); }
-    .form-body { padding: 20px 30px 24px; display: grid; grid-template-columns: 1fr; gap: 14px; }
+    .form-body { padding: 20px 30px 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px 22px; }
     .field { display: flex; flex-direction: column; gap: 6px; }
     .field label { font-size: 12px; font-weight: 700; color: var(--slate-700); text-transform: uppercase; letter-spacing: .4px; }
-    .field input { height: 44px; padding: 0 13px; border: 1px solid var(--slate-200); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--slate-900); background: white; outline: none; transition: border-color .18s, box-shadow .18s; }
+    .field input { height: 44px; padding: 0 13px; border: 1px solid var(--slate-200); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--slate-900); background: white; outline: none; transition: border-color .18s, box-shadow .18s; width: 100%; }
     .field input:focus { border-color: var(--sky); box-shadow: 0 0 0 3px rgba(0,172,233,0.12); }
     .field input::placeholder { color: var(--slate-400); }
 
@@ -115,51 +115,48 @@
 
     /* ── RESULT PANEL ── */
     .result-panel { background: white; border: 1px solid var(--slate-200); border-radius: 14px; overflow: hidden; }
-    .result-panel-header { padding: 18px 20px 16px; border-bottom: 1px solid var(--slate-100); display: flex; align-items: center; gap: 10px; }
-    .result-panel-title { font-size: 15px; font-weight: 700; color: var(--slate-900); }
-
-    /* Probability bars section */
-    .prob-section { padding: 16px 20px; border-bottom: 1px solid var(--slate-100); }
-    .prob-section-label { font-size: 11px; font-weight: 700; color: var(--slate-400); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 14px; }
-    .prob-row { margin-bottom: 12px; }
+    .result-panel-header { padding: 14px 18px 12px; border-bottom: 1px solid var(--slate-100); display: flex; align-items: center; gap: 9px; }
+    .result-panel-title { font-size: 14px; font-weight: 700; color: var(--slate-900); }
+    .prob-section { padding: 13px 18px; border-bottom: 1px solid var(--slate-100); }
+    .prob-section-label { font-size: 10px; font-weight: 700; color: var(--slate-400); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 11px; }
+    .prob-row { margin-bottom: 10px; }
     .prob-row:last-child { margin-bottom: 0; }
-    .prob-meta { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
-    .prob-name { font-size: 12px; font-weight: 700; color: var(--slate-700); display: flex; align-items: center; gap: 6px; }
-    .prob-pct { font-size: 16px; font-weight: 800; font-family: 'DM Mono', monospace; color: var(--navy); }
-    .prob-bar-bg { height: 7px; background: var(--slate-100); border-radius: 99px; overflow: hidden; }
+    .prob-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+    .prob-name { font-size: 11px; font-weight: 600; color: var(--slate-600); display: flex; align-items: center; gap: 5px; }
+    .prob-pct { font-size: 14px; font-weight: 700; font-family: 'DM Sans', sans-serif; color: var(--navy); }
+    .prob-bar-bg { height: 5px; background: var(--slate-100); border-radius: 99px; overflow: hidden; }
     .prob-bar-fill { height: 100%; border-radius: 99px; transition: width .6s cubic-bezier(.4,0,.2,1); width: 0; }
-    .fill-rf    { background: linear-gradient(90deg, #2563EB, #60A5FA); }
-    .fill-prior { background: linear-gradient(90deg, #0891B2, #38BDF8); }
-    .fill-bayes { background: linear-gradient(90deg, var(--navy), var(--sky)); }
+    .fill-rf    { background: #2563EB; }
+    .fill-prior { background: #0891B2; }
     .prob-source { display: none; }
-
-    /* Divider */
-    .bayes-section { padding: 14px 20px; border-bottom: 1px solid var(--slate-100); }
-    .bayes-combined { display: flex; align-items: center; gap: 14px; }
-    .bayes-score-box { background: linear-gradient(135deg, var(--navy) 0%, #1D4ED8 100%); border-radius: 12px; padding: 12px 18px; min-width: 90px; text-align: center; flex-shrink: 0; }
-    .bayes-pct-val { font-size: 28px; font-weight: 800; font-family: 'DM Mono', monospace; color: white; line-height: 1; }
-    .bayes-pct-label { font-size: 10px; font-weight: 600; color: rgba(191,219,254,0.85); margin-top: 3px; letter-spacing: .3px; }
-    .bayes-detail { flex: 1; }
-    .bayes-detail-title { font-size: 12px; font-weight: 700; color: var(--slate-700); margin-bottom: 4px; }
-    .bayes-formula { font-size: 11px; color: var(--slate-400); font-family: 'DM Mono', monospace; line-height: 1.5; }
-    .risk-chip { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; margin-top: 6px; }
-    .risk-chip.high   { background: #FEF2F2; color: var(--red-text); }
-    .risk-chip.medium { background: #FFFBEB; color: var(--amber-text); }
-    .risk-chip.low    { background: var(--green-bg); color: var(--green-text); }
-    .risk-dot { width: 6px; height: 6px; border-radius: 50%; }
+    .bayes-section { padding: 13px 18px; border-bottom: 1px solid var(--slate-100); }
+    .bayes-combined { display: flex; align-items: center; gap: 12px; }
+    .bayes-score-box { background: var(--navy); border-radius: 10px; padding: 10px 13px; min-width: 72px; text-align: center; flex-shrink: 0; }
+    .bayes-pct-val { font-size: 22px; font-weight: 700; font-family: 'DM Sans', sans-serif; color: white; line-height: 1; }
+    .bayes-pct-label { font-size: 9px; font-weight: 600; color: rgba(191,219,254,0.85); margin-top: 3px; letter-spacing: .3px; }
+    .bayes-detail { flex: 1; min-width: 0; }
+    .bayes-detail-title { font-size: 12px; font-weight: 600; color: var(--slate-700); margin-bottom: 3px; }
+    .bayes-formula { font-size: 10px; color: var(--slate-400); font-family: 'DM Mono', monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .risk-chip { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 5px; font-size: 11px; font-weight: 600; margin-top: 5px; }
+    .risk-chip.high   { background: #FEF2F2; color: #991B1B; }
+    .risk-chip.medium { background: #FFFBEB; color: #92400E; }
+    .risk-chip.low    { background: var(--green-bg); color: #065F46; }
+    .risk-dot { width: 5px; height: 5px; border-radius: 50%; }
     .risk-dot.high   { background: var(--red); }
     .risk-dot.medium { background: var(--amber); }
     .risk-dot.low    { background: var(--green); }
-
-    /* Prediction Set */
-    .predset-section { padding: 12px 20px; border-bottom: 1px solid var(--slate-100); display: flex; align-items: center; gap: 10px; }
-    .predset-key { font-size: 11px; font-weight: 700; color: var(--slate-400); text-transform: uppercase; letter-spacing: .4px; }
-    .predset-badge { font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 6px; font-family: 'DM Mono', monospace; }
-    .ps-yes     { background: #FEF2F2; color: var(--red-text); }
-    .ps-noyes   { background: #FFFBEB; color: var(--amber-text); }
-    .ps-no      { background: var(--blue-pill); color: var(--blue-text); }
-    .predset-note { font-size: 11px; color: var(--slate-400); }
-    .conf-chip  { font-size: 10px; font-weight: 700; background: var(--blue-pill); color: var(--navy); padding: 3px 8px; border-radius: 5px; margin-left: auto; font-family: 'DM Mono', monospace; }
+    .verdict-box { display: flex; align-items: stretch; border-top: 0.5px solid transparent; border-bottom: 0.5px solid transparent; }
+    .verdict-left { flex: 1; padding: 12px 16px; }
+    .verdict-divider { width: 0.5px; flex-shrink: 0; }
+    .verdict-right { padding: 12px 16px; display: flex; flex-direction: column; align-items: flex-end; justify-content: center; min-width: 96px; }
+    .verdict-key { font-size: 10px; font-weight: 600; color: #94A3B8; text-transform: uppercase; letter-spacing: .05em; }
+    .verdict-val { font-size: 17px; font-weight: 700; font-family: 'DM Sans', sans-serif; margin-top: 3px; }
+    .conf-key { font-size: 10px; font-weight: 600; color: #94A3B8; text-transform: uppercase; letter-spacing: .05em; text-align: right; }
+    .conf-val { font-size: 17px; font-weight: 700; font-family: 'DM Sans', sans-serif; text-align: right; margin-top: 3px; }
+    .predset-section { display: none; }
+    .conf-chip { display: none; }
+    .predset-badge { display: none; }
+    .predset-key { display: none; }
 
     /* Tier card */
     .tier-section { padding: 14px 20px; }
@@ -194,29 +191,28 @@
 
 
     /* ── TIER STACKED ── */
-    .tier-stack-label { font-size: 11px; font-weight: 700; color: var(--slate-400); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; }
-    .tier-row { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 10px; border: 1.5px solid transparent; margin-bottom: 8px; transition: all .3s; }
+    .tier-stack-label { font-size: 10px; font-weight: 600; color: var(--slate-400); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
+    .tier-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; border: 0.5px solid transparent; margin-bottom: 6px; transition: opacity .25s; }
     .tier-row:last-child { margin-bottom: 0; }
-    .tier-row.inactive { background: var(--slate-50); border-color: var(--slate-100); opacity: 0.38; }
+    .tier-row.inactive { background: var(--slate-50); opacity: .28; }
     .tier-row.active-t1 { background: #FEF2F2; border-color: #FECACA; opacity: 1; }
     .tier-row.active-t2 { background: #FFFBEB; border-color: #FDE68A; opacity: 1; }
     .tier-row.active-t3 { background: #F0FDF4; border-color: #BBF7D0; opacity: 1; }
     .tier-row-left { flex-shrink: 0; }
-    .tier-num { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 5px; white-space: nowrap; font-family: 'DM Mono', monospace; }
-    .t1-num { background: #FEE2E2; color: var(--red-text); }
-    .t2-num { background: #FDE68A; color: var(--amber-text); }
-    .t3-num { background: #BBF7D0; color: var(--green-text); }
+    .tier-num { font-size: 13px; font-weight: 600; padding: 5px 12px; border-radius: 6px; white-space: nowrap; font-family: 'DM Sans', sans-serif; }
+    .t1-num { background: #FEE2E2; color: #991B1B; }
+    .t2-num { background: #FEF3C7; color: #92400E; }
+    .t3-num { background: #D1FAE5; color: #065F46; }
     .tier-row-body { flex: 1; min-width: 0; }
-    .tier-row-title { font-size: 12px; font-weight: 700; color: var(--slate-900); line-height: 1.3; }
-    .active-t1 .tier-row-title { color: var(--red-text); }
-    .active-t2 .tier-row-title { color: var(--amber-text); }
-    .active-t3 .tier-row-title { color: var(--green-text); }
-    .tier-row-crit { font-size: 10px; color: var(--slate-400); margin-top: 2px; font-family: 'DM Mono', monospace; }
+    .tier-row-title { font-size: 12px; font-weight: 600; color: var(--slate-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .active-t1 .tier-row-title { color: #991B1B; }
+    .active-t2 .tier-row-title { color: #92400E; }
+    .active-t3 .tier-row-title { color: #065F46; }
+    .tier-row-crit { font-size: 10px; color: var(--slate-400); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .tier-row-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; background: var(--slate-200); }
-    .active-t1 .t1-dot { background: var(--red); box-shadow: 0 0 6px rgba(239,68,68,0.5); }
-    .active-t2 .t2-dot { background: var(--amber); box-shadow: 0 0 6px rgba(245,158,11,0.5); }
-    .active-t3 .t3-dot { background: var(--green); box-shadow: 0 0 6px rgba(34,197,94,0.5); }
-    /* override old tier styles no longer needed */
+    .active-t1 .t1-dot { background: #EF4444; }
+    .active-t2 .t2-dot { background: #F59E0B; }
+    .active-t3 .t3-dot { background: #22C55E; }
     .tier-card, .tier-badge, .tier-action, .tier-criteria { display: none; }
 
     /* ── FOOTER ── */
@@ -486,20 +482,19 @@
 
         <!-- Empty state -->
         <div class="result-empty" id="resultEmpty">
-          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" style="display:block;margin:0 auto;">
+          <svg width="44" height="44" viewBox="0 0 48 48" fill="none" style="display:block;margin:0 auto;">
             <circle cx="24" cy="24" r="20" stroke="#94A3B8" stroke-width="2"/>
             <path d="M24 14v10l6 4" stroke="#94A3B8" stroke-width="2" stroke-linecap="round"/>
           </svg>
           <div class="result-empty-text" style="margin-top:8px;">Fill in parameters and click<br/><strong>Predict Corrosion Risk</strong></div>
         </div>
 
-        <!-- Filled state (hidden until predict) -->
+        <!-- Filled state -->
         <div id="resultFilled" style="display:none;">
 
           <!-- Probability bars -->
           <div class="prob-section">
             <div class="prob-section-label">Model Probability Breakdown</div>
-
             <div class="prob-row">
               <div class="prob-meta">
                 <span class="prob-name">
@@ -509,9 +504,7 @@
                 <span class="prob-pct" id="rfPct">—</span>
               </div>
               <div class="prob-bar-bg"><div class="prob-bar-fill fill-rf" id="rfBar"></div></div>
-              <div class="prob-source">Data-driven · 700 trees · class_weight 1:8</div>
             </div>
-
             <div class="prob-row">
               <div class="prob-meta">
                 <span class="prob-name">
@@ -521,7 +514,6 @@
                 <span class="prob-pct" id="priorPct">—</span>
               </div>
               <div class="prob-bar-bg"><div class="prob-bar-fill fill-prior" id="priorBar"></div></div>
-              <div class="prob-source">API 583 §5.2–5.5 · API 571 §5.1.2 · RBI-based</div>
             </div>
           </div>
 
@@ -540,20 +532,24 @@
             </div>
           </div>
 
-          <!-- Prediction Set -->
-          <div class="predset-section">
-            <span class="predset-key">Prediction Set</span>
-            <span class="predset-badge" id="predSetBadge">—</span>
-            <span class="conf-chip" id="confChip">95%</span>
+          <!-- Verdict box: CUI Final Prediction | Confidence Level -->
+          <div class="verdict-box" id="verdictBox">
+            <div class="verdict-left">
+              <div class="verdict-key">CUI Final Prediction</div>
+              <div class="verdict-val" id="verdictVal">—</div>
+            </div>
+            <div class="verdict-divider" id="verdictDiv"></div>
+            <div class="verdict-right">
+              <div class="conf-key">Confidence Level</div>
+              <div class="conf-val" id="confVal">95%</div>
+            </div>
           </div>
 
-          <!-- Tier & Action — 3 tiers stacked -->
+          <!-- 3-tier stacked -->
           <div class="tier-section">
             <div class="tier-stack-label">Inspection Tier</div>
             <div class="tier-row inactive" id="tier-row-1">
-              <div class="tier-row-left">
-                <span class="tier-num t1-num">Tier 1</span>
-              </div>
+              <div class="tier-row-left"><span class="tier-num t1-num">Tier 1</span></div>
               <div class="tier-row-body">
                 <div class="tier-row-title">Immediate Inspection</div>
                 <div class="tier-row-crit">{Yes} · Risk High · Bayes ≥ 50%</div>
@@ -561,19 +557,15 @@
               <div class="tier-row-dot t1-dot"></div>
             </div>
             <div class="tier-row inactive" id="tier-row-2">
-              <div class="tier-row-left">
-                <span class="tier-num t2-num">Tier 2</span>
-              </div>
+              <div class="tier-row-left"><span class="tier-num t2-num">Tier 2</span></div>
               <div class="tier-row-body">
-                <div class="tier-row-title">Uncertain — Monitor &amp; Inspect Next Cycle</div>
+                <div class="tier-row-title">Monitor &amp; Inspect Next Cycle</div>
                 <div class="tier-row-crit">{No+Yes} · Risk Medium · Bayes 30–50%</div>
               </div>
               <div class="tier-row-dot t2-dot"></div>
             </div>
             <div class="tier-row inactive" id="tier-row-3">
-              <div class="tier-row-left">
-                <span class="tier-num t3-num">Tier 3</span>
-              </div>
+              <div class="tier-row-left"><span class="tier-num t3-num">Tier 3</span></div>
               <div class="tier-row-body">
                 <div class="tier-row-title">Scheduled Inspection</div>
                 <div class="tier-row-crit">{No} · Risk Low · Bayes &lt; 30%</div>
@@ -669,15 +661,31 @@
     psBadge.className   = 'predset-badge ' + psClass;
     document.getElementById('confChip').textContent = 'conf=' + (data.confidence || selectedConf) + '%';
 
-    // Tier stacked — highlight active
+    // Verdict box
     const tier = data.tier || 3;
+    const verdictMap = {
+      1: { val: 'CUI Detected',    bg: '#FEF2F2', bc: '#FECACA', tc: '#991B1B' },
+      2: { val: 'Uncertain',       bg: '#FFFBEB', bc: '#FDE68A', tc: '#92400E' },
+      3: { val: 'No CUI Detected', bg: '#F0FDF4', bc: '#BBF7D0', tc: '#065F46' },
+    };
+    const vm = verdictMap[tier] || verdictMap[3];
+    const vbox = document.getElementById('verdictBox');
+    const vval = document.getElementById('verdictVal');
+    const vdiv = document.getElementById('verdictDiv');
+    const cval = document.getElementById('confVal');
+    vbox.style.background   = vm.bg;
+    vbox.style.borderTop    = '0.5px solid ' + vm.bc;
+    vbox.style.borderBottom = '0.5px solid ' + vm.bc;
+    vval.textContent        = vm.val;
+    vval.style.color        = vm.tc;
+    vdiv.style.background   = vm.bc;
+    cval.textContent        = (data.confidence || selectedConf) + '%';
+    cval.style.color        = vm.tc;
+
+    // Tier stacked
     [1, 2, 3].forEach(t => {
-      const row = document.getElementById('tier-row-' + t);
-      if (t === tier) {
-        row.className = 'tier-row active-t' + t;
-      } else {
-        row.className = 'tier-row inactive';
-      }
+      document.getElementById('tier-row-' + t).className =
+        t === tier ? 'tier-row active-t' + t : 'tier-row inactive';
     });
   }
 
