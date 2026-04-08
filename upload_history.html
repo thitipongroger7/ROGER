@@ -82,9 +82,15 @@
     td.num { font-weight: 700; color: var(--slate-900); text-align: center; width: 48px; }
     tr:hover td { background: var(--slate-50); }
     .badge { display: inline-block; padding: 3px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; }
-    .badge.CRITICAL { background: var(--red-bg); color: var(--red-text); }
-    .badge.WARNING  { background: var(--yellow-bg); color: var(--yellow-text); }
-    .badge.SAFE     { background: var(--green-bg); color: var(--green-text); }
+    .badge.CRITICAL,.badge.High { background: var(--red-bg); color: var(--red-text); }
+    .badge.WARNING,.badge.Medium  { background: var(--yellow-bg); color: var(--yellow-text); }
+    .badge.SAFE,.badge.Low        { background: var(--green-bg); color: var(--green-text); }
+    .badge.tier1 { background:#FEE2E2; color:#991B1B; }
+    .badge.tier2 { background:#FEF3C7; color:#92400E; }
+    .badge.tier3 { background:#D1FAE5; color:#065F46; }
+    .pred-cui    { background:#FEE2E2; color:#991B1B; border-radius:5px; padding:2px 8px; font-size:12px; font-weight:600; }
+    .pred-unc    { background:#FEF3C7; color:#92400E; border-radius:5px; padding:2px 8px; font-size:12px; font-weight:600; }
+    .pred-no     { background:#D1FAE5; color:#065F46; border-radius:5px; padding:2px 8px; font-size:12px; font-weight:600; }
     .icon-btn { background: none; border: none; cursor: pointer; padding: 6px; border-radius: 6px; transition: background .15s; font-size: 18px; }
     .icon-btn:hover { background: var(--slate-100); }
     .detail-btn { background: var(--slate-100); border: none; border-radius: 6px; padding: 5px 12px; font-size: 12px; font-weight: 600; color: var(--navy); cursor: pointer; transition: background .15s; }
@@ -231,13 +237,16 @@
       <div class="table-wrap"><table>
         <thead>
           <tr>
-            <th style="width:48px;">#</th>
+            <th style="width:44px;">#</th>
             <th>Date</th>
             <th>Time</th>
-            <th>Result</th>
+            <th>CUI Prediction</th>
+            <th>Risk Level</th>
+            <th>Bayes %</th>
+            <th>Tier</th>
             <th>Details</th>
-            <th style="width:52px;">Note</th>
-            <th style="width:52px;">Delete</th>
+            <th style="width:48px;">Note</th>
+            <th style="width:48px;">Delete</th>
           </tr>
         </thead>
         <tbody id="historyBody">
@@ -417,11 +426,18 @@
         <div class="param-value">${v}</div>
       </div>`).join('');
     const r = h.result || {};
-    const level = r.risk_level || 'SAFE';
+    const risk  = r.risk_level || '—';
+    const tierN = r.tier || '—';
+    const predMap2 = { 1: 'CUI Detected', 2: 'Uncertain', 3: 'No CUI Detected' };
+    const predLabel2 = predMap2[tierN] || '—';
+    const bayes2 = r.bayes_probability != null ? r.bayes_probability : r.probability_pct;
+    const rf2    = r.rf_probability    != null ? r.rf_probability    : '—';
+    const prior2 = r.prior_probability != null ? r.prior_probability : '—';
     document.getElementById('modalResult').innerHTML = `
-      <div class="result-box ${level}">
-        <div class="rl">${level}</div>
-        <div class="sub">Probability: ${r.probability_pct ?? '—'}% &nbsp;|&nbsp; Next Inspection: ${r.next_inspection_year ?? '—'}</div>
+      <div class="result-box ${risk}">
+        <div class="rl">${predLabel2}</div>
+        <div class="sub">Risk: ${risk} &nbsp;|&nbsp; Tier: ${tierN} &nbsp;|&nbsp; Bayes: ${bayes2 != null ? bayes2 + '%' : '—'}</div>
+        <div class="sub" style="margin-top:4px;">RF: ${rf2 != null ? rf2 + '%' : '—'} &nbsp;|&nbsp; API Prior: ${prior2 != null ? prior2 + '%' : '—'} &nbsp;|&nbsp; Next Inspection: ${r.next_inspection_year ?? '—'}</div>
       </div>`;
     document.getElementById('modalNoteText').textContent = h.note || '— No note —';
     document.getElementById('detailOverlay').classList.add('open');
