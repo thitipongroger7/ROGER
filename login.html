@@ -253,7 +253,7 @@
 <script>
 // ── Remember Me: redirect ถ้าเคย stay signed in ──────────────────────────────
 if (localStorage.getItem('cui_remember') === 'true') {
-  window.location.replace('/cui_prediction.html');
+  window.location.replace('cui_prediction.html');
 }
 
 var _submitting = false;
@@ -310,7 +310,7 @@ async function doLogin() {
       } else {
         localStorage.removeItem('cui_remember');
       }
-      window.location.replace('/cui_prediction.html');
+      window.location.replace('cui_prediction.html');
     } else {
       showError('Incorrect username or password. Please try again.');
       btnText.textContent = 'Sign In';
