@@ -72,7 +72,7 @@
     .card { background: white; border: 1px solid var(--slate-200); border-radius: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
     .card-header { padding: 26px 30px 0; display: flex; align-items: center; gap: 12px; }
     .card-title { font-size: 20px; font-weight: 700; color: var(--slate-900); }
-    .form-body { padding: 20px 30px 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px 22px; }
+    .form-body { padding: 20px 30px 24px; display: grid; grid-template-columns: 1fr; gap: 14px; }
     .field { display: flex; flex-direction: column; gap: 6px; }
     .field label { font-size: 12px; font-weight: 700; color: var(--slate-700); text-transform: uppercase; letter-spacing: .4px; }
     .field input { height: 44px; padding: 0 13px; border: 1px solid var(--slate-200); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--slate-900); background: white; outline: none; transition: border-color .18s, box-shadow .18s; }
@@ -131,7 +131,7 @@
     .fill-rf    { background: linear-gradient(90deg, #2563EB, #60A5FA); }
     .fill-prior { background: linear-gradient(90deg, #0891B2, #38BDF8); }
     .fill-bayes { background: linear-gradient(90deg, var(--navy), var(--sky)); }
-    .prob-source { font-size: 10px; font-weight: 500; color: var(--slate-400); margin-top: 2px; }
+    .prob-source { display: none; }
 
     /* Divider */
     .bayes-section { padding: 14px 20px; border-bottom: 1px solid var(--slate-100); }
@@ -191,6 +191,33 @@
     .total-card { background: white; border: 1px solid var(--slate-200); border-radius: 14px; padding: 20px 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
     .total-label { font-size: 12px; font-weight: 600; color: var(--slate-500); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; }
     .total-value { font-size: 40px; font-weight: 700; color: var(--slate-900); line-height: 1; }
+
+
+    /* ── TIER STACKED ── */
+    .tier-stack-label { font-size: 11px; font-weight: 700; color: var(--slate-400); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; }
+    .tier-row { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 10px; border: 1.5px solid transparent; margin-bottom: 8px; transition: all .3s; }
+    .tier-row:last-child { margin-bottom: 0; }
+    .tier-row.inactive { background: var(--slate-50); border-color: var(--slate-100); opacity: 0.38; }
+    .tier-row.active-t1 { background: #FEF2F2; border-color: #FECACA; opacity: 1; }
+    .tier-row.active-t2 { background: #FFFBEB; border-color: #FDE68A; opacity: 1; }
+    .tier-row.active-t3 { background: #F0FDF4; border-color: #BBF7D0; opacity: 1; }
+    .tier-row-left { flex-shrink: 0; }
+    .tier-num { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 5px; white-space: nowrap; font-family: 'DM Mono', monospace; }
+    .t1-num { background: #FEE2E2; color: var(--red-text); }
+    .t2-num { background: #FDE68A; color: var(--amber-text); }
+    .t3-num { background: #BBF7D0; color: var(--green-text); }
+    .tier-row-body { flex: 1; min-width: 0; }
+    .tier-row-title { font-size: 12px; font-weight: 700; color: var(--slate-900); line-height: 1.3; }
+    .active-t1 .tier-row-title { color: var(--red-text); }
+    .active-t2 .tier-row-title { color: var(--amber-text); }
+    .active-t3 .tier-row-title { color: var(--green-text); }
+    .tier-row-crit { font-size: 10px; color: var(--slate-400); margin-top: 2px; font-family: 'DM Mono', monospace; }
+    .tier-row-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; background: var(--slate-200); }
+    .active-t1 .t1-dot { background: var(--red); box-shadow: 0 0 6px rgba(239,68,68,0.5); }
+    .active-t2 .t2-dot { background: var(--amber); box-shadow: 0 0 6px rgba(245,158,11,0.5); }
+    .active-t3 .t3-dot { background: var(--green); box-shadow: 0 0 6px rgba(34,197,94,0.5); }
+    /* override old tier styles no longer needed */
+    .tier-card, .tier-badge, .tier-action, .tier-criteria { display: none; }
 
     /* ── FOOTER ── */
     footer { background: white; border-top: 1px solid var(--slate-200); padding: 18px 72px; display: flex; justify-content: space-between; align-items: center; }
@@ -488,8 +515,8 @@
             <div class="prob-row">
               <div class="prob-meta">
                 <span class="prob-name">
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1L11 4v4c0 2.5-2 4-5 5C3 12 1 10.5 1 8V4L6 1Z" stroke="#0891B2" stroke-width="1.2" fill="none"/></svg>
-                  API 583 Prior (Bayesian)
+                  <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1L13 4v4c0 3-2.5 4.5-6 5C3 12.5 1 11 1 8V4L7 1Z" stroke="#0891B2" stroke-width="1.4" fill="none" stroke-linejoin="round"/><polyline points="4.5,7 6.2,8.8 9.5,5.5" stroke="#0891B2" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+                  API 583 + API 571 Prior (Bayesian)
                 </span>
                 <span class="prob-pct" id="priorPct">—</span>
               </div>
@@ -507,7 +534,7 @@
               </div>
               <div class="bayes-detail">
                 <div class="bayes-detail-title">Combined Score</div>
-                <div class="bayes-formula">σ(0.5·logit(Prior)<br/>+ 0.5·logit(RF))</div>
+                <div class="bayes-formula">σ(0.5·logit(Prior) + 0.5·logit(RF))</div>
                 <div id="riskChip" class="risk-chip" style="display:none;"></div>
               </div>
             </div>
@@ -515,20 +542,43 @@
 
           <!-- Prediction Set -->
           <div class="predset-section">
-            <span class="predset-key">Pred Set</span>
+            <span class="predset-key">Prediction Set</span>
             <span class="predset-badge" id="predSetBadge">—</span>
-            <span class="predset-note" id="predSetNote"></span>
             <span class="conf-chip" id="confChip">95%</span>
           </div>
 
-          <!-- Tier & Action -->
+          <!-- Tier & Action — 3 tiers stacked -->
           <div class="tier-section">
-            <div class="tier-card" id="tierCard">
-              <div class="tier-top">
-                <span class="tier-badge" id="tierBadge">—</span>
-                <span class="tier-action" id="tierAction">Awaiting prediction</span>
+            <div class="tier-stack-label">Inspection Tier</div>
+            <div class="tier-row inactive" id="tier-row-1">
+              <div class="tier-row-left">
+                <span class="tier-num t1-num">Tier 1</span>
               </div>
-              <div class="tier-criteria" id="tierCriteria"></div>
+              <div class="tier-row-body">
+                <div class="tier-row-title">Immediate Inspection</div>
+                <div class="tier-row-crit">{Yes} · Risk High · Bayes ≥ 50%</div>
+              </div>
+              <div class="tier-row-dot t1-dot"></div>
+            </div>
+            <div class="tier-row inactive" id="tier-row-2">
+              <div class="tier-row-left">
+                <span class="tier-num t2-num">Tier 2</span>
+              </div>
+              <div class="tier-row-body">
+                <div class="tier-row-title">Uncertain — Monitor &amp; Inspect Next Cycle</div>
+                <div class="tier-row-crit">{No+Yes} · Risk Medium · Bayes 30–50%</div>
+              </div>
+              <div class="tier-row-dot t2-dot"></div>
+            </div>
+            <div class="tier-row inactive" id="tier-row-3">
+              <div class="tier-row-left">
+                <span class="tier-num t3-num">Tier 3</span>
+              </div>
+              <div class="tier-row-body">
+                <div class="tier-row-title">Scheduled Inspection</div>
+                <div class="tier-row-crit">{No} · Risk Low · Bayes &lt; 30%</div>
+              </div>
+              <div class="tier-row-dot t3-dot"></div>
             </div>
           </div>
         </div>
@@ -615,32 +665,20 @@
     const psBadge = document.getElementById('predSetBadge');
     const psNote  = document.getElementById('predSetNote');
     const psClass = ps === 'Yes' ? 'ps-yes' : ps === 'No+Yes' ? 'ps-noyes' : 'ps-no';
-    const psNotes = {
-      'Yes':    'โมเดลมั่นใจ — มี CUI',
-      'No+Yes': 'ไม่แน่ใจ → Safety-first → Yes',
-      'No':     'โมเดลมั่นใจ — ไม่มี CUI',
-    };
     psBadge.textContent = '{' + ps + '}';
     psBadge.className   = 'predset-badge ' + psClass;
-    psNote.textContent  = psNotes[ps] || '';
     document.getElementById('confChip').textContent = 'conf=' + (data.confidence || selectedConf) + '%';
 
-    // Tier card
+    // Tier stacked — highlight active
     const tier = data.tier || 3;
-    const action = data.action || '—';
-    const criteria = data.tier_criteria || '';
-
-    const tierCard   = document.getElementById('tierCard');
-    const tierBadge  = document.getElementById('tierBadge');
-    const tierAction = document.getElementById('tierAction');
-    const tierCrit   = document.getElementById('tierCriteria');
-
-    tierCard.className   = 'tier-card t' + tier;
-    tierBadge.className  = 'tier-badge tb-t' + tier;
-    tierBadge.textContent = 'Tier ' + tier;
-    tierAction.className  = 'tier-action ta-t' + tier;
-    tierAction.textContent = action;
-    tierCrit.textContent   = criteria;
+    [1, 2, 3].forEach(t => {
+      const row = document.getElementById('tier-row-' + t);
+      if (t === tier) {
+        row.className = 'tier-row active-t' + t;
+      } else {
+        row.className = 'tier-row inactive';
+      }
+    });
   }
 
   // ── Stats ──
