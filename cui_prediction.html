@@ -8,155 +8,211 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --navy: #1E3A8A; --sky: #00ACE9;
-      --slate-50: #F8FAFC; --slate-100: #F1F5F9; --slate-200: #E2E8F0;
-      --slate-400: #94A3B8; --slate-500: #64748B; --slate-700: #334155; --slate-900: #0F172A;
-      --red-bg: #FEF2F2; --red-text: #B91C1C; --red: #EF4444;
-      --yellow-bg: #FEFCE8; --yellow: #EAB308; --orange: #FF740A;
-      --green-bg: #F0FDF4; --green: #22C55E; --green-text: #15803D; --green-light: #ECFDF5; --green-badge: #059669;
+      --navy: #1E3A8A;
+      --navy-hover: #162d6e;
+      --sky: #00ACE9;
+      --sky-dim: rgba(0,172,233,0.10);
+      --slate-50: #F8FAFC;
+      --slate-100: #F1F5F9;
+      --slate-200: #E2E8F0;
+      --slate-300: #CBD5E1;
+      --slate-400: #94A3B8;
+      --slate-500: #64748B;
+      --slate-700: #334155;
+      --slate-900: #0F172A;
+      --red:       #EF4444;
+      --red-bg:    #FEF2F2;
+      --red-text:  #B91C1C;
+      --amber:     #F59E0B;
+      --amber-bg:  #FFFBEB;
+      --amber-text:#92400E;
+      --green:     #22C55E;
+      --green-bg:  #F0FDF4;
+      --green-text:#15803D;
+      --blue-pill: #EFF6FF;
+      --blue-text: #1D4ED8;
     }
     body { font-family: 'DM Sans', sans-serif; background: var(--slate-50); color: var(--slate-900); min-height: 100vh; display: flex; flex-direction: column; }
 
-    nav { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--slate-200); box-shadow: 0 4px 24px rgba(0,0,0,0.08); padding: 0 90px; }
-    .nav-inner { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; }
-    .nav-logos { display: flex; align-items: center; gap: 24px; }
+    /* ── NAV ── */
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.93); backdrop-filter: blur(10px); border-bottom: 1px solid var(--slate-200); box-shadow: 0 2px 12px rgba(0,0,0,0.06); padding: 0 72px; }
+    .nav-inner { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; }
+    .nav-logos { display: flex; align-items: center; gap: 20px; }
     .nav-logos img { object-fit: contain; }
-    .nav-divider { width: 1.3px; height: 32px; background: var(--slate-200); }
-    .upload-btn { display: flex; align-items: center; gap: 10px; background: linear-gradient(136deg, var(--navy) 24%, var(--sky) 100%); color: white; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 15px; border: none; cursor: pointer; padding: 11px 22px; border-radius: 10px; box-shadow: inset 0 4px 6px rgba(0,0,0,0.18); transition: opacity .2s, transform .15s; text-decoration: none; }
-    .upload-btn:hover { opacity: .9; transform: translateY(-1px); }
-    .upload-btn svg { width: 18px; height: 18px; }
+    .nav-divider { width: 1px; height: 30px; background: var(--slate-200); }
+    .nav-btn { display: flex; align-items: center; gap: 8px; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 14px; border: none; cursor: pointer; padding: 9px 18px; border-radius: 9px; transition: opacity .2s, transform .15s; text-decoration: none; }
+    .btn-primary { background: linear-gradient(135deg, var(--navy) 0%, #2563EB 100%); color: white; box-shadow: 0 2px 8px rgba(30,58,138,0.25); }
+    .btn-secondary { background: var(--slate-100); color: var(--slate-700); border: 1px solid var(--slate-200); }
+    .nav-btn:hover { opacity: .88; transform: translateY(-1px); }
+    .nav-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
 
-    main { flex: 1; padding: 24px 90px 40px; display: flex; flex-direction: column; gap: 28px; max-width: 1440px; margin: 0 auto; width: 100%; }
+    /* ── MAIN ── */
+    main { flex: 1; padding: 24px 72px 48px; display: flex; flex-direction: column; gap: 24px; max-width: 1440px; margin: 0 auto; width: 100%; }
 
-    /* Hero with local background image */
-    .hero { border-radius: 14px; overflow: hidden; position: relative; min-height: 240px; display: flex; align-items: center; background: #0f2460; }
-    .hero-bg { position: absolute; inset: 0; background-image: url('hero_bg.jpg'); background-size: cover; background-position: center center; opacity: 0.55; }
-    .hero-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(15,36,96,0.70) 0%, rgba(30,58,138,0.64) 50%, rgba(26,111,168,0.60) 100%); }
-    .hero-grid { display: none; }
-    .hero-content { position: relative; z-index: 2; padding: 36px 44px; max-width: 700px; }
-    .hero-content h1 { font-size: 32px; font-weight: 800; color: white; line-height: 1.15; margin-bottom: 14px; text-shadow: 0 2px 8px rgba(0,0,0,0.3); }
-    .hero-content p { font-size: 15px; color: rgba(191,219,254,0.9); line-height: 1.7; }
+    /* ── HERO ── */
+    .hero { border-radius: 14px; overflow: hidden; position: relative; min-height: 210px; display: flex; align-items: center; background: #0f2460; }
+    .hero-bg { position: absolute; inset: 0; background-image: url('hero_bg.jpg'); background-size: cover; background-position: center; opacity: 0.45; }
+    .hero-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(15,36,96,0.80) 0%, rgba(30,58,138,0.65) 60%, rgba(0,172,233,0.4) 100%); }
+    .hero-content { position: relative; z-index: 2; padding: 32px 40px; max-width: 680px; }
+    .hero-content h1 { font-size: 28px; font-weight: 800; color: white; line-height: 1.18; margin-bottom: 12px; text-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+    .hero-content p { font-size: 14px; color: rgba(191,219,254,0.9); line-height: 1.7; }
 
-    .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-    .stat-card { background: white; border: 1px solid var(--slate-200); border-radius: 10px; padding: 18px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); display: flex; align-items: center; justify-content: space-between; transition: box-shadow .2s; }
-    .stat-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
-    .stat-label { font-size: 13px; font-weight: 600; color: var(--slate-500); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
-    .stat-value { font-size: 30px; font-weight: 700; color: rgba(15,23,42,0.85); }
-    .stat-unit { font-size: 12px; font-weight: 700; color: rgba(0,0,0,0.45); }
-    .stat-badge { background: var(--green-light); color: var(--green-badge); font-size: 18px; font-weight: 700; padding: 8px 14px; border-radius: 8px; }
+    /* ── STATS ── */
+    .stat-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+    .stat-card { background: white; border: 1px solid var(--slate-200); border-radius: 10px; padding: 16px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: space-between; }
+    .stat-label { font-size: 12px; font-weight: 600; color: var(--slate-500); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 5px; }
+    .stat-value { font-size: 28px; font-weight: 700; color: var(--slate-900); }
+    .stat-unit { font-size: 12px; font-weight: 600; color: var(--slate-400); }
+    .stat-badge { background: var(--blue-pill); color: var(--blue-text); font-size: 16px; font-weight: 700; padding: 7px 13px; border-radius: 8px; }
 
-    .content-grid { display: grid; grid-template-columns: 1fr 380px; gap: 24px; align-items: start; }
-    .card { background: white; border: 1px solid var(--slate-200); border-radius: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
-    .card-header { padding: 28px 32px 0; display: flex; align-items: center; gap: 12px; }
-    .card-title { font-size: 22px; font-weight: 700; color: var(--slate-900); }
+    /* ── CONTENT GRID ── */
+    .content-grid { display: grid; grid-template-columns: 1fr 400px; gap: 22px; align-items: start; }
 
-    .form-body { padding: 24px 32px 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px 24px; }
-    .field { display: flex; flex-direction: column; gap: 7px; }
-    .field label { font-size: 13px; font-weight: 700; color: var(--slate-700); }
-    .field input { height: 48px; padding: 0 14px; border: 1px solid var(--slate-200); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--slate-900); background: white; outline: none; transition: border-color .18s, box-shadow .18s; width: 100%; }
+    /* ── FORM CARD ── */
+    .card { background: white; border: 1px solid var(--slate-200); border-radius: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+    .card-header { padding: 26px 30px 0; display: flex; align-items: center; gap: 12px; }
+    .card-title { font-size: 20px; font-weight: 700; color: var(--slate-900); }
+    .form-body { padding: 20px 30px 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px 22px; }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field label { font-size: 12px; font-weight: 700; color: var(--slate-700); text-transform: uppercase; letter-spacing: .4px; }
+    .field input { height: 44px; padding: 0 13px; border: 1px solid var(--slate-200); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--slate-900); background: white; outline: none; transition: border-color .18s, box-shadow .18s; }
     .field input:focus { border-color: var(--sky); box-shadow: 0 0 0 3px rgba(0,172,233,0.12); }
-    .field input::placeholder { color: #9CA3AF; }
+    .field input::placeholder { color: var(--slate-400); }
 
     .autocomplete-wrap { position: relative; }
-    .suggestions { display: none; position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: white; border: 1px solid var(--slate-200); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); z-index: 200; overflow: hidden; }
+    .suggestions { display: none; position: absolute; top: calc(100% + 3px); left: 0; right: 0; background: white; border: 1px solid var(--slate-200); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); z-index: 200; overflow: hidden; max-height: 220px; overflow-y: auto; }
     .suggestions.open { display: block; }
-    .suggestions div { padding: 12px 14px; font-size: 14px; color: var(--slate-900); cursor: pointer; transition: background .15s; }
+    .suggestions div { padding: 10px 14px; font-size: 13px; color: var(--slate-900); cursor: pointer; transition: background .12s; }
     .suggestions div:hover { background: var(--slate-50); color: var(--navy); font-weight: 600; }
     .suggestions div + div { border-top: 1px solid var(--slate-100); }
 
-    .result-bar { display: none; margin: 0 32px 24px; padding: 18px 22px; border-radius: 12px; font-weight: 700; font-size: 17px; align-items: center; gap: 12px; animation: slideIn .35s ease; }
-    .result-bar.show { display: flex; }
-    .result-bar.CRITICAL { background: var(--red-bg); color: var(--red-text); border: 1.5px solid var(--red); }
-    .result-bar.WARNING  { background: var(--yellow-bg); color: var(--orange); border: 1.5px solid var(--yellow); }
-    .result-bar.SAFE     { background: var(--green-bg); color: var(--green-text); border: 1.5px solid var(--green); }
-    @keyframes slideIn { from { opacity:0; transform: translateY(-8px); } to { opacity:1; transform: translateY(0); } }
-    .error-bar { display: none; margin: 0 32px 24px; padding: 14px 20px; border-radius: 10px; background: #FFF1F2; border: 1.5px solid #FDA4AF; color: #BE123C; font-size: 14px; font-weight: 600; }
+    /* ── CONFIDENCE TOGGLE ── */
+    .conf-row { padding: 0 30px 4px; display: flex; align-items: center; gap: 12px; }
+    .conf-label { font-size: 12px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; letter-spacing: .4px; white-space: nowrap; }
+    .conf-tabs { display: flex; gap: 4px; background: var(--slate-100); border-radius: 8px; padding: 3px; }
+    .conf-tab { font-size: 12px; font-weight: 600; padding: 5px 13px; border-radius: 6px; border: none; cursor: pointer; background: transparent; color: var(--slate-500); transition: all .18s; font-family: 'DM Sans', sans-serif; }
+    .conf-tab.active { background: white; color: var(--navy); box-shadow: 0 1px 3px rgba(0,0,0,0.12); }
+
+    /* ── ERROR / BUTTON ── */
+    .error-bar { display: none; margin: 4px 30px 12px; padding: 12px 16px; border-radius: 8px; background: #FFF1F2; border: 1px solid #FDA4AF; color: #BE123C; font-size: 13px; font-weight: 600; }
     .error-bar.show { display: block; }
-
-    .predict-btn { margin: 4px 32px 32px; width: calc(100% - 64px); padding: 18px; background: var(--navy); color: white; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 17px; border: none; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: background .2s, transform .15s, box-shadow .2s; box-shadow: 0 4px 14px rgba(30,58,138,0.3); }
-    .predict-btn:hover:not(:disabled) { background: #162d6e; transform: translateY(-2px); }
-    .predict-btn:disabled { opacity: .6; cursor: not-allowed; }
-
-    .right-col { display: flex; flex-direction: column; gap: 20px; }
-    .risk-card { background: white; border: 1px solid var(--slate-200); border-radius: 14px; padding: 28px; }
-    .risk-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
-    .risk-title { font-size: 22px; font-weight: 700; }
-    .risk-item { border-radius: 0 8px 8px 0; padding: 14px 16px; margin-bottom: 14px; transition: opacity .4s; }
-    .risk-item:last-child { margin-bottom: 0; }
-    .risk-item.critical { background: var(--red-bg); border-left: 4px solid var(--red); }
-    .risk-item.warning  { background: var(--yellow-bg); border-left: 4px solid var(--yellow); }
-    .risk-item.safe     { background: var(--green-bg); border-left: 4px solid var(--green); }
-    .risk-item.inactive { opacity: 0.3; }
-    .risk-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-    .risk-name { font-size: 18px; font-weight: 700; }
-    .risk-item.critical .risk-name { color: var(--red-text); }
-    .risk-item.warning  .risk-name { color: var(--orange); }
-    .risk-item.safe     .risk-name { color: var(--green-text); }
-    .risk-icon-svg { width: 22px; height: 22px; flex-shrink: 0; }
-    .risk-desc { font-size: 14px; font-weight: 600; }
-    .risk-item.critical .risk-desc { color: var(--red-text); }
-    .risk-item.warning  .risk-desc { color: var(--orange); }
-    .risk-item.safe     .risk-desc { color: var(--green-text); }
-    .result-detail { display: none; padding: 14px 16px; background: var(--slate-50); border-radius: 8px; margin-top: 12px; font-size: 13px; color: var(--slate-500); }
-    .result-detail.show { display: block; }
-    .result-detail span { font-weight: 700; color: var(--slate-900); }
-
-    .total-card { background: white; border: 1px solid var(--slate-200); border-radius: 14px; padding: 24px 28px; }
-    .total-label { font-size: 14px; font-weight: 600; color: var(--slate-500); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 14px; }
-    .total-value { font-size: 46px; font-weight: 700; color: rgba(15,23,42,0.85); line-height: 1; }
-
-    .model-status { display: flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; }
-    .model-status.ready   { background: var(--green-light); color: var(--green-badge); }
-    .model-status.not-ready { background: #FEF9C3; color: #92400E; }
-    .status-dot { width: 8px; height: 8px; border-radius: 50%; }
-    .model-status.ready   .status-dot { background: var(--green-badge); }
-    .model-status.not-ready .status-dot { background: #D97706; }
-
-    .spinner { display: none; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin .7s linear infinite; }
+    .predict-btn { margin: 8px 30px 28px; width: calc(100% - 60px); padding: 16px; background: linear-gradient(135deg, var(--navy) 0%, #2563EB 100%); color: white; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 16px; border: none; border-radius: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: opacity .2s, transform .15s; box-shadow: 0 4px 14px rgba(30,58,138,0.28); }
+    .predict-btn:hover:not(:disabled) { opacity: .9; transform: translateY(-1px); }
+    .predict-btn:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+    .spinner { display: none; width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,0.35); border-top-color: white; border-radius: 50%; animation: spin .7s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    footer { background: white; border-top: 1px solid var(--slate-200); padding: 22px 90px; display: flex; justify-content: space-between; align-items: center; }
-    .footer-copy { font-size: 13px; color: var(--slate-500); }
-    .footer-links { display: flex; gap: 28px; }
-    .footer-links a { font-size: 13px; color: var(--slate-400); text-decoration: none; }
+    /* ── RIGHT COLUMN ── */
+    .right-col { display: flex; flex-direction: column; gap: 16px; }
+
+    /* Model status */
+    .model-status { display: flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 9px; font-size: 12px; font-weight: 600; }
+    .model-status.ready     { background: #F0FDF4; color: #15803D; }
+    .model-status.not-ready { background: #FFFBEB; color: #92400E; }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .model-status.ready     .status-dot { background: #16A34A; }
+    .model-status.not-ready .status-dot { background: #D97706; }
+
+    /* ── RESULT PANEL ── */
+    .result-panel { background: white; border: 1px solid var(--slate-200); border-radius: 14px; overflow: hidden; }
+    .result-panel-header { padding: 18px 20px 16px; border-bottom: 1px solid var(--slate-100); display: flex; align-items: center; gap: 10px; }
+    .result-panel-title { font-size: 15px; font-weight: 700; color: var(--slate-900); }
+
+    /* Probability bars section */
+    .prob-section { padding: 16px 20px; border-bottom: 1px solid var(--slate-100); }
+    .prob-section-label { font-size: 11px; font-weight: 700; color: var(--slate-400); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 14px; }
+    .prob-row { margin-bottom: 12px; }
+    .prob-row:last-child { margin-bottom: 0; }
+    .prob-meta { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+    .prob-name { font-size: 12px; font-weight: 700; color: var(--slate-700); display: flex; align-items: center; gap: 6px; }
+    .prob-pct { font-size: 16px; font-weight: 800; font-family: 'DM Mono', monospace; color: var(--navy); }
+    .prob-bar-bg { height: 7px; background: var(--slate-100); border-radius: 99px; overflow: hidden; }
+    .prob-bar-fill { height: 100%; border-radius: 99px; transition: width .6s cubic-bezier(.4,0,.2,1); width: 0; }
+    .fill-rf    { background: linear-gradient(90deg, #2563EB, #60A5FA); }
+    .fill-prior { background: linear-gradient(90deg, #0891B2, #38BDF8); }
+    .fill-bayes { background: linear-gradient(90deg, var(--navy), var(--sky)); }
+    .prob-source { font-size: 10px; font-weight: 500; color: var(--slate-400); margin-top: 2px; }
+
+    /* Divider */
+    .bayes-section { padding: 14px 20px; border-bottom: 1px solid var(--slate-100); }
+    .bayes-combined { display: flex; align-items: center; gap: 14px; }
+    .bayes-score-box { background: linear-gradient(135deg, var(--navy) 0%, #1D4ED8 100%); border-radius: 12px; padding: 12px 18px; min-width: 90px; text-align: center; flex-shrink: 0; }
+    .bayes-pct-val { font-size: 28px; font-weight: 800; font-family: 'DM Mono', monospace; color: white; line-height: 1; }
+    .bayes-pct-label { font-size: 10px; font-weight: 600; color: rgba(191,219,254,0.85); margin-top: 3px; letter-spacing: .3px; }
+    .bayes-detail { flex: 1; }
+    .bayes-detail-title { font-size: 12px; font-weight: 700; color: var(--slate-700); margin-bottom: 4px; }
+    .bayes-formula { font-size: 11px; color: var(--slate-400); font-family: 'DM Mono', monospace; line-height: 1.5; }
+    .risk-chip { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; margin-top: 6px; }
+    .risk-chip.high   { background: #FEF2F2; color: var(--red-text); }
+    .risk-chip.medium { background: #FFFBEB; color: var(--amber-text); }
+    .risk-chip.low    { background: var(--green-bg); color: var(--green-text); }
+    .risk-dot { width: 6px; height: 6px; border-radius: 50%; }
+    .risk-dot.high   { background: var(--red); }
+    .risk-dot.medium { background: var(--amber); }
+    .risk-dot.low    { background: var(--green); }
+
+    /* Prediction Set */
+    .predset-section { padding: 12px 20px; border-bottom: 1px solid var(--slate-100); display: flex; align-items: center; gap: 10px; }
+    .predset-key { font-size: 11px; font-weight: 700; color: var(--slate-400); text-transform: uppercase; letter-spacing: .4px; }
+    .predset-badge { font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 6px; font-family: 'DM Mono', monospace; }
+    .ps-yes     { background: #FEF2F2; color: var(--red-text); }
+    .ps-noyes   { background: #FFFBEB; color: var(--amber-text); }
+    .ps-no      { background: var(--blue-pill); color: var(--blue-text); }
+    .predset-note { font-size: 11px; color: var(--slate-400); }
+    .conf-chip  { font-size: 10px; font-weight: 700; background: var(--blue-pill); color: var(--navy); padding: 3px 8px; border-radius: 5px; margin-left: auto; font-family: 'DM Mono', monospace; }
+
+    /* Tier card */
+    .tier-section { padding: 14px 20px; }
+    .tier-card { border-radius: 10px; padding: 14px 16px; border-left: 4px solid transparent; }
+    .tier-card.t1 { background: #FEF2F2; border-color: var(--red);   }
+    .tier-card.t2 { background: #FFFBEB; border-color: var(--amber); }
+    .tier-card.t3 { background: var(--blue-pill); border-color: #93C5FD; }
+    .tier-card.idle { background: var(--slate-50); border-color: var(--slate-200); }
+    .tier-top { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+    .tier-badge { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 5px; }
+    .tb-t1 { background: #FEE2E2; color: var(--red-text); }
+    .tb-t2 { background: #FDE68A; color: var(--amber-text); }
+    .tb-t3 { background: #BFDBFE; color: #1D4ED8; }
+    .tb-idle { background: var(--slate-100); color: var(--slate-400); }
+    .tier-action { font-size: 14px; font-weight: 700; }
+    .ta-t1 { color: var(--red-text); }
+    .ta-t2 { color: var(--amber-text); }
+    .ta-t3 { color: #1D4ED8; }
+    .ta-idle { color: var(--slate-400); }
+    .tier-criteria { font-size: 11px; color: var(--slate-500); margin-top: 3px; line-height: 1.5; }
+    .tier-criteria-idle { color: var(--slate-300); }
+
+    /* Empty state */
+    .result-empty { padding: 28px 20px; text-align: center; }
+    .result-empty svg { opacity: .25; margin-bottom: 10px; }
+    .result-empty-text { font-size: 13px; color: var(--slate-400); }
+
+    /* Total card */
+    .total-card { background: white; border: 1px solid var(--slate-200); border-radius: 14px; padding: 20px 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .total-label { font-size: 12px; font-weight: 600; color: var(--slate-500); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; }
+    .total-value { font-size: 40px; font-weight: 700; color: var(--slate-900); line-height: 1; }
+
+    /* ── FOOTER ── */
+    footer { background: white; border-top: 1px solid var(--slate-200); padding: 18px 72px; display: flex; justify-content: space-between; align-items: center; }
+    .footer-copy { font-size: 12px; color: var(--slate-500); }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { font-size: 12px; color: var(--slate-400); text-decoration: none; }
     .footer-links a:hover { color: var(--navy); }
 
-    @media (max-width: 768px) {
-      nav { padding: 0 12px; }
-      .nav-inner { padding: 8px 0; gap: 8px; }
-      .nav-logos { gap: 8px; flex-shrink: 1; min-width: 0; }
-      .nav-logos img { height: 22px; flex-shrink: 1; }
-      .nav-divider { height: 20px; flex-shrink: 0; }
-      .chula-logo-bg { background: transparent !important; padding: 0 !important; }
-      .upload-btn { font-size: 11px; padding: 7px 10px; border-radius: 8px; flex-shrink: 0; white-space: nowrap; }
-      .upload-btn svg { width: 13px; height: 13px; }
-      main { padding: 16px 16px 32px; gap: 16px; }
-      .hero { min-height: 140px; border-radius: 12px; }
-      .hero-content { padding: 20px 20px; }
-      .hero-content h1 { font-size: 18px; margin-bottom: 8px; }
-      .hero-content p { font-size: 12px; }
-      .model-status { font-size: 12px; padding: 10px 14px; }
-      .stat-row { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-      .stat-card { padding: 12px 14px; }
-      .stat-value { font-size: 22px; }
-      .stat-badge { font-size: 14px; padding: 6px 10px; }
-      .content-grid { grid-template-columns: 1fr; gap: 16px; }
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      nav { padding: 0 20px; }
+      main { padding: 20px 20px 40px; }
+      .content-grid { grid-template-columns: 1fr; }
       .right-col { order: -1; }
-      .card-header { padding: 18px 18px 0; }
-      .card-title { font-size: 17px; }
-      .form-body { padding: 16px 18px 20px; grid-template-columns: 1fr 1fr; gap: 12px 14px; }
-      .field input { height: 42px; font-size: 13px; }
-      .field label { font-size: 12px; }
-      .predict-btn { margin: 4px 18px 20px; width: calc(100% - 36px); padding: 15px; font-size: 15px; }
-      .result-bar { margin: 0 18px 16px; font-size: 14px; padding: 14px 16px; }
-      .error-bar { margin: 0 18px 16px; }
-      .risk-card { padding: 18px; }
-      .risk-title { font-size: 17px; }
-      .risk-name { font-size: 15px; }
-      .total-card { padding: 16px 18px; }
-      .total-value { font-size: 36px; }
-      footer { padding: 16px 16px; flex-direction: column; gap: 10px; text-align: center; }
-      .footer-links { gap: 16px; }
+      footer { padding: 16px 20px; }
+      .stat-row { grid-template-columns: repeat(2,1fr); }
+    }
+    @media (max-width: 640px) {
+      .form-body { grid-template-columns: 1fr; }
+      .hero-content h1 { font-size: 20px; }
+      .stat-row { grid-template-columns: 1fr; }
+      .nav-btn span { display: none; }
     }
   </style>
 </head>
@@ -165,45 +221,50 @@
 <nav>
   <div class="nav-inner">
     <div class="nav-logos">
-      <img src="gcme_logo.png" alt="GCME" style="height:42px; object-fit:contain;"/>
+      <img src="gcme_logo.png" alt="GCME" style="height:40px;"/>
       <div class="nav-divider"></div>
-      <img src="chula_logo.png" alt="Chulalongkorn University" style="height:42px; object-fit:contain; mix-blend-mode:multiply;"/>
+      <img src="chula_logo.png" alt="Chulalongkorn University" style="height:40px; mix-blend-mode:multiply;"/>
     </div>
-    <div style="display:flex; align-items:center; gap:12px;">
-    <a href="upload_history.html" class="upload-btn">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
-      </svg>
-      Upload Data
-    </a>
-    <button onclick="doLogout()" class="upload-btn" style="background:#64748B; box-shadow: inset 0 4px 6px rgba(0,0,0,0.18);">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="width:18px;height:18px;">
-        <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/>
-      </svg>
-      Logout
-    </button>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <a href="upload_history.html" class="nav-btn btn-primary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+        </svg>
+        <span>Upload Data</span>
+      </a>
+      <button onclick="doLogout()" class="nav-btn btn-secondary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/>
+        </svg>
+        <span>Logout</span>
+      </button>
     </div>
   </div>
 </nav>
 
 <main>
+  <!-- HERO -->
   <div class="hero">
     <div class="hero-bg"></div>
     <div class="hero-overlay"></div>
-    <div class="hero-grid"></div>
     <div class="hero-content">
       <h1>Data Analytics for a Machine Learning Based Corrosion Under Insulation Predictive Model</h1>
       <p>Senior Engineering Project in collaboration between the Department of Metallurgical Engineering, Chulalongkorn University and GC Maintenance and Engineering (GCME)</p>
     </div>
   </div>
 
-  <div class="stat-row" id="statRow"></div>
+  <!-- STATS ROW -->
+  <div class="stat-row" id="statRow">
+    <div class="stat-card"><div><div class="stat-label">Loading...</div></div></div>
+  </div>
 
+  <!-- CONTENT GRID -->
   <div class="content-grid">
+
+    <!-- ── LEFT: INPUT FORM ── -->
     <div class="card">
       <div class="card-header">
-        <!-- Icon: 3 connectors / terminals -->
-        <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+        <svg width="32" height="32" viewBox="0 0 36 36" fill="none">
           <line x1="8.5" y1="2" x2="8.5" y2="34" stroke="#1E3A8A" stroke-width="3" stroke-linecap="round"/>
           <rect x="4.5" y="8" width="8" height="10" rx="2" fill="white" stroke="#1E3A8A" stroke-width="2"/>
           <line x1="18" y1="2" x2="18" y2="34" stroke="#1E3A8A" stroke-width="3" stroke-linecap="round"/>
@@ -218,13 +279,13 @@
         <div class="field">
           <label>Substrate Material</label>
           <div class="autocomplete-wrap">
-            <input type="text" id="Substrate" placeholder="e.g. Carbon Steel" autocomplete="off"
+            <input type="text" id="Substrate" placeholder="e.g. CS" autocomplete="off"
               oninput="filter('Substrate','list-Sub')" onfocus="open_('list-Sub')" onblur="close_('list-Sub')"/>
             <div class="suggestions" id="list-Sub">
-              <div onmousedown="pick('Substrate','CS')">CS</div>
-              <div onmousedown="pick('Substrate','LTCS')">LTCS</div>
-              <div onmousedown="pick('Substrate','LOW ALLOY STEEL')">LOW ALLOY STEEL</div>
-              <div onmousedown="pick('Substrate','SS')">SS</div>
+              <div onmousedown="pick('Substrate','cs')">CS — Carbon Steel</div>
+              <div onmousedown="pick('Substrate','ltcs')">LTCS — Low Temp Carbon Steel</div>
+              <div onmousedown="pick('Substrate','low alloy steel')">Low Alloy Steel</div>
+              <div onmousedown="pick('Substrate','ss')">SS — Stainless Steel</div>
             </div>
           </div>
         </div>
@@ -235,21 +296,21 @@
         </div>
 
         <div class="field">
-          <label>Temperature Group</label>
+          <label>Temperature Group (°C)</label>
           <div class="autocomplete-wrap">
-            <input type="text" id="Operating_Temperature_C" placeholder="e.g. 30 - <40" autocomplete="off"
+            <input type="text" id="Operating_Temperature_C" placeholder="e.g. 70 - &lt;80" autocomplete="off"
               oninput="filter('Operating_Temperature_C','list-Temp')" onfocus="open_('list-Temp')" onblur="close_('list-Temp')"/>
             <div class="suggestions" id="list-Temp">
-              <div onmousedown="pick('Operating_Temperature_C','0 - <10')">0 - &lt;10</div>
-              <div onmousedown="pick('Operating_Temperature_C','10 - <20')">10 - &lt;20</div>
-              <div onmousedown="pick('Operating_Temperature_C','20 - <30')">20 - &lt;30</div>
-              <div onmousedown="pick('Operating_Temperature_C','30 - <40')">30 - &lt;40</div>
-              <div onmousedown="pick('Operating_Temperature_C','50 - <60')">50 - &lt;60</div>
-              <div onmousedown="pick('Operating_Temperature_C','70 - <80')">70 - &lt;80</div>
-              <div onmousedown="pick('Operating_Temperature_C','80 - <90')">80 - &lt;90</div>
-              <div onmousedown="pick('Operating_Temperature_C','130 - <140')">130 - &lt;140</div>
-              <div onmousedown="pick('Operating_Temperature_C','140 - <150')">140 - &lt;150</div>
-              <div onmousedown="pick('Operating_Temperature_C','150 - <160')">150 - &lt;160</div>
+              <div onmousedown="pick('Operating_Temperature_C','0 - <10')">0 – &lt;10 °C</div>
+              <div onmousedown="pick('Operating_Temperature_C','10 - <20')">10 – &lt;20 °C</div>
+              <div onmousedown="pick('Operating_Temperature_C','20 - <30')">20 – &lt;30 °C</div>
+              <div onmousedown="pick('Operating_Temperature_C','30 - <40')">30 – &lt;40 °C</div>
+              <div onmousedown="pick('Operating_Temperature_C','50 - <60')">50 – &lt;60 °C</div>
+              <div onmousedown="pick('Operating_Temperature_C','70 - <80')">70 – &lt;80 °C</div>
+              <div onmousedown="pick('Operating_Temperature_C','80 - <90')">80 – &lt;90 °C</div>
+              <div onmousedown="pick('Operating_Temperature_C','130 - <140')">130 – &lt;140 °C</div>
+              <div onmousedown="pick('Operating_Temperature_C','140 - <150')">140 – &lt;150 °C</div>
+              <div onmousedown="pick('Operating_Temperature_C','150 - <160')">150 – &lt;160 °C</div>
             </div>
           </div>
         </div>
@@ -257,13 +318,14 @@
         <div class="field">
           <label>Prime Coating</label>
           <div class="autocomplete-wrap">
-            <input type="text" id="Coating_Prime" placeholder="e.g. zinc ethyl silicate" autocomplete="off"
+            <input type="text" id="Coating_Prime" placeholder="e.g. phenolic epoxy" autocomplete="off"
               oninput="filter('Coating_Prime','list-Prime')" onfocus="open_('list-Prime')" onblur="close_('list-Prime')"/>
             <div class="suggestions" id="list-Prime">
               <div onmousedown="pick('Coating_Prime','zinc ethyl silicate')">zinc ethyl silicate</div>
               <div onmousedown="pick('Coating_Prime','phenolic epoxy')">phenolic epoxy</div>
               <div onmousedown="pick('Coating_Prime','rich zinc epoxy')">rich zinc epoxy</div>
               <div onmousedown="pick('Coating_Prime','inorganic zinc')">inorganic zinc</div>
+              <div onmousedown="pick('Coating_Prime','epoxy')">epoxy</div>
               <div onmousedown="pick('Coating_Prime','non primer')">non primer</div>
             </div>
           </div>
@@ -294,6 +356,7 @@
               <div onmousedown="pick('Top_Coat','polyurethane')">polyurethane</div>
               <div onmousedown="pick('Top_Coat','epoxy polyamide')">epoxy polyamide</div>
               <div onmousedown="pick('Top_Coat','silicone aluminum')">silicone aluminum</div>
+              <div onmousedown="pick('Top_Coat','2 component polyurethane')">2 component polyurethane</div>
             </div>
           </div>
         </div>
@@ -307,7 +370,8 @@
               <div onmousedown="pick('Insulation_Type','mineral fiber')">mineral fiber</div>
               <div onmousedown="pick('Insulation_Type','cellular glass')">cellular glass</div>
               <div onmousedown="pick('Insulation_Type','flexible aerogel blanket')">flexible aerogel blanket</div>
-              <div onmousedown="pick('Insulation_Type','Polyisocyanurate')">Polyisocyanurate</div>
+              <div onmousedown="pick('Insulation_Type','polyisocyanurate')">polyisocyanurate</div>
+              <div onmousedown="pick('Insulation_Type','perlite')">perlite</div>
             </div>
           </div>
         </div>
@@ -315,10 +379,12 @@
         <div class="field">
           <label>Vapor Barrier</label>
           <div class="autocomplete-wrap">
-            <input type="text" id="Vapor_Barrier" placeholder="e.g. Unknow" autocomplete="off"
+            <input type="text" id="Vapor_Barrier" placeholder="e.g. unknown" autocomplete="off"
               oninput="filter('Vapor_Barrier','list-Vapor')" onfocus="open_('list-Vapor')" onblur="close_('list-Vapor')"/>
             <div class="suggestions" id="list-Vapor">
-              <div onmousedown="pick('Vapor_Barrier','Unknow')">Unknow</div>
+              <div onmousedown="pick('Vapor_Barrier','unknown')">unknown</div>
+              <div onmousedown="pick('Vapor_Barrier','yes')">yes</div>
+              <div onmousedown="pick('Vapor_Barrier','no')">no</div>
             </div>
           </div>
         </div>
@@ -326,11 +392,11 @@
         <div class="field">
           <label>Environment</label>
           <div class="autocomplete-wrap">
-            <input type="text" id="Environment" placeholder="e.g. Marine / Industrial" autocomplete="off"
+            <input type="text" id="Environment" placeholder="e.g. marine / industrial" autocomplete="off"
               oninput="filter('Environment','list-Env')" onfocus="open_('list-Env')" onblur="close_('list-Env')"/>
             <div class="suggestions" id="list-Env">
-              <div onmousedown="pick('Environment','Marine')">Marine</div>
-              <div onmousedown="pick('Environment','Industrial')">Industrial</div>
+              <div onmousedown="pick('Environment','marine')">Marine</div>
+              <div onmousedown="pick('Environment','industrial')">Industrial</div>
             </div>
           </div>
         </div>
@@ -338,24 +404,32 @@
         <div class="field">
           <label>Jacket Damage</label>
           <div class="autocomplete-wrap">
-            <input type="text" id="Jacket_Damage" placeholder="e.g. Yes / No" autocomplete="off"
+            <input type="text" id="Jacket_Damage" placeholder="yes / no" autocomplete="off"
               oninput="filter('Jacket_Damage','list-Jacket')" onfocus="open_('list-Jacket')" onblur="close_('list-Jacket')"/>
             <div class="suggestions" id="list-Jacket">
-              <div onmousedown="pick('Jacket_Damage','Yes')">Yes</div>
-              <div onmousedown="pick('Jacket_Damage','No')">No</div>
-              <div onmousedown="pick('Jacket_Damage','Unknow')">Unknow</div>
+              <div onmousedown="pick('Jacket_Damage','yes')">Yes</div>
+              <div onmousedown="pick('Jacket_Damage','no')">No</div>
+              <div onmousedown="pick('Jacket_Damage','unknown')">Unknown</div>
             </div>
           </div>
         </div>
       </div>
 
+      <!-- Confidence selector -->
+      <div class="conf-row">
+        <span class="conf-label">Confidence Level</span>
+        <div class="conf-tabs">
+          <button class="conf-tab" data-conf="85" onclick="setConf(85)">85%</button>
+          <button class="conf-tab" data-conf="90" onclick="setConf(90)">90%</button>
+          <button class="conf-tab active" data-conf="95" onclick="setConf(95)">95%</button>
+        </div>
+      </div>
+
       <div class="error-bar" id="errorBar"></div>
-      <div class="result-bar" id="resultBar"><span id="resultText"></span></div>
 
       <button class="predict-btn" id="predictBtn" onclick="predict()">
         <div class="spinner" id="spinner"></div>
-        <!-- Icon: bar chart -->
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" id="btnIcon">
+        <svg id="btnIcon" width="20" height="20" viewBox="0 0 24 24" fill="none">
           <rect x="1" y="1" width="22" height="22" rx="4" fill="none" stroke="white" stroke-width="2"/>
           <rect x="5" y="13" width="3.5" height="7" rx="1" fill="white"/>
           <rect x="10.2" y="9" width="3.5" height="11" rx="1" fill="white"/>
@@ -365,64 +439,102 @@
       </button>
     </div>
 
+    <!-- ── RIGHT COLUMN ── -->
     <div class="right-col">
+
+      <!-- Model status -->
       <div class="model-status not-ready" id="modelStatus">
         <div class="status-dot"></div>
         <span id="modelStatusText">Connecting to backend...</span>
       </div>
 
-      <div class="risk-card">
-        <div class="risk-header">
-          <!-- Icon: shield with checkmark -->
-          <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
-            <path d="M17 3L5 8V17c0 7 5.5 12.5 12 14.5C24.5 29.5 29 24 29 17V8L17 3Z" fill="none" stroke="#1E3A8A" stroke-width="2.5" stroke-linejoin="round"/>
-            <polyline points="11,17 15,21 23,13" fill="none" stroke="#1E3A8A" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Result Panel -->
+      <div class="result-panel">
+        <div class="result-panel-header">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1E3A8A" stroke-width="2.2">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
           </svg>
-          <div class="risk-title">Risk Assessment</div>
+          <div class="result-panel-title">Prediction Result</div>
         </div>
 
-        <div class="risk-item critical inactive" id="risk-CRITICAL">
-          <div class="risk-row">
-            <span class="risk-name">CRITICAL</span>
-            <!-- X circle icon red -->
-            <svg class="risk-icon-svg" viewBox="0 0 22 22" fill="none">
-              <circle cx="11" cy="11" r="9" fill="#FEF2F2" stroke="#EF4444" stroke-width="1.5"/>
-              <line x1="7.5" y1="7.5" x2="14.5" y2="14.5" stroke="#EF4444" stroke-width="2" stroke-linecap="round"/>
-              <line x1="14.5" y1="7.5" x2="7.5" y2="14.5" stroke="#EF4444" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <div class="risk-desc">CUI Incident Rate &gt; 50%</div>
-          <div class="result-detail" id="detail-CRITICAL">Probability: <span id="prob-CRITICAL">—</span> &nbsp;|&nbsp; Next Inspection: <span id="year-CRITICAL">—</span></div>
+        <!-- Empty state -->
+        <div class="result-empty" id="resultEmpty">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" style="display:block;margin:0 auto;">
+            <circle cx="24" cy="24" r="20" stroke="#94A3B8" stroke-width="2"/>
+            <path d="M24 14v10l6 4" stroke="#94A3B8" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <div class="result-empty-text" style="margin-top:8px;">Fill in parameters and click<br/><strong>Predict Corrosion Risk</strong></div>
         </div>
 
-        <div class="risk-item warning inactive" id="risk-WARNING">
-          <div class="risk-row">
-            <span class="risk-name">WARNING</span>
-            <!-- Triangle warning icon yellow -->
-            <svg class="risk-icon-svg" viewBox="0 0 22 22" fill="none">
-              <path d="M11 3L20 19H2L11 3Z" fill="#FEFCE8" stroke="#EAB308" stroke-width="1.5" stroke-linejoin="round"/>
-              <line x1="11" y1="9" x2="11" y2="13.5" stroke="#EAB308" stroke-width="2" stroke-linecap="round"/>
-              <circle cx="11" cy="16" r="1" fill="#EAB308"/>
-            </svg>
-          </div>
-          <div class="risk-desc">CUI Incident Rate 25% – 50%</div>
-          <div class="result-detail" id="detail-WARNING">Probability: <span id="prob-WARNING">—</span> &nbsp;|&nbsp; Next Inspection: <span id="year-WARNING">—</span></div>
-        </div>
+        <!-- Filled state (hidden until predict) -->
+        <div id="resultFilled" style="display:none;">
 
-        <div class="risk-item safe inactive" id="risk-SAFE">
-          <div class="risk-row">
-            <span class="risk-name">SAFE / OPERATIONAL</span>
-            <!-- Check circle icon green -->
-            <svg class="risk-icon-svg" viewBox="0 0 22 22" fill="none">
-              <circle cx="11" cy="11" r="9" fill="#F0FDF4" stroke="#22C55E" stroke-width="1.5"/>
-              <polyline points="7,11 10,14 15,8" fill="none" stroke="#22C55E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+          <!-- Probability bars -->
+          <div class="prob-section">
+            <div class="prob-section-label">Model Probability Breakdown</div>
+
+            <div class="prob-row">
+              <div class="prob-meta">
+                <span class="prob-name">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="4" width="2" height="7" rx="1" fill="#2563EB"/><rect x="5" y="2" width="2" height="9" rx="1" fill="#2563EB"/><rect x="9" y="0" width="2" height="11" rx="1" fill="#2563EB"/></svg>
+                  Random Forest (RF)
+                </span>
+                <span class="prob-pct" id="rfPct">—</span>
+              </div>
+              <div class="prob-bar-bg"><div class="prob-bar-fill fill-rf" id="rfBar"></div></div>
+              <div class="prob-source">Data-driven · 700 trees · class_weight 1:8</div>
+            </div>
+
+            <div class="prob-row">
+              <div class="prob-meta">
+                <span class="prob-name">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1L11 4v4c0 2.5-2 4-5 5C3 12 1 10.5 1 8V4L6 1Z" stroke="#0891B2" stroke-width="1.2" fill="none"/></svg>
+                  API 583 Prior (Bayesian)
+                </span>
+                <span class="prob-pct" id="priorPct">—</span>
+              </div>
+              <div class="prob-bar-bg"><div class="prob-bar-fill fill-prior" id="priorBar"></div></div>
+              <div class="prob-source">API 583 §5.2–5.5 · API 571 §5.1.2 · RBI-based</div>
+            </div>
           </div>
-          <div class="risk-desc">CUI Incident Rate &lt; 25%</div>
-          <div class="result-detail" id="detail-SAFE">Probability: <span id="prob-SAFE">—</span> &nbsp;|&nbsp; Next Inspection: <span id="year-SAFE">—</span></div>
+
+          <!-- Bayesian Combined Score -->
+          <div class="bayes-section">
+            <div class="bayes-combined">
+              <div class="bayes-score-box">
+                <div class="bayes-pct-val" id="bayesPct">—</div>
+                <div class="bayes-pct-label">BAYESIAN %</div>
+              </div>
+              <div class="bayes-detail">
+                <div class="bayes-detail-title">Combined Score</div>
+                <div class="bayes-formula">σ(0.5·logit(Prior)<br/>+ 0.5·logit(RF))</div>
+                <div id="riskChip" class="risk-chip" style="display:none;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Prediction Set -->
+          <div class="predset-section">
+            <span class="predset-key">Pred Set</span>
+            <span class="predset-badge" id="predSetBadge">—</span>
+            <span class="predset-note" id="predSetNote"></span>
+            <span class="conf-chip" id="confChip">95%</span>
+          </div>
+
+          <!-- Tier & Action -->
+          <div class="tier-section">
+            <div class="tier-card" id="tierCard">
+              <div class="tier-top">
+                <span class="tier-badge" id="tierBadge">—</span>
+                <span class="tier-action" id="tierAction">Awaiting prediction</span>
+              </div>
+              <div class="tier-criteria" id="tierCriteria"></div>
+            </div>
+          </div>
         </div>
       </div>
 
+      <!-- Total datasets -->
       <div class="total-card">
         <div class="total-label">Total Datasets</div>
         <div class="total-value" id="totalDatasets">—</div>
@@ -442,7 +554,9 @@
 
 <script>
   const API_BASE = "https://mtcu-cui.onrender.com";
+  let selectedConf = 95;
 
+  // ── Dropdown helpers ──
   function open_(listId) { document.getElementById(listId).classList.add('open'); }
   function close_(listId) { setTimeout(() => document.getElementById(listId).classList.remove('open'), 150); }
   function pick(inputId, value) {
@@ -458,15 +572,87 @@
     });
   }
 
+  // ── Confidence selector ──
+  function setConf(val) {
+    selectedConf = val;
+    document.querySelectorAll('.conf-tab').forEach(t => {
+      t.classList.toggle('active', parseInt(t.dataset.conf) === val);
+    });
+  }
+
+  // ── Animate probability bar ──
+  function setBar(barId, pctId, value) {
+    const pct = Math.round(value);
+    document.getElementById(pctId).textContent = pct + '%';
+    setTimeout(() => {
+      document.getElementById(barId).style.width = Math.min(pct, 100) + '%';
+    }, 80);
+  }
+
+  // ── Render result panel ──
+  function renderResult(data) {
+    document.getElementById('resultEmpty').style.display = 'none';
+    document.getElementById('resultFilled').style.display = 'block';
+
+    const rf    = data.rf_probability    ?? data.probability_pct ?? 0;
+    const prior = data.prior_probability ?? 0;
+    const bayes = data.bayes_probability ?? data.probability_pct ?? 0;
+
+    setBar('rfBar',    'rfPct',    rf);
+    setBar('priorBar', 'priorPct', prior);
+    document.getElementById('bayesPct').textContent = Math.round(bayes) + '%';
+
+    // Risk chip
+    const risk = (data.risk_level || '').toLowerCase();
+    const riskLabels = { high: 'High Risk', medium: 'Medium Risk', low: 'Low Risk' };
+    const chip = document.getElementById('riskChip');
+    chip.style.display = 'inline-flex';
+    chip.className = 'risk-chip ' + risk;
+    chip.innerHTML = `<div class="risk-dot ${risk}"></div>${riskLabels[risk] || risk}`;
+
+    // Prediction Set
+    const ps = data.pred_set || 'No+Yes';
+    const psBadge = document.getElementById('predSetBadge');
+    const psNote  = document.getElementById('predSetNote');
+    const psClass = ps === 'Yes' ? 'ps-yes' : ps === 'No+Yes' ? 'ps-noyes' : 'ps-no';
+    const psNotes = {
+      'Yes':    'โมเดลมั่นใจ — มี CUI',
+      'No+Yes': 'ไม่แน่ใจ → Safety-first → Yes',
+      'No':     'โมเดลมั่นใจ — ไม่มี CUI',
+    };
+    psBadge.textContent = '{' + ps + '}';
+    psBadge.className   = 'predset-badge ' + psClass;
+    psNote.textContent  = psNotes[ps] || '';
+    document.getElementById('confChip').textContent = 'conf=' + (data.confidence || selectedConf) + '%';
+
+    // Tier card
+    const tier = data.tier || 3;
+    const action = data.action || '—';
+    const criteria = data.tier_criteria || '';
+
+    const tierCard   = document.getElementById('tierCard');
+    const tierBadge  = document.getElementById('tierBadge');
+    const tierAction = document.getElementById('tierAction');
+    const tierCrit   = document.getElementById('tierCriteria');
+
+    tierCard.className   = 'tier-card t' + tier;
+    tierBadge.className  = 'tier-badge tb-t' + tier;
+    tierBadge.textContent = 'Tier ' + tier;
+    tierAction.className  = 'tier-action ta-t' + tier;
+    tierAction.textContent = action;
+    tierCrit.textContent   = criteria;
+  }
+
+  // ── Stats ──
   async function loadStats() {
     try {
-      const res = await fetch(`${API_BASE}/api/stats`);
+      const res  = await fetch(`${API_BASE}/api/stats`);
       if (!res.ok) throw new Error();
       const data = await res.json();
-      const statRow = document.getElementById('statRow');
       const areaCounts = data.area_counts || {};
       const total = data.total_datasets || 1;
       const areas = Object.entries(areaCounts);
+      const statRow = document.getElementById('statRow');
       if (areas.length === 0) {
         statRow.innerHTML = `<div class="stat-card" style="grid-column:1/-1"><div class="stat-label">No data yet — please upload a file first</div></div>`;
       } else {
@@ -476,102 +662,102 @@
         }).join('');
       }
       document.getElementById('totalDatasets').textContent = data.total_datasets?.toLocaleString() || '—';
-      const statusEl = document.getElementById('modelStatus');
+      const statusEl   = document.getElementById('modelStatus');
       const statusText = document.getElementById('modelStatusText');
       if (data.accuracy) {
         statusEl.className = 'model-status ready';
-        statusText.textContent = `Model ready — Accuracy ${data.accuracy}% | Last trained: ${data.last_trained}`;
+        statusText.textContent = `Model ready — Recall ${data.recall}% | F2 ${data.f2_score} | Trained: ${data.last_trained}`;
       } else {
         statusEl.className = 'model-status not-ready';
         statusText.textContent = 'No model yet — please upload a training file first';
       }
     } catch {
-      document.getElementById('modelStatusText').textContent = 'Cannot connect to backend — make sure server is running at ' + API_BASE;
+      document.getElementById('modelStatusText').textContent = 'Cannot connect to backend — ' + API_BASE;
     }
   }
 
+  // ── Predict ──
   async function predict() {
-    const btn = document.getElementById('predictBtn');
+    const btn     = document.getElementById('predictBtn');
     const spinner = document.getElementById('spinner');
-    const icon = document.getElementById('btnIcon');
-    const resultBar = document.getElementById('resultBar');
-    const errorBar = document.getElementById('errorBar');
-    const age = document.getElementById('Age_Years').value;
-    if (!age) { errorBar.textContent = 'Please enter Age (Years in Service)'; errorBar.classList.add('show'); return; }
-    errorBar.classList.remove('show');
+    const icon    = document.getElementById('btnIcon');
+    const errBar  = document.getElementById('errorBar');
+    const age     = document.getElementById('Age_Years').value;
+
+    if (!age) { errBar.textContent = 'Please enter Age (Years in Service)'; errBar.classList.add('show'); return; }
+    errBar.classList.remove('show');
+
     const payload = {
-      Substrate:               document.getElementById('Substrate').value || 'Unknow',
+      Substrate:               document.getElementById('Substrate').value || 'unknown',
       Age_Years:               parseFloat(age),
-      Operating_Temperature_C: document.getElementById('Operating_Temperature_C').value || 'Unknow',
-      Coating_Prime:           document.getElementById('Coating_Prime').value || 'Unknow',
-      Coating_Second:          document.getElementById('Coating_Second').value || 'Unknow',
-      Top_Coat:                document.getElementById('Top_Coat').value || 'Unknow',
-      Insulation_Type:         document.getElementById('Insulation_Type').value || 'Unknow',
-      Vapor_Barrier:           document.getElementById('Vapor_Barrier').value || 'Unknow',
-      Environment:             document.getElementById('Environment').value || 'Unknow',
-      Jacket_Damage:           document.getElementById('Jacket_Damage').value || 'Unknow',
+      Operating_Temperature_C: document.getElementById('Operating_Temperature_C').value || 'unknown',
+      Coating_Prime:           document.getElementById('Coating_Prime').value || 'unknown',
+      Coating_Second:          document.getElementById('Coating_Second').value || 'unknown',
+      Top_Coat:                document.getElementById('Top_Coat').value || 'unknown',
+      Insulation_Type:         document.getElementById('Insulation_Type').value || 'unknown',
+      Vapor_Barrier:           document.getElementById('Vapor_Barrier').value || 'unknown',
+      Environment:             document.getElementById('Environment').value || 'unknown',
+      Jacket_Damage:           document.getElementById('Jacket_Damage').value || 'unknown',
+      confidence:              selectedConf,
     };
-    btn.disabled = true; spinner.style.display = 'block'; icon.style.display = 'none';
-    resultBar.className = 'result-bar';
+
+    btn.disabled = true;
+    spinner.style.display = 'block';
+    icon.style.display    = 'none';
+
     try {
-      const res = await fetch(`${API_BASE}/api/predict`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.detail || 'Error');
-      const level = data.risk_level;
-      ['CRITICAL','WARNING','SAFE'].forEach(l => {
-        document.getElementById('risk-'+l).classList.add('inactive');
-        document.getElementById('detail-'+l).classList.remove('show');
+      const res  = await fetch(`${API_BASE}/api/predict`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
       });
-      document.getElementById('risk-'+level).classList.remove('inactive');
-      document.getElementById('prob-'+level).textContent = data.probability_pct+'%';
-      document.getElementById('year-'+level).textContent = data.next_inspection_year;
-      document.getElementById('detail-'+level).classList.add('show');
-      const labels = {
-        CRITICAL: 'CRITICAL — CUI Incident Rate > 50%',
-        WARNING:  'WARNING — CUI Incident Rate 25%–50%',
-        SAFE:     'SAFE / OPERATIONAL — CUI Incident Rate < 25%'
-      };
-      resultBar.classList.add('show', level);
-      document.getElementById('resultText').textContent = labels[level];
-      const now = new Date();
-      const record = {
-        id:   Date.now(),
-        date: now.toLocaleDateString('en-GB'),
-        time: now.toLocaleTimeString('en-GB'),
-        input: payload,
-        result: data,
-        note: '',
-      };
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || 'Prediction error');
+
+      renderResult(data);
+
+      // Save to sessionStorage so result.html can read it
+      sessionStorage.setItem('lastResult', JSON.stringify({ input: payload, ...data }));
+
+      // Save history
       try {
         await fetch(`${API_BASE}/api/history`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(record)
+          body: JSON.stringify({
+            id: Date.now(),
+            date: new Date().toLocaleDateString('en-GB'),
+            time: new Date().toLocaleTimeString('en-GB'),
+            input: payload,
+            result: data,
+            note: '',
+          }),
         });
       } catch {}
     } catch (err) {
-      errorBar.textContent = err.message;
-      errorBar.classList.add('show');
+      errBar.textContent = err.message;
+      errBar.classList.add('show');
     } finally {
-      btn.disabled = false; spinner.style.display = 'none'; icon.style.display = 'block';
+      btn.disabled = false;
+      spinner.style.display = 'none';
+      icon.style.display    = 'block';
     }
   }
 
-  loadStats();
-
-  // ── Auth Guard ──────────────────────────────────────────────────────────────
-  window.addEventListener('DOMContentLoaded', function() {
-    var session  = sessionStorage.getItem('cui_logged_in') === 'true';
-    var remember = localStorage.getItem('cui_remember') === 'true';
-    if (!session && !remember) window.location.replace('/login.html');
+  // ── Auth Guard ──
+  window.addEventListener('DOMContentLoaded', function () {
+    const session  = sessionStorage.getItem('cui_logged_in') === 'true';
+    const remember = localStorage.getItem('cui_remember')   === 'true';
+    if (!session && !remember) window.location.replace('login.html');
   });
 
-  // ── Logout ──────────────────────────────────────────────────────────────────
   function doLogout() {
     localStorage.removeItem('cui_remember');
     sessionStorage.removeItem('cui_logged_in');
-    window.location.replace('/login.html');
+    window.location.replace('login.html');
   }
+
+  loadStats();
 </script>
 </body>
 </html>
