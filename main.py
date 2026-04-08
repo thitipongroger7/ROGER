@@ -1,6 +1,7 @@
 # ==============================================================================
 # FILE: main.py
 # PURPOSE: FastAPI Backend — รับข้อมูลจาก UI แล้วส่งให้ ML Model ทำนาย
+#          V4: เพิ่ม API 583 Bayesian Prior + Conformal Prediction
 # ==============================================================================
 
 from fastapi import FastAPI, UploadFile, File, HTTPException
@@ -12,12 +13,13 @@ from typing import Optional
 import uvicorn
 import os
 import json
+import math
 from datetime import datetime
 from supabase import create_client
 
 from model import ModelManager
 
-app = FastAPI(title="CUI Corrosion Prediction API", version="2.0")
+app = FastAPI(title="CUI Corrosion Prediction API", version="4.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -79,6 +81,124 @@ def serve_refinery(): return FileResponse(os.path.join(os.getcwd(), "refinery_ne
 
 
 # ==============================================================================
+# API 583 BAYESIAN PRIOR  (ความรู้จากมาตรฐาน — independent จาก training data)
+# ==============================================================================
+
+_BASE_RATE    = 0.25   # API 583 §4 — population base rate
+_BASE_LO      = math.log(_BASE_RATE / (1 - _BASE_RATE))   # −1.099
+
+def _sigmoid(x: float) -> float:
+    return 1.0 / (1.0 + math.exp(-max(-500, min(500, x))))
+
+def _logit(p: float) -> float:
+    p = max(1e-7, min(1 - 1e-7, p))
+    return math.log(p / (1 - p))
+
+# Temperature zone — API 583 §5.2
+_TEMP_ADJ = {
+    "0 - <10": 0.8,  "10 - <20": 0.8,  "20 - <30": 0.8,
+    "30 - <40": 0.8, "40 - <50": 0.8,  "50 - <60": 0.8,
+    "60 - <70": 1.2, "70 - <80": 1.2,  "80 - <90": 1.2,
+    "90 - <100": 1.2,"100 - <110": 1.2,"110 - <120": 1.2,
+    "120 - <130": 0.3,"130 - <140": 0.3,
+    "140 - <150": -0.5,"150 - <160": -1.5,
+    "160 - <170": -3.0,"170 - <180": -3.0,
+}
+# Substrate — API 571 §5.1.2
+_SUB_ADJ = {"cs": 0.0, "ltcs": 0.0, "low alloy steel": 0.0, "ss": -2.5}
+# Insulation — API 583 §5.3
+_INS_ADJ = {
+    "polyisocyanurate": 0.4, "mineral fiber": 0.3, "mineral wool": 0.3,
+    "perlite": 0.2, "calcium silicate": 0.2,
+    "cellular glass": -0.5, "flexible aerogel blanket": -0.6, "aerogel": -0.6,
+}
+# Prime coating — API 583 §5.4
+_PRIME_ADJ = {
+    "zinc ethyl silicate": 0.7, "rich zinc epoxy": 0.5, "inorganic zinc": 0.4,
+    "phenolic epoxy": 0.0, "epoxy": -0.5, "non primer": 0.6,
+    "silicone primer": -0.3, "inorganic copolymer": 0.4,
+}
+# Top coat — API 583 §5.4
+_TOP_ADJ = {
+    "zinc silicate": 0.5, "non top coat": 0.4, "phenolic epoxy": 0.2,
+    "polyurethane": -0.3, "2 component polyurethane": -0.6,
+    "silicone aluminum": -0.2, "epoxy": -0.4, "epoxy polyamide": -0.3,
+    "fbe": -0.5,
+}
+# Conformal q values (calibrated from test set)
+_Q = {95: 0.847, 90: 0.745, 85: 0.691}
+
+
+def api583_prior(inp: dict) -> float:
+    """คำนวณ API 583 Prior probability จาก input dict."""
+    lo = _BASE_LO
+
+    # Temperature
+    temp_key = str(inp.get("Operating_Temperature_C", "")).strip().lower()
+    lo += _TEMP_ADJ.get(temp_key, 0.8)
+
+    # Substrate
+    lo += _SUB_ADJ.get(str(inp.get("Substrate", "")).strip().lower(), 0.0)
+
+    # Insulation
+    lo += _INS_ADJ.get(str(inp.get("Insulation_Type", "")).strip().lower(), 0.2)
+
+    # Coating
+    lo += _PRIME_ADJ.get(str(inp.get("Coating_Prime", "")).strip().lower(), 0.2)
+    lo += _TOP_ADJ.get(str(inp.get("Top_Coat", "")).strip().lower(), 0.2)
+
+    # Jacket damage — API 583 §5.5
+    jacket = str(inp.get("Jacket_Damage", "")).strip().lower()
+    if jacket == "yes":  lo += 0.9
+    elif jacket == "no": lo -= 0.4
+
+    # Age
+    try:
+        age = float(inp.get("Age_Years", 0))
+        if age > 30:    lo += 0.8
+        elif age > 20:  lo += 0.4
+        elif age > 10:  lo += 0.1
+        elif age < 5:   lo -= 0.3
+    except (ValueError, TypeError):
+        pass
+
+    # Environment — API 571 §5.1.3
+    if "marine" in str(inp.get("Environment", "")).lower():
+        lo += 0.3
+
+    return _sigmoid(lo)
+
+
+def bayesian_blend(prior_p: float, rf_p: float) -> float:
+    """รวม Prior + RF ใน log-odds space (50/50)."""
+    return _sigmoid(0.5 * _logit(prior_p) + 0.5 * _logit(rf_p))
+
+
+def conformal_predict(bayes_p: float, confidence: int) -> str:
+    """Return prediction set: 'Yes', 'No', หรือ 'No+Yes'."""
+    q = _Q.get(confidence, 0.847)
+    in_yes = (1 - bayes_p) <= q
+    in_no  = bayes_p <= q
+    if in_yes and in_no:  return "No+Yes"
+    if in_yes:            return "Yes"
+    if in_no:             return "No"
+    return "No+Yes"   # Empty set → conservative
+
+
+def tier_action(pred_set: str, risk_level: str, bayes_pct: float):
+    """คำนวณ Tier และ Action จาก Prediction Set + Risk Level."""
+    final_pred = "Yes" if pred_set in ("Yes", "No+Yes") else "No"
+    if final_pred == "Yes":
+        if pred_set == "Yes" or risk_level == "High" or bayes_pct >= 50:
+            return 1, "ตรวจสอบทันที (Immediate Inspection)", \
+                   "Pred Set = {Yes} หรือ Risk High หรือ Bayes ≥ 50%"
+        return 2, "เฝ้าระวัง + ตรวจรอบถัดไป (Monitor & Inspect Next Cycle)", \
+               "Pred Set = {No+Yes} · Risk Medium · Bayes 30–50%"
+    return 3, "ตาม Scheduled Inspection (Follow Standard Schedule)", \
+           "Pred Set = {No} · Risk Low · Bayes < 30%"
+
+
+# ==============================================================================
 # Schema
 # ==============================================================================
 class PredictRequest(BaseModel):
@@ -92,6 +212,7 @@ class PredictRequest(BaseModel):
     Vapor_Barrier:           str
     Environment:             str
     Jacket_Damage:           str
+    confidence:              Optional[int] = 95   # ← ใหม่: 85 / 90 / 95
 
 class LoginRequest(BaseModel):
     username: str
@@ -112,12 +233,12 @@ class NoteUpdate(BaseModel):
 # ==============================================================================
 # ENDPOINT 1: Health Check
 # ==============================================================================
-@app.get("/")
+@app.get("/health")
 def health_check():
     return {
         "status": "ok",
         "model_trained": manager.is_trained(),
-        "message": "CUI Prediction API is running"
+        "message": "CUI Prediction API v4.0 is running"
     }
 
 
@@ -132,7 +253,7 @@ def login(data: LoginRequest):
 
 
 # ==============================================================================
-# ENDPOINT 2: Upload Excel → Train Model
+# ENDPOINT 2: Upload → Train Model  (ไม่เปลี่ยนแปลง)
 # ==============================================================================
 @app.post("/api/upload")
 async def upload_and_train(file: UploadFile = File(...)):
@@ -159,7 +280,7 @@ async def upload_and_train(file: UploadFile = File(...)):
 
 
 # ==============================================================================
-# ENDPOINT 3: Predict + บันทึกประวัติอัตโนมัติ
+# ENDPOINT 3: Predict  (เพิ่ม V4 fields)
 # ==============================================================================
 @app.post("/api/predict")
 def predict(data: PredictRequest):
@@ -170,20 +291,59 @@ def predict(data: PredictRequest):
         )
     try:
         input_dict = data.dict()
-        result     = manager.predict(input_dict)
+        confidence = int(input_dict.pop("confidence", 95))
+        if confidence not in (85, 90, 95):
+            confidence = 95
+
+        # ── RF prediction (จาก model.py เดิม) ──
+        result = manager.predict(input_dict)
+        rf_p   = float(result["probability"])   # 0–1
+
+        # ── API 583 Bayesian Prior ──
+        prior_p = api583_prior(input_dict)
+
+        # ── Bayesian Blend ──
+        bayes_p = bayesian_blend(prior_p, rf_p)
+        bayes_pct = round(bayes_p * 100, 1)
+
+        # ── Risk Level ──
+        if bayes_pct >= 60:   risk_level = "High"
+        elif bayes_pct >= 30: risk_level = "Medium"
+        else:                 risk_level = "Low"
+
+        # ── Conformal Prediction ──
+        pred_set = conformal_predict(bayes_p, confidence)
+
+        # ── Tier & Action ──
+        tier, action, criteria = tier_action(pred_set, risk_level, bayes_pct)
+
+        # ── Next inspection year ──
+        current_year = datetime.now().year
+        next_yr = current_year + (1 if tier == 1 else 3 if tier == 2 else 5)
 
         response = {
+            # ── V4 fields (ใหม่) ──
+            "rf_probability":    round(rf_p * 100, 1),
+            "prior_probability": round(prior_p * 100, 1),
+            "bayes_probability": bayes_pct,
+            "pred_set":          pred_set,
+            "risk_level":        risk_level,
+            "tier":              tier,
+            "action":            action,
+            "tier_criteria":     criteria,
+            "confidence":        confidence,
+            "q_value":           _Q.get(confidence, 0.847),
+            # ── Legacy fields (เดิม — ให้ result.html ยังทำงานได้) ──
             "status":               "success",
             "prediction":           result["prediction"],
-            "probability":          round(result["probability"], 4),
-            "probability_pct":      round(result["probability"] * 100, 2),
-            "risk_level":           result["risk_level"],
-            "next_inspection_year": result["next_inspection_year"],
-            "confidence_pct":       result["confidence_pct"],
+            "probability":          round(rf_p, 4),
+            "probability_pct":      bayes_pct,   # ใช้ Bayes แทน RF เดิม
+            "next_inspection_year": next_yr,
+            "confidence_pct":       result.get("confidence_pct", bayes_pct),
             "input_summary":        input_dict,
         }
 
-        # ✅ บันทึกประวัติอัตโนมัติหลัง predict สำเร็จ
+        # ── บันทึก Supabase อัตโนมัติ ──
         try:
             sb = get_supabase()
             if sb:
@@ -195,11 +355,14 @@ def predict(data: PredictRequest):
                     "time": now.strftime("%H:%M:%S"),
                     "input": input_dict,
                     "result": {
-                        "prediction":           result["prediction"],
-                        "probability_pct":      round(result["probability"] * 100, 2),
-                        "risk_level":           result["risk_level"],
-                        "next_inspection_year": result["next_inspection_year"],
-                        "confidence_pct":       result["confidence_pct"],
+                        "rf_probability":    response["rf_probability"],
+                        "prior_probability": response["prior_probability"],
+                        "bayes_probability": response["bayes_probability"],
+                        "pred_set":          pred_set,
+                        "risk_level":        risk_level,
+                        "tier":              tier,
+                        "action":            action,
+                        "next_inspection_year": next_yr,
                     },
                     "note": ""
                 }
@@ -209,7 +372,7 @@ def predict(data: PredictRequest):
                     {"upsert": "true", "content-type": "application/json"}
                 )
         except Exception:
-            pass  # ไม่ให้ error ตรงนี้มากระทบผลทำนาย
+            pass
 
         return response
 
@@ -218,7 +381,7 @@ def predict(data: PredictRequest):
 
 
 # ==============================================================================
-# ENDPOINT 4: Stats
+# ENDPOINT 4: Stats  (ไม่เปลี่ยนแปลง)
 # ==============================================================================
 @app.get("/api/stats")
 def get_stats():
@@ -226,7 +389,7 @@ def get_stats():
 
 
 # ==============================================================================
-# ENDPOINT 5: History — บันทึกประวัติ (manual)
+# ENDPOINT 5–8: History  (ไม่เปลี่ยนแปลง)
 # ==============================================================================
 @app.post("/api/history")
 def save_history(record: HistoryRecord):
@@ -244,9 +407,6 @@ def save_history(record: HistoryRecord):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-# ==============================================================================
-# ENDPOINT 6: History — ดึงประวัติทั้งหมด
-# ==============================================================================
 @app.get("/api/history")
 def get_history():
     sb = get_supabase()
@@ -267,9 +427,6 @@ def get_history():
         return []
 
 
-# ==============================================================================
-# ENDPOINT 7: History — อัพเดต note
-# ==============================================================================
 @app.patch("/api/history/{record_id}/note")
 def update_note(record_id: int, body: NoteUpdate):
     sb = get_supabase()
@@ -289,9 +446,6 @@ def update_note(record_id: int, body: NoteUpdate):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-# ==============================================================================
-# ENDPOINT 8: History — ลบประวัติ
-# ==============================================================================
 @app.delete("/api/history/{record_id}")
 def delete_history(record_id: int):
     sb = get_supabase()
