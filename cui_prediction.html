@@ -654,12 +654,6 @@
 
     // Prediction Set
     const ps = data.pred_set || 'No+Yes';
-    const psBadge = document.getElementById('predSetBadge');
-    const psNote  = document.getElementById('predSetNote');
-    const psClass = ps === 'Yes' ? 'ps-yes' : ps === 'No+Yes' ? 'ps-noyes' : 'ps-no';
-    psBadge.textContent = '{' + ps + '}';
-    psBadge.className   = 'predset-badge ' + psClass;
-    document.getElementById('confChip').textContent = 'conf=' + (data.confidence || selectedConf) + '%';
 
     // Verdict box
     const tier = data.tier || 3;
