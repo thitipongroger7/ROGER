@@ -394,14 +394,23 @@
       return;
     }
     tbody.innerHTML = filtered.map((h, i) => {
-      const level = h.result?.risk_level || 'SAFE';
       const noteIcon = h.note ? `<svg width='18' height='18' viewBox='0 0 18 18' fill='none'><rect x='2' y='1' width='12' height='16' rx='2' fill='#94A3B8'/><rect x='4' y='5' width='8' height='2' rx='1' fill='white'/><rect x='4' y='8.5' width='8' height='2' rx='1' fill='white'/><rect x='4' y='12' width='5' height='2' rx='1' fill='white'/></svg>` : `<svg width='18' height='18' viewBox='0 0 18 18' fill='none'><rect x='2' y='1' width='12' height='16' rx='2' fill='#CBD5E1'/><rect x='4' y='5' width='8' height='2' rx='1' fill='white'/><rect x='4' y='8.5' width='8' height='2' rx='1' fill='white'/><rect x='4' y='12' width='5' height='2' rx='1' fill='white'/></svg>`;
+      const r = h.result || {};
+      const risk  = r.risk_level || '—';
+      const tier  = r.tier ? 'Tier ' + r.tier : '—';
+      const tierCls = r.tier ? 'tier' + r.tier : '';
+      const bayes = r.bayes_probability != null ? r.bayes_probability + '%' : (r.probability_pct != null ? r.probability_pct + '%' : '—');
+      const predMap = { 1: ['CUI Detected','pred-cui'], 2: ['Uncertain','pred-unc'], 3: ['No CUI Detected','pred-no'] };
+      const [predLabel, predCls] = predMap[r.tier] || ['—', ''];
       return `<tr>
         <td class="num">${filtered.length - i}</td>
         <td>${h.date}</td>
         <td>${h.time}</td>
-        <td><span class="badge ${level}">${level}</span></td>
-        <td><button class="detail-btn" onclick="openDetail(${h.id})">View Details</button></td>
+        <td><span class="${predCls}">${predLabel}</span></td>
+        <td><span class="badge ${risk}">${risk}</span></td>
+        <td style="text-align:center;font-weight:600;">${bayes}</td>
+        <td><span class="badge ${tierCls}">${tier}</span></td>
+        <td><button class="detail-btn" onclick="openDetail(${h.id})">Details</button></td>
         <td style="text-align:center;"><button class="icon-btn" onclick="openNote(${h.id})" title="Note">${noteIcon}</button></td>
         <td style="text-align:center;"><button class="icon-btn" onclick="deleteRecord(${h.id})" title="Delete"><svg width='18' height='18' viewBox='0 0 18 18' fill='none'><rect x='2' y='5' width='14' height='12' rx='2' fill='#FEF2F2' stroke='#EF4444' stroke-width='1.2'/><rect x='1' y='3' width='16' height='3.5' rx='1.5' fill='#EF4444'/><rect x='6' y='1' width='6' height='3' rx='1' fill='#EF4444'/><line x1='6' y1='8.5' x2='6' y2='14' stroke='#EF4444' stroke-width='1.5' stroke-linecap='round'/><line x1='9' y1='8.5' x2='9' y2='14' stroke='#EF4444' stroke-width='1.5' stroke-linecap='round'/><line x1='12' y1='8.5' x2='12' y2='14' stroke='#EF4444' stroke-width='1.5' stroke-linecap='round'/></svg></button></td>
       </tr>`;
