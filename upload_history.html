@@ -387,7 +387,8 @@
 
   function renderHistory() {
     const filterVal = document.getElementById('filterDate').value.trim().toLowerCase();
-    const filtered = filterVal ? allHistory.filter(h => h.date.toLowerCase().includes(filterVal)) : allHistory;
+    const sorted = [...allHistory].sort((a,b) => b.id - a.id);
+    const filtered = filterVal ? sorted.filter(h => h.date.toLowerCase().includes(filterVal)) : sorted;
     const tbody = document.getElementById('historyBody');
     if (filtered.length === 0) {
       tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--slate-400);padding:32px;">${filterVal ? 'No records found.' : 'No prediction history yet.'}</td></tr>`;
