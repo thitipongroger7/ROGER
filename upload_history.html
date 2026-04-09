@@ -361,8 +361,9 @@
         const opacities = [1, 0.8, 0.65, 0.5, 0.4];
         distItems.innerHTML = areas.map(([name, count], i) => {
           const pct = Math.round(count / total * 100);
+          const displayName = name.toLowerCase() === 'unknow' ? 'Unknown' : name;
           return `<div class="dist-item">
-            <div class="dist-row"><span class="dist-name">${name}</span><span class="dist-pct">${pct}%</span></div>
+            <div class="dist-row"><span class="dist-name">${displayName}</span><span class="dist-pct">${pct}%</span></div>
             <div class="dist-track"><div class="dist-fill" style="width:${pct}%;opacity:${opacities[i]??0.35}"></div></div>
           </div>`;
         }).join('');
