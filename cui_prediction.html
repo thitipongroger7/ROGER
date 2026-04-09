@@ -698,7 +698,8 @@
       } else {
         statRow.innerHTML = areas.map(([name, count]) => {
           const pct = Math.round(count / total * 100);
-          return `<div class="stat-card"><div><div class="stat-label">${name}</div><div><span class="stat-value">${count.toLocaleString()}</span> <span class="stat-unit">Datasets</span></div></div><div class="stat-badge">${pct}%</div></div>`;
+          const dname = name.toLowerCase()==='unknow'?'Unknown':name;
+          return `<div class="stat-card"><div><div class="stat-label">${dname}</div><div><span class="stat-value">${count.toLocaleString()}</span> <span class="stat-unit">Datasets</span></div></div><div class="stat-badge">${pct}%</div></div>`;
         }).join('');
       }
       document.getElementById('totalDatasets').textContent = data.total_datasets?.toLocaleString() || '—';
