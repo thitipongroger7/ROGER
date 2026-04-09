@@ -14,6 +14,9 @@ import uvicorn
 import os
 import json
 import math
+import threading
+import time
+import requests as req_lib
 from datetime import datetime
 from supabase import create_client
 
@@ -465,5 +468,17 @@ def delete_history(record_id: int):
 # ==============================================================================
 # Run Server
 # ==============================================================================
+def _self_ping():
+    """Keep Render free tier alive by pinging every 10 minutes."""
+    time.sleep(60)
+    while True:
+        try:
+            req_lib.get("https://mtcu-cui.onrender.com/health", timeout=15)
+        except Exception:
+            pass
+        time.sleep(600)
+
+threading.Thread(target=_self_ping, daemon=True).start()
+
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
