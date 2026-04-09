@@ -44,8 +44,10 @@ def get_supabase():
     if not SUPABASE_URL or not SUPABASE_KEY:
         return None
     try:
-        return create_client(SUPABASE_URL, SUPABASE_KEY)
-    except Exception:
+        client = create_client(SUPABASE_URL, SUPABASE_KEY)
+        return client
+    except Exception as e:
+        print(f"[Supabase] connect error: {e}")
         return None
 
 # Serve static files (HTML, images, etc.)
