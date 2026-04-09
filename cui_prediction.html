@@ -759,7 +759,24 @@
       // Save to sessionStorage so result.html can read it
       sessionStorage.setItem('lastResult', JSON.stringify({ input: payload, ...data }));
 
-      // History saved automatically by backend
+      // Save history
+      try {
+        const now = new Date();
+        const locale = now.toLocaleString('en-GB', { timeZone: 'Asia/Bangkok' });
+        const [datePart, timePart] = locale.split(', ');
+        await fetch(`${API_BASE}/api/history`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: Date.now(),
+            date: datePart,
+            time: timePart,
+            input: payload,
+            result: data,
+            note: '',
+          }),
+        });
+      } catch {}
     } catch (err) {
       errBar.textContent = err.message;
       errBar.classList.add('show');
