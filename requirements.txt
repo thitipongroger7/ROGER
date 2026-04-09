@@ -5,3 +5,4 @@ numpy==1.26.4
 scikit-learn==1.4.1.post1
 python-multipart==0.0.9
 requests==2.31.0
+requests==2.31.0
