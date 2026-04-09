@@ -352,37 +352,6 @@ def predict(data: PredictRequest):
             "input_summary":        input_dict,
         }
 
-        # ── บันทึก Supabase อัตโนมัติ ──
-        try:
-            sb = get_supabase()
-            if sb:
-                now = datetime.now()
-                record_id = int(now.timestamp() * 1000)
-                record = {
-                    "id":   record_id,
-                    "date": now.strftime("%Y-%m-%d"),
-                    "time": now.strftime("%H:%M:%S"),
-                    "input": input_dict,
-                    "result": {
-                        "rf_probability":    response["rf_probability"],
-                        "prior_probability": response["prior_probability"],
-                        "bayes_probability": response["bayes_probability"],
-                        "pred_set":          pred_set,
-                        "risk_level":        risk_level,
-                        "tier":              tier,
-                        "action":            action,
-                        "next_inspection_year": next_yr,
-                    },
-                    "note": ""
-                }
-                sb.storage.from_("models").upload(
-                    f"history/{record_id}.json",
-                    json.dumps(record).encode(),
-                    {"upsert": "true", "content-type": "application/json"}
-                )
-        except Exception:
-            pass
-
         return response
 
     except Exception as e:
