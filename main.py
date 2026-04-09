@@ -418,7 +418,7 @@ def save_history(record: HistoryRecord):
 def get_history():
     sb = get_supabase()
     if not sb:
-        return []
+        raise HTTPException(status_code=500, detail="Supabase not connected")
     try:
         files = sb.storage.from_("models").list("history")
         records = []
@@ -426,12 +426,13 @@ def get_history():
             try:
                 data = sb.storage.from_("models").download(f"history/{f['name']}")
                 records.append(json.loads(data.decode()))
-            except Exception:
+            except Exception as e:
+                print(f"[history] skip {f['name']}: {e}")
                 continue
         records.sort(key=lambda x: x.get("id", 0), reverse=True)
         return records
-    except Exception:
-        return []
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"History error: {str(e)}")
 
 
 @app.patch("/api/history/{record_id}/note")
