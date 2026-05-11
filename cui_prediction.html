@@ -816,6 +816,35 @@ function doLogout() {
   window.location.replace('login.html');
 }
 
+
+  function acOpen(lid) {
+    document.getElementById(lid).classList.add('open');
+  }
+  function acClose(lid) {
+    setTimeout(function() { document.getElementById(lid).classList.remove('open'); }, 200);
+  }
+  function acPick(fid, val) {
+    document.getElementById(fid).value = val;
+    document.querySelectorAll('.ac-list').forEach(function(l) { l.classList.remove('open'); });
+  }
+  function ac(fid, lid) {
+    var q = document.getElementById(fid).value.toLowerCase();
+    var list = document.getElementById(lid);
+    list.classList.add('open');
+    list.querySelectorAll('div').forEach(function(d) {
+      d.style.display = d.textContent.toLowerCase().indexOf(q) >= 0 ? '' : 'none';
+    });
+  }
+  function acToggle(lid) {
+    var list = document.getElementById(lid);
+    var isOpen = list.classList.contains('open');
+    document.querySelectorAll('.ac-list').forEach(function(l) { l.classList.remove('open'); });
+    if (!isOpen) {
+      list.querySelectorAll('div').forEach(function(d) { d.style.display = ''; });
+      list.classList.add('open');
+    }
+  }
+
 loadStats();
 </script>
 </body>
