@@ -74,14 +74,15 @@
     }
     .field select { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; padding-right:32px; cursor:pointer; }
     .field select:focus, .field input[type="number"]:focus, .field input[type="text"]:focus { border-color:var(--sky); box-shadow:0 0 0 3px rgba(0,172,233,0.12); }
-    .ac-wrap { position:relative; display:flex; }
-    .ac-wrap input { border-radius:8px 0 0 8px !important; border-right:none !important; flex:1; }
+    .ac-wrap { position:relative; display:flex; align-items:stretch; }
+    .ac-input-group { display:flex; flex:1; position:relative; }
+    .ac-wrap input { border-radius:8px 0 0 8px !important; border-right:none !important; flex:1; min-width:0; }
     .ac-wrap input:focus { z-index:1; }
     .ac-arrow { height:42px; width:36px; border:1px solid var(--slate-200); border-left:none; border-radius:0 8px 8px 0; background:white; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:background .15s; }
     .ac-arrow:hover { background:var(--slate-50); }
-    .ac-arrow svg { width:14px; height:14px; color:var(--slate-400); transition:transform .2s; }
+    .ac-arrow svg { width:14px; height:14px; stroke:var(--slate-400); transition:transform .2s; }
     .ac-arrow.open svg { transform:rotate(180deg); }
-    .ac-list { display:none; position:absolute; top:calc(100% + 2px); left:0; right:0; background:white; border:1px solid var(--slate-200); border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,0.1); z-index:300; overflow:hidden; max-height:220px; overflow-y:auto; }
+    .ac-list { display:none; position:absolute; top:44px; left:0; right:0; background:white; border:1px solid var(--slate-200); border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,0.12); z-index:500; overflow:hidden; max-height:220px; overflow-y:auto; }
     .ac-list.open { display:block; }
     .ac-list div { padding:9px 13px; font-size:13px; color:var(--slate-900); cursor:pointer; transition:background .1s; }
     .ac-list div:hover { background:var(--slate-50); color:var(--navy); font-weight:600; }
@@ -267,8 +268,10 @@
           <div class="ac-wrap">
             <input type="text" id="Substrate" placeholder="e.g. CS" autocomplete="off"
               oninput="ac('Substrate','acSub')" onfocus="acOpen('acSub')" onblur="acClose('acSub')"/>
-            
-            <button type="button" class="ac-arrow" id="arr-acSub" onclick="acToggle('acSub', this)" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button><div class="ac-list" id="acSub">
+            <button type="button" class="ac-arrow" onclick="acToggle('acSub',this)" tabindex="-1">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="ac-list" id="acSub">
               <div onmousedown="acPick('Substrate','CS')">CS</div>
               <div onmousedown="acPick('Substrate','LTCS')">LTCS</div>
               <div onmousedown="acPick('Substrate','LOW ALLOY STEEL')">LOW ALLOY STEEL</div>
@@ -285,36 +288,38 @@
         <div class="field">
           <label>Temperature Group (°C)</label>
           <div class="ac-wrap">
-            <input type="text" id="Operating_Temperature_C" placeholder="e.g. 80 - &lt;90" autocomplete="off"
+            <input type="text" id="Operating_Temperature_C" placeholder="e.g. 80 - <90" autocomplete="off"
               oninput="ac('Operating_Temperature_C','acTemp')" onfocus="acOpen('acTemp')" onblur="acClose('acTemp')"/>
-            
-            <button type="button" class="ac-arrow" id="arr-acTemp" onclick="acToggle('acTemp', this)" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button><div class="ac-list" id="acTemp">
-              <div onmousedown="acPick('Operating_Temperature_C','(40) - &lt;(30)')">(40) – &lt;(30) °C</div>
-              <div onmousedown="acPick('Operating_Temperature_C','(30) - &lt;(20)')">(30) – &lt;(20) °C</div>
-              <div onmousedown="acPick('Operating_Temperature_C','(20) - &lt;(10)')">(20) – &lt;(10) °C</div>
-              <div onmousedown="acPick('Operating_Temperature_C','(10) - &lt;0')">(10) – &lt;0 °C</div>
-              <div onmousedown="acPick('Operating_Temperature_C','0 - &lt;10')">0 – &lt;10 °C</div>
-              <div onmousedown="acPick('Operating_Temperature_C','10 - &lt;20')">10 – &lt;20 °C</div>
-              <div onmousedown="acPick('Operating_Temperature_C','20 - &lt;30')">20 – &lt;30 °C</div>
-              <div onmousedown="acPick('Operating_Temperature_C','30 - &lt;40')">30 – &lt;40 °C</div>
-              <div onmousedown="acPick('Operating_Temperature_C','40 - &lt;50')">40 – &lt;50 °C</div>
-              <div onmousedown="acPick('Operating_Temperature_C','50 - &lt;60')">50 – &lt;60 °C</div>
-              <div onmousedown="acPick('Operating_Temperature_C','60 - &lt;70')">60 – &lt;70 °C</div>
-              <div onmousedown="acPick('Operating_Temperature_C','70 - &lt;80')">70 – &lt;80 °C</div>
-              <div onmousedown="acPick('Operating_Temperature_C','80 - &lt;90')">80 – &lt;90 °C</div>
-              <div onmousedown="acPick('Operating_Temperature_C','90 - &lt;100')">90 – &lt;100 °C</div>
-              <div onmousedown="acPick('Operating_Temperature_C','100 - &lt;110')">100 – &lt;110 °C</div>
-              <div onmousedown="acPick('Operating_Temperature_C','110 - &lt;120')">110 – &lt;120 °C</div>
-              <div onmousedown="acPick('Operating_Temperature_C','120 - &lt;130')">120 – &lt;130 °C</div>
-              <div onmousedown="acPick('Operating_Temperature_C','130 - &lt;140')">130 – &lt;140 °C</div>
-              <div onmousedown="acPick('Operating_Temperature_C','140 - &lt;150')">140 – &lt;150 °C</div>
-              <div onmousedown="acPick('Operating_Temperature_C','150 - &lt;160')">150 – &lt;160 °C</div>
-              <div onmousedown="acPick('Operating_Temperature_C','160 - &lt;170')">160 – &lt;170 °C</div>
-              <div onmousedown="acPick('Operating_Temperature_C','170 - &lt;180')">170 – &lt;180 °C</div>
-              <div onmousedown="acPick('Operating_Temperature_C','180 - &lt;190')">180 – &lt;190 °C</div>
-              <div onmousedown="acPick('Operating_Temperature_C','190 - &lt;200')">190 – &lt;200 °C</div>
+            <button type="button" class="ac-arrow" onclick="acToggle('acTemp',this)" tabindex="-1">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="ac-list" id="acTemp">
+              <div onmousedown="acPick('Operating_Temperature_C','(40) - <(30)')">(40) - <(30)</div>
+              <div onmousedown="acPick('Operating_Temperature_C','(30) - <(20)')">(30) - <(20)</div>
+              <div onmousedown="acPick('Operating_Temperature_C','(20) - <(10)')">(20) - <(10)</div>
+              <div onmousedown="acPick('Operating_Temperature_C','(10) - <0')">(10) - <0</div>
+              <div onmousedown="acPick('Operating_Temperature_C','0 - <10')">0 - <10</div>
+              <div onmousedown="acPick('Operating_Temperature_C','10 - <20')">10 - <20</div>
+              <div onmousedown="acPick('Operating_Temperature_C','20 - <30')">20 - <30</div>
+              <div onmousedown="acPick('Operating_Temperature_C','30 - <40')">30 - <40</div>
+              <div onmousedown="acPick('Operating_Temperature_C','40 - <50')">40 - <50</div>
+              <div onmousedown="acPick('Operating_Temperature_C','50 - <60')">50 - <60</div>
+              <div onmousedown="acPick('Operating_Temperature_C','60 - <70')">60 - <70</div>
+              <div onmousedown="acPick('Operating_Temperature_C','70 - <80')">70 - <80</div>
+              <div onmousedown="acPick('Operating_Temperature_C','80 - <90')">80 - <90</div>
+              <div onmousedown="acPick('Operating_Temperature_C','90 - <100')">90 - <100</div>
+              <div onmousedown="acPick('Operating_Temperature_C','100 - <110')">100 - <110</div>
+              <div onmousedown="acPick('Operating_Temperature_C','110 - <120')">110 - <120</div>
+              <div onmousedown="acPick('Operating_Temperature_C','120 - <130')">120 - <130</div>
+              <div onmousedown="acPick('Operating_Temperature_C','130 - <140')">130 - <140</div>
+              <div onmousedown="acPick('Operating_Temperature_C','140 - <150')">140 - <150</div>
+              <div onmousedown="acPick('Operating_Temperature_C','150 - <160')">150 - <160</div>
+              <div onmousedown="acPick('Operating_Temperature_C','160 - <170')">160 - <170</div>
+              <div onmousedown="acPick('Operating_Temperature_C','170 - <180')">170 - <180</div>
+              <div onmousedown="acPick('Operating_Temperature_C','180 - <190')">180 - <190</div>
+              <div onmousedown="acPick('Operating_Temperature_C','190 - <200')">190 - <200</div>
               <div onmousedown="acPick('Operating_Temperature_C','Cyclic temperature')">Cyclic temperature</div>
-              <div onmousedown="acPick('Operating_Temperature_C','มากกว่าหรือเท่ากับ 200')">≥ 200 °C</div>
+              <div onmousedown="acPick('Operating_Temperature_C','มากกว่าหรือเท่ากับ 200')">มากกว่าหรือเท่ากับ 200</div>
             </div>
           </div>
         </div>
@@ -324,8 +329,10 @@
           <div class="ac-wrap">
             <input type="text" id="Environment" placeholder="e.g. Marine" autocomplete="off"
               oninput="ac('Environment','acEnv')" onfocus="acOpen('acEnv')" onblur="acClose('acEnv')"/>
-            
-            <button type="button" class="ac-arrow" id="arr-acEnv" onclick="acToggle('acEnv', this)" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button><div class="ac-list" id="acEnv">
+            <button type="button" class="ac-arrow" onclick="acToggle('acEnv',this)" tabindex="-1">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="ac-list" id="acEnv">
               <div onmousedown="acPick('Environment','Marine')">Marine</div>
               <div onmousedown="acPick('Environment','Industrial')">Industrial</div>
             </div>
@@ -337,8 +344,10 @@
           <div class="ac-wrap">
             <input type="text" id="Coating_Prime" placeholder="e.g. phenolic epoxy" autocomplete="off"
               oninput="ac('Coating_Prime','acPrime')" onfocus="acOpen('acPrime')" onblur="acClose('acPrime')"/>
-            
-            <button type="button" class="ac-arrow" id="arr-acPrime" onclick="acToggle('acPrime', this)" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button><div class="ac-list" id="acPrime">
+            <button type="button" class="ac-arrow" onclick="acToggle('acPrime',this)" tabindex="-1">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="ac-list" id="acPrime">
               <div onmousedown="acPick('Coating_Prime','phenolic epoxy')">phenolic epoxy</div>
               <div onmousedown="acPick('Coating_Prime','zinc ethyl silicate')">zinc ethyl silicate</div>
               <div onmousedown="acPick('Coating_Prime','rich zinc epoxy')">rich zinc epoxy</div>
@@ -361,8 +370,10 @@
           <div class="ac-wrap">
             <input type="text" id="Coating_Second" placeholder="e.g. phenolic epoxy" autocomplete="off"
               oninput="ac('Coating_Second','acSec')" onfocus="acOpen('acSec')" onblur="acClose('acSec')"/>
-            
-            <button type="button" class="ac-arrow" id="arr-acSec" onclick="acToggle('acSec', this)" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button><div class="ac-list" id="acSec">
+            <button type="button" class="ac-arrow" onclick="acToggle('acSec',this)" tabindex="-1">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="ac-list" id="acSec">
               <div onmousedown="acPick('Coating_Second','phenolic epoxy')">phenolic epoxy</div>
               <div onmousedown="acPick('Coating_Second','zinc silicate')">zinc silicate</div>
               <div onmousedown="acPick('Coating_Second','Epoxy')">Epoxy</div>
@@ -381,8 +392,10 @@
           <div class="ac-wrap">
             <input type="text" id="Top_Coat" placeholder="e.g. polyurethane" autocomplete="off"
               oninput="ac('Top_Coat','acTop')" onfocus="acOpen('acTop')" onblur="acClose('acTop')"/>
-            
-            <button type="button" class="ac-arrow" id="arr-acTop" onclick="acToggle('acTop', this)" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button><div class="ac-list" id="acTop">
+            <button type="button" class="ac-arrow" onclick="acToggle('acTop',this)" tabindex="-1">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="ac-list" id="acTop">
               <div onmousedown="acPick('Top_Coat','non top coat')">non top coat</div>
               <div onmousedown="acPick('Top_Coat','zinc silicate')">zinc silicate</div>
               <div onmousedown="acPick('Top_Coat','polyurethane')">polyurethane</div>
@@ -407,8 +420,10 @@
           <div class="ac-wrap">
             <input type="text" id="Insulation_Type" placeholder="e.g. Mineral fiber" autocomplete="off"
               oninput="ac('Insulation_Type','acIns')" onfocus="acOpen('acIns')" onblur="acClose('acIns')"/>
-            
-            <button type="button" class="ac-arrow" id="arr-acIns" onclick="acToggle('acIns', this)" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button><div class="ac-list" id="acIns">
+            <button type="button" class="ac-arrow" onclick="acToggle('acIns',this)" tabindex="-1">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="ac-list" id="acIns">
               <div onmousedown="acPick('Insulation_Type','Mineral fiber')">Mineral fiber</div>
               <div onmousedown="acPick('Insulation_Type','mineral fiber')">mineral fiber</div>
               <div onmousedown="acPick('Insulation_Type','Cellular glass')">Cellular glass</div>
@@ -425,8 +440,10 @@
           <div class="ac-wrap">
             <input type="text" id="Vapor_Barrier" placeholder="Unknown" autocomplete="off"
               oninput="ac('Vapor_Barrier','acVapor')" onfocus="acOpen('acVapor')" onblur="acClose('acVapor')"/>
-            
-            <button type="button" class="ac-arrow" id="arr-acVapor" onclick="acToggle('acVapor', this)" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button><div class="ac-list" id="acVapor">
+            <button type="button" class="ac-arrow" onclick="acToggle('acVapor',this)" tabindex="-1">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="ac-list" id="acVapor">
               <div onmousedown="acPick('Vapor_Barrier','Unknown')">Unknown</div>
             </div>
           </div>
@@ -437,8 +454,10 @@
           <div class="ac-wrap">
             <input type="text" id="Jacket_Damage" placeholder="e.g. No" autocomplete="off"
               oninput="ac('Jacket_Damage','acJacket')" onfocus="acOpen('acJacket')" onblur="acClose('acJacket')"/>
-            
-            <button type="button" class="ac-arrow" id="arr-acJacket" onclick="acToggle('acJacket', this)" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button><div class="ac-list" id="acJacket">
+            <button type="button" class="ac-arrow" onclick="acToggle('acJacket',this)" tabindex="-1">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="ac-list" id="acJacket">
               <div onmousedown="acPick('Jacket_Damage','No')">No</div>
               <div onmousedown="acPick('Jacket_Damage','Yes')">Yes</div>
               <div onmousedown="acPick('Jacket_Damage','Unknown')">Unknown</div>
@@ -777,7 +796,7 @@ async function loadStats() {
     const tx = document.getElementById('modelStatusText');
     if (data.accuracy) {
       el.className = 'model-status ready';
-      tx.textContent = `Model ready — Accuracy ${data.accuracy}% | Trained: ${data.last_trained}`;
+      tx.textContent = `Last trained: ${data.last_trained}`;
     } else {
       el.className = 'model-status not-ready';
       tx.textContent = 'No model — please upload a training file first';
