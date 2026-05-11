@@ -1,6 +1,7 @@
 # ==============================================================================
 # FILE: model.py
-# PURPOSE: ML Logic — Random Forest + Supabase Storage for persistence
+# PURPOSE: ML Logic — Random Forest + OneHotEncoder + Unknown Detection
+#          + Bayesian Prior (API 583 Annex A) + Conformal Prediction
 # ==============================================================================
 
 import re
@@ -11,9 +12,8 @@ import pandas as pd
 import numpy as np
 from datetime import datetime
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import OneHotEncoder
 from sklearn.model_selection import StratifiedKFold, cross_val_score
-from sklearn.utils import resample
 from supabase import create_client
 
 warnings.filterwarnings("ignore")
@@ -63,21 +63,11 @@ def encode_temperature(t: str) -> float:
     return 50.0
 
 
-def risk_label(prob: float) -> str:
-    if prob >= 0.60:
-        return "CRITICAL"
-    if prob >= 0.30:
-        return "WARNING"
-    return "SAFE"
-
-
-def next_inspection_year(prob: float) -> int:
-    year = datetime.now().year
-    if prob >= 0.60:
-        return year + 1
-    if prob >= 0.30:
-        return year + 3
-    return year + 5
+def normalize_cat(df: pd.DataFrame) -> pd.DataFrame:
+    return pd.DataFrame({
+        c: df[c].astype(str).str.strip().str.lower()
+        for c in CAT_COLS
+    })
 
 
 # ==============================================================================
@@ -129,8 +119,11 @@ def _download_model_from_supabase():
 # ==============================================================================
 class ModelManager:
     def __init__(self):
-        self.model    = None
-        self.encoders = {}
+        self.model      = None
+        self.ohe        = None        # OneHotEncoder
+        self.seen_vals  = {}          # ค่าที่เคยเห็นใน training (Unknown Detection)
+        self.base_lo    = None        # BASE_LO คำนวณจาก training data จริง
+        self.q_value    = 0.3352      # Conformal q (conf=90%)
         self.stats = {
             "total_datasets": 0,
             "area_counts":    {},
@@ -141,12 +134,13 @@ class ModelManager:
         self._load_model()
 
     def is_trained(self) -> bool:
-        return self.model is not None and len(self.encoders) > 0
+        return self.model is not None and self.ohe is not None
 
     # ------------------------------------------------------------------
     def train(self, file_path: str) -> dict:
         print(f"\n[ModelManager] เริ่ม Train จากไฟล์: {file_path}")
 
+        # โหลดข้อมูล
         if file_path.endswith(".xlsx") or file_path.endswith(".xls"):
             df = pd.read_excel(file_path, engine='openpyxl')
         else:
@@ -159,64 +153,77 @@ class ModelManager:
 
         print(f"  โหลดข้อมูลดิบ: {len(df)} แถว")
 
+        # เติมค่าว่าง
         for col in CAT_COLS:
             if col in df.columns:
-                df[col] = df[col].fillna("Unknow").astype(str).str.strip()
+                df[col] = df[col].fillna("Unknown").astype(str).str.strip()
             else:
-                df[col] = "Unknow"
+                df[col] = "Unknown"
 
+        # Label
         df["yes_prob"] = df["Corrosion_Result"].apply(parse_corrosion_result)
         df["label"]    = (df["yes_prob"] >= THRESHOLD).astype(int)
         df = df.dropna(subset=["label"])
-        print(f"  หลังล้าง Target: {len(df)} แถว")
-
         df["temp_num"] = df["Operating_Temperature_C"].apply(encode_temperature)
+        print(f"  หลังล้าง: {len(df)} แถว")
 
-        self.encoders = {}
-        for col in CAT_COLS:
-            le = LabelEncoder()
-            le.fit(df[col].str.lower())
-            self.encoders[col] = le
+        # บันทึกค่าที่เคยเห็น (Unknown Detection)
+        self.seen_vals = {
+            col: set(df[col].astype(str).str.strip().str.lower().unique())
+            for col in CAT_COLS
+        }
 
+        # BASE_LO จาก training data จริง
+        n_yes = int(df["label"].sum())
+        n_total = len(df)
+        prev = n_yes / n_total
+        self.base_lo = float(np.log(prev / (1 - prev)))
+        print(f"  Yes={n_yes}, No={n_total-n_yes}, Prevalence={prev*100:.1f}%")
+        print(f"  BASE_LO = {self.base_lo:.4f}")
+
+        # OneHotEncoder
+        self.ohe = OneHotEncoder(sparse_output=False, handle_unknown="ignore")
+        self.ohe.fit(normalize_cat(df))
+
+        # Build features
         X = self._build_features(df)
-        y = df["label"]
+        y = df["label"].values
 
-        label_counts = y.value_counts()
-        print(f"  Label distribution → Yes: {label_counts.get(1,0)}, No: {label_counts.get(0,0)}")
+        # Oversample minority class
+        idx_maj = np.where(y == 0)[0]
+        idx_min = np.where(y == 1)[0]
+        rng     = np.random.RandomState(RANDOM_STATE)
+        idx_up  = rng.choice(idx_min, size=len(idx_maj), replace=True)
+        X_bal   = np.vstack([X[idx_maj], X[idx_up]])
+        y_bal   = np.hstack([y[idx_maj], y[idx_up]])
+        sh      = rng.permutation(len(y_bal))
+        X_bal, y_bal = X_bal[sh], y_bal[sh]
 
-        X_min_up, y_min_up = resample(
-            X[y == 1], y[y == 1],
-            replace=True,
-            n_samples=int(label_counts.get(0, len(X))),
-            random_state=RANDOM_STATE,
-        )
-        X_bal = pd.concat([X[y == 0], X_min_up]).reset_index(drop=True)
-        y_bal = pd.concat([y[y == 0], y_min_up]).reset_index(drop=True)
-
+        # Train RF
         rf = RandomForestClassifier(
-            n_estimators     = N_ESTIMATORS,
-            max_features     = "sqrt",
-            min_samples_leaf = 2,
-            min_samples_split= 4,
-            class_weight     = "balanced",
-            random_state     = RANDOM_STATE,
-            n_jobs           = -1,
+            n_estimators  = N_ESTIMATORS,
+            max_features  = "sqrt",
+            class_weight  = "balanced",
+            random_state  = RANDOM_STATE,
+            n_jobs        = -1,
         )
-        cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=RANDOM_STATE)
+        cv    = StratifiedKFold(n_splits=5, shuffle=True, random_state=RANDOM_STATE)
         cv_f1 = cross_val_score(rf, X_bal, y_bal, cv=cv, scoring="f1")
         print(f"  CV F1: {cv_f1.mean():.3f} ± {cv_f1.std():.3f}")
 
         rf.fit(X_bal, y_bal)
         self.model = rf
 
-        y_pred   = rf.predict(X)
-        accuracy = float((y_pred == y.values).mean()) * 100
+        accuracy = float((rf.predict(X) == y).mean()) * 100
         print(f"  Accuracy (train): {accuracy:.2f}%")
+
+        # Calibrate q จาก training data
+        self.q_value = self._calibrate_q(df, X, y)
+        print(f"  q (conf=90%): {self.q_value:.4f}")
 
         area_counts = {}
         if "Area" in df.columns:
-            area_counts = df["Area"].value_counts().to_dict()
-            area_counts = {str(k): int(v) for k, v in area_counts.items()}
+            area_counts = {str(k): int(v) for k, v in df["Area"].value_counts().items()}
 
         self.stats.update({
             "total_datasets": len(df),
@@ -227,7 +234,7 @@ class ModelManager:
         })
 
         self._save_model()
-        _upload_model_to_supabase()  # ← อัพขึ้น Supabase หลัง train
+        _upload_model_to_supabase()
 
         return {
             "accuracy":       round(accuracy, 2),
@@ -236,48 +243,109 @@ class ModelManager:
         }
 
     # ------------------------------------------------------------------
+    def _calibrate_q(self, df, X, y, conf=0.90) -> float:
+        """Calibrate Conformal q จาก training data"""
+        try:
+            import prior_v2 as P2
+            rf_probs = self.model.predict_proba(X)[:, 1]
+            prior_probs = df.apply(
+                lambda r: P2.compute_prior(
+                    r["Operating_Temperature_C"], r["Jacket_Damage"],
+                    r["Environment"], r["Coating_Prime"],
+                    r["Age_Years"], r["Insulation_Type"],
+                    substrate=r["Substrate"],
+                    base_lo=self.base_lo,
+                ), axis=1
+            ).values
+            bayes_probs = np.array([
+                P2.bayesian_blend(p, r)
+                for p, r in zip(prior_probs, rf_probs)
+            ])
+            scores = np.where(y == 1, 1 - bayes_probs, bayes_probs)
+            return float(np.quantile(scores, conf))
+        except Exception as e:
+            print(f"  [q calibration] ใช้ค่า default: {e}")
+            return 0.3352
+
+    # ------------------------------------------------------------------
+    def detect_unknown(self, input_dict: dict) -> list:
+        """ตรวจหา categorical value ที่ไม่เคยเห็นใน training"""
+        unknown_cols = []
+        for col in CAT_COLS:
+            val = str(input_dict.get(col, "")).strip().lower()
+            if val not in self.seen_vals.get(col, set()):
+                unknown_cols.append(col)
+        return unknown_cols
+
+    # ------------------------------------------------------------------
     def predict(self, input_dict: dict) -> dict:
         if not self.is_trained():
             raise RuntimeError("โมเดลยังไม่ได้ Train")
 
+        # Unknown Detection
+        unknown_cols = self.detect_unknown(input_dict)
+        if unknown_cols:
+            return {
+                "prediction":    "Unknown",
+                "unknown_cols":  unknown_cols,
+                "rf_prob":       None,
+                "prior_prob":    None,
+                "bayes_prob":    None,
+                "pred_set":      None,
+                "q_value":       self.q_value,
+            }
+
+        # Build features
         row = {}
         for col in CAT_COLS:
-            val = str(input_dict.get(col, "Unknow")).strip()
-            row[col] = val
+            row[col] = str(input_dict.get(col, "Unknown")).strip()
         row["Age_Years"] = float(input_dict.get("Age_Years", 0))
         row["Operating_Temperature_C"] = str(input_dict.get("Operating_Temperature_C", "50"))
         row["temp_num"] = encode_temperature(row["Operating_Temperature_C"])
 
         df_input = pd.DataFrame([row])
-        X_input  = self._build_features(df_input, predict_mode=True)
+        X_input  = self._build_features(df_input)
 
-        prob_yes   = float(self.model.predict_proba(X_input)[0, 1])
-        prediction = "Yes" if prob_yes >= THRESHOLD else "No"
-        level      = risk_label(prob_yes)
-        next_year  = next_inspection_year(prob_yes)
-        confidence = round((1 - abs(prob_yes - 0.5) * 2) * 100, 1)
+        # RF Probability
+        rf_prob = float(self.model.predict_proba(X_input)[0, 1])
+
+        # Bayesian Prior
+        try:
+            import prior_v2 as P2
+            prior_prob = P2.compute_prior(
+                row["Operating_Temperature_C"], row["Jacket_Damage"],
+                row["Environment"], row["Coating_Prime"],
+                row["Age_Years"], row["Insulation_Type"],
+                substrate=row["Substrate"],
+                base_lo=self.base_lo,
+            )
+            bayes_prob = P2.bayesian_blend(prior_prob, rf_prob)
+            result_cp  = P2.conformal_predict(bayes_prob, self.q_value)
+        except Exception as e:
+            print(f"[predict] prior_v2 error: {e}")
+            prior_prob = rf_prob
+            bayes_prob = rf_prob
+            result_cp  = {"pred_set": "{Yes}" if rf_prob >= 0.5 else "{No}",
+                          "predict": "Yes" if rf_prob >= 0.5 else "No", "tier": 1}
 
         return {
-            "prediction":           prediction,
-            "probability":          prob_yes,
-            "risk_level":           level,
-            "next_inspection_year": next_year,
-            "confidence_pct":       confidence,
+            "prediction":  result_cp["predict"],
+            "pred_set":    result_cp["pred_set"],
+            "rf_prob":     round(rf_prob * 100, 1),
+            "prior_prob":  round(prior_prob * 100, 1),
+            "bayes_prob":  round(bayes_prob * 100, 1),
+            "q_value":     round(self.q_value, 4),
+            "unknown_cols": [],
         }
 
     # ------------------------------------------------------------------
-    def _build_features(self, df: pd.DataFrame, predict_mode=False) -> pd.DataFrame:
-        feats = {}
-        for col in CAT_COLS:
-            vals = df[col].astype(str).str.strip().str.lower()
-            if predict_mode:
-                le    = self.encoders[col]
-                known = set(le.classes_)
-                vals  = vals.apply(lambda v: v if v in known else le.classes_[0])
-            feats[col] = self.encoders[col].transform(vals)
-        feats["Age_Years"] = df["Age_Years"].values
-        feats["temp_num"]  = df["temp_num"].values
-        return pd.DataFrame(feats)
+    def _build_features(self, df: pd.DataFrame) -> np.ndarray:
+        cat_enc = self.ohe.transform(normalize_cat(df))
+        num     = np.column_stack([
+            df["Age_Years"].values,
+            df["temp_num"].values,
+        ])
+        return np.hstack([cat_enc, num])
 
     # ------------------------------------------------------------------
     def get_stats(self) -> dict:
@@ -286,9 +354,12 @@ class ModelManager:
     # ------------------------------------------------------------------
     def _save_model(self):
         data = {
-            "model":    self.model,
-            "encoders": self.encoders,
-            "stats":    self.stats,
+            "model":     self.model,
+            "ohe":       self.ohe,
+            "seen_vals": self.seen_vals,
+            "base_lo":   self.base_lo,
+            "q_value":   self.q_value,
+            "stats":     self.stats,
         }
         with open(MODEL_SAVE_PATH, "wb") as f:
             pickle.dump(data, f)
@@ -296,7 +367,6 @@ class ModelManager:
 
     # ------------------------------------------------------------------
     def _load_model(self):
-        # ลองโหลดจาก Supabase ก่อน
         if not os.path.exists(MODEL_SAVE_PATH):
             print("[ModelManager] ไม่มี model local — ลอง download จาก Supabase...")
             _download_model_from_supabase()
@@ -307,15 +377,20 @@ class ModelManager:
         try:
             with open(MODEL_SAVE_PATH, "rb") as f:
                 data = pickle.load(f)
-            self.model    = data.get("model")
-            self.encoders = data.get("encoders", {})
-            self.stats    = data.get("stats", self.stats)
+            self.model      = data.get("model")
+            self.ohe        = data.get("ohe")
+            self.seen_vals  = data.get("seen_vals", {})
+            self.base_lo    = data.get("base_lo")
+            self.q_value    = data.get("q_value", 0.3352)
+            self.stats      = data.get("stats", self.stats)
 
-            if not self.encoders:
+            if self.model is None or self.ohe is None:
                 print("[ModelManager] พบ Model เก่า — ต้อง Train ใหม่")
                 self.model = None
+                self.ohe   = None
                 return
 
             print(f"[ModelManager] โหลด Model สำเร็จ — Accuracy: {self.stats.get('accuracy')}%")
         except Exception as e:
             print(f"[ModelManager] โหลด Model ไม่สำเร็จ ({e}) — ต้อง Train ใหม่")
+
