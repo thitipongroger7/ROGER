@@ -66,14 +66,20 @@
     .form-body { padding:16px 28px 20px; display:grid; grid-template-columns:1fr 1fr; gap:12px 20px; }
     .field { display:flex; flex-direction:column; gap:5px; }
     .field label { font-size:11px; font-weight:700; color:var(--slate-700); text-transform:uppercase; letter-spacing:.4px; }
-    .field select, .field input[type="number"] {
+    .field select, .field input[type="number"], .field input[type="text"] {
       height:42px; padding:0 12px; border:1px solid var(--slate-200); border-radius:8px;
       font-family:'DM Sans',sans-serif; font-size:13px; color:var(--slate-900);
       background:white; outline:none; transition:border-color .18s,box-shadow .18s; width:100%;
-      appearance:none; -webkit-appearance:none; cursor:pointer;
+      appearance:none; -webkit-appearance:none;
     }
-    .field select { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; padding-right:32px; }
-    .field select:focus, .field input[type="number"]:focus { border-color:var(--sky); box-shadow:0 0 0 3px rgba(0,172,233,0.12); }
+    .field select { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; padding-right:32px; cursor:pointer; }
+    .field select:focus, .field input[type="number"]:focus, .field input[type="text"]:focus { border-color:var(--sky); box-shadow:0 0 0 3px rgba(0,172,233,0.12); }
+    .ac-wrap { position:relative; }
+    .ac-list { display:none; position:absolute; top:calc(100% + 2px); left:0; right:0; background:white; border:1px solid var(--slate-200); border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,0.1); z-index:300; overflow:hidden; max-height:200px; overflow-y:auto; }
+    .ac-list.open { display:block; }
+    .ac-list div { padding:9px 13px; font-size:13px; color:var(--slate-900); cursor:pointer; transition:background .1s; }
+    .ac-list div:hover { background:var(--slate-50); color:var(--navy); font-weight:600; }
+    .ac-list div+div { border-top:1px solid var(--slate-100); }
 
     .error-bar { display:none; margin:0 28px 8px; padding:11px 14px; border-radius:8px; background:#FFF1F2; border:1px solid #FDA4AF; color:#BE123C; font-size:13px; font-weight:600; }
     .error-bar.show { display:block; }
@@ -101,29 +107,30 @@
     .result-empty svg { opacity:.2; margin-bottom:10px; }
     .result-empty-text { font-size:13px; color:var(--slate-400); }
 
-    /* Main result badge */
+    /* Main result badge — Option 5 style */
     .result-badge-wrap { padding:16px 18px; border-bottom:1px solid var(--slate-100); }
-    .result-badge { border-radius:10px; padding:14px 16px; display:flex; align-items:center; gap:12px; }
+    .result-badge { border-radius:10px; padding:14px 16px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
     .result-badge.corrosion-sure   { background:#FEF2F2; border:1px solid #FECACA; }
     .result-badge.no-corrosion     { background:#F0FDF4; border:1px solid #BBF7D0; }
     .result-badge.corrosion-unsure { background:#FFFBEB; border:1px solid #FDE68A; }
     .result-badge.unknown          { background:var(--slate-50); border:1px solid var(--slate-200); }
-    .badge-icon { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .badge-left { display:flex; align-items:center; gap:10px; }
+    .badge-icon { width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
     .corrosion-sure .badge-icon    { background:#FEE2E2; }
     .no-corrosion .badge-icon      { background:#DCFCE7; }
     .corrosion-unsure .badge-icon  { background:#FEF3C7; }
     .unknown .badge-icon           { background:var(--slate-100); }
-    .badge-label { font-size:18px; font-weight:800; }
+    .badge-label { font-size:16px; font-weight:700; }
     .corrosion-sure .badge-label   { color:#991B1B; }
     .no-corrosion .badge-label     { color:#14532D; }
     .corrosion-unsure .badge-label { color:#78350F; }
     .unknown .badge-label          { color:var(--slate-500); }
-    .badge-pill { display:inline-flex; align-items:center; padding:3px 9px; border-radius:6px; font-size:11px; font-weight:600; margin-top:3px; }
+    .badge-predset { font-size:11px; color:var(--slate-500); margin-top:3px; font-family:'DM Mono',monospace; }
+    .badge-pill { padding:4px 12px; border-radius:99px; font-size:11px; font-weight:600; white-space:nowrap; flex-shrink:0; }
     .corrosion-sure .badge-pill    { background:#FEE2E2; color:#B91C1C; }
     .no-corrosion .badge-pill      { background:#DCFCE7; color:#15803D; }
     .corrosion-unsure .badge-pill  { background:#FEF3C7; color:#92400E; }
     .unknown .badge-pill           { background:var(--slate-100); color:var(--slate-500); }
-    .badge-predset { font-size:11px; color:var(--slate-500); margin-top:5px; font-family:'DM Mono',monospace; }
 
     /* Prob bars (hybrid only) */
     .prob-section { padding:13px 18px; border-bottom:1px solid var(--slate-100); }
@@ -209,12 +216,12 @@
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <h1>Data Analytics for a Machine Learning Based<br>Corrosion Under Insulation Predictive Model</h1>
-      <p>Senior Engineering Project — Department of Metallurgical Engineering, Chulalongkorn University &amp; GCME</p>
+      <p>Senior Engineering Project — Department of Metallurgical Engineering, Chulalongkorn University in collaboration with GC Maintenance and Engineering Co., Ltd.</p>
     </div>
   </div>
 
   <div class="stat-row" id="statRow">
-    <div class="stat-card"><div><div class="stat-label">Loading...</div></div></div>
+    <div class="stat-card" style="grid-column:1/-1"><div class="stat-label">Loading model stats...</div></div>
   </div>
 
   <div class="content-grid">
@@ -251,13 +258,16 @@
       <div class="form-body">
         <div class="field">
           <label>Substrate Material</label>
-          <select id="Substrate">
-            <option value="">— Select —</option>
-            <option value="CS">CS — Carbon Steel</option>
-            <option value="LTCS">LTCS — Low Temp Carbon Steel</option>
-            <option value="Low Alloy Steel">Low Alloy Steel</option>
-            <option value="SS">SS — Stainless Steel</option>
-          </select>
+          <div class="ac-wrap">
+            <input type="text" id="Substrate" placeholder="e.g. CS" autocomplete="off"
+              oninput="ac('Substrate','acSub')" onfocus="acOpen('acSub')" onblur="acClose('acSub')"/>
+            <div class="ac-list" id="acSub">
+              <div onmousedown="acPick('Substrate','CS')">CS</div>
+              <div onmousedown="acPick('Substrate','LTCS')">LTCS</div>
+              <div onmousedown="acPick('Substrate','LOW ALLOY STEEL')">LOW ALLOY STEEL</div>
+              <div onmousedown="acPick('Substrate','SS')">SS</div>
+            </div>
+          </div>
         </div>
 
         <div class="field">
@@ -267,118 +277,158 @@
 
         <div class="field">
           <label>Temperature Group (°C)</label>
-          <select id="Operating_Temperature_C">
-            <option value="">— Select —</option>
-            <option value="0 - &lt;10">0 – &lt;10 °C</option>
-            <option value="10 - &lt;20">10 – &lt;20 °C</option>
-            <option value="20 - &lt;30">20 – &lt;30 °C</option>
-            <option value="30 - &lt;40">30 – &lt;40 °C</option>
-            <option value="40 - &lt;50">40 – &lt;50 °C</option>
-            <option value="50 - &lt;60">50 – &lt;60 °C</option>
-            <option value="60 - &lt;70">60 – &lt;70 °C</option>
-            <option value="70 - &lt;80">70 – &lt;80 °C</option>
-            <option value="80 - &lt;90">80 – &lt;90 °C</option>
-            <option value="90 - &lt;100">90 – &lt;100 °C</option>
-            <option value="100 - &lt;110">100 – &lt;110 °C</option>
-            <option value="110 - &lt;120">110 – &lt;120 °C</option>
-            <option value="120 - &lt;130">120 – &lt;130 °C</option>
-            <option value="130 - &lt;140">130 – &lt;140 °C</option>
-            <option value="140 - &lt;150">140 – &lt;150 °C</option>
-            <option value="150 - &lt;160">150 – &lt;160 °C</option>
-            <option value="Cyclic temperature">Cyclic temperature</option>
-            <option value="มากกว่าหรือเท่ากับ 200">≥ 200 °C</option>
-          </select>
+          <div class="ac-wrap">
+            <input type="text" id="Operating_Temperature_C" placeholder="e.g. 80 - &lt;90" autocomplete="off"
+              oninput="ac('Operating_Temperature_C','acTemp')" onfocus="acOpen('acTemp')" onblur="acClose('acTemp')"/>
+            <div class="ac-list" id="acTemp">
+              <div onmousedown="acPick('Operating_Temperature_C','(40) - &lt;(30)')">(40) – &lt;(30) °C</div>
+              <div onmousedown="acPick('Operating_Temperature_C','(30) - &lt;(20)')">(30) – &lt;(20) °C</div>
+              <div onmousedown="acPick('Operating_Temperature_C','(20) - &lt;(10)')">(20) – &lt;(10) °C</div>
+              <div onmousedown="acPick('Operating_Temperature_C','(10) - &lt;0')">(10) – &lt;0 °C</div>
+              <div onmousedown="acPick('Operating_Temperature_C','0 - &lt;10')">0 – &lt;10 °C</div>
+              <div onmousedown="acPick('Operating_Temperature_C','10 - &lt;20')">10 – &lt;20 °C</div>
+              <div onmousedown="acPick('Operating_Temperature_C','20 - &lt;30')">20 – &lt;30 °C</div>
+              <div onmousedown="acPick('Operating_Temperature_C','30 - &lt;40')">30 – &lt;40 °C</div>
+              <div onmousedown="acPick('Operating_Temperature_C','40 - &lt;50')">40 – &lt;50 °C</div>
+              <div onmousedown="acPick('Operating_Temperature_C','50 - &lt;60')">50 – &lt;60 °C</div>
+              <div onmousedown="acPick('Operating_Temperature_C','60 - &lt;70')">60 – &lt;70 °C</div>
+              <div onmousedown="acPick('Operating_Temperature_C','70 - &lt;80')">70 – &lt;80 °C</div>
+              <div onmousedown="acPick('Operating_Temperature_C','80 - &lt;90')">80 – &lt;90 °C</div>
+              <div onmousedown="acPick('Operating_Temperature_C','90 - &lt;100')">90 – &lt;100 °C</div>
+              <div onmousedown="acPick('Operating_Temperature_C','100 - &lt;110')">100 – &lt;110 °C</div>
+              <div onmousedown="acPick('Operating_Temperature_C','110 - &lt;120')">110 – &lt;120 °C</div>
+              <div onmousedown="acPick('Operating_Temperature_C','120 - &lt;130')">120 – &lt;130 °C</div>
+              <div onmousedown="acPick('Operating_Temperature_C','130 - &lt;140')">130 – &lt;140 °C</div>
+              <div onmousedown="acPick('Operating_Temperature_C','140 - &lt;150')">140 – &lt;150 °C</div>
+              <div onmousedown="acPick('Operating_Temperature_C','150 - &lt;160')">150 – &lt;160 °C</div>
+              <div onmousedown="acPick('Operating_Temperature_C','160 - &lt;170')">160 – &lt;170 °C</div>
+              <div onmousedown="acPick('Operating_Temperature_C','170 - &lt;180')">170 – &lt;180 °C</div>
+              <div onmousedown="acPick('Operating_Temperature_C','180 - &lt;190')">180 – &lt;190 °C</div>
+              <div onmousedown="acPick('Operating_Temperature_C','190 - &lt;200')">190 – &lt;200 °C</div>
+              <div onmousedown="acPick('Operating_Temperature_C','Cyclic temperature')">Cyclic temperature</div>
+              <div onmousedown="acPick('Operating_Temperature_C','มากกว่าหรือเท่ากับ 200')">≥ 200 °C</div>
+            </div>
+          </div>
         </div>
 
         <div class="field">
           <label>Environment</label>
-          <select id="Environment">
-            <option value="">— Select —</option>
-            <option value="Marine">Marine</option>
-            <option value="Industrial">Industrial</option>
-            <option value="Arid">Arid</option>
-          </select>
+          <div class="ac-wrap">
+            <input type="text" id="Environment" placeholder="e.g. Marine" autocomplete="off"
+              oninput="ac('Environment','acEnv')" onfocus="acOpen('acEnv')" onblur="acClose('acEnv')"/>
+            <div class="ac-list" id="acEnv">
+              <div onmousedown="acPick('Environment','Marine')">Marine</div>
+              <div onmousedown="acPick('Environment','Industrial')">Industrial</div>
+            </div>
+          </div>
         </div>
 
         <div class="field">
           <label>Prime Coating</label>
-          <select id="Coating_Prime">
-            <option value="">— Select —</option>
-            <option value="phenolic epoxy">Phenolic Epoxy</option>
-            <option value="zinc ethyl silicate">Zinc Ethyl Silicate</option>
-            <option value="rich zinc epoxy">Rich Zinc Epoxy</option>
-            <option value="inorganic zinc">Inorganic Zinc</option>
-            <option value="inorganic zinc self-cure">Inorganic Zinc Self-cure</option>
-            <option value="epoxy">Epoxy</option>
-            <option value="non primer">Non Primer</option>
-            <option value="silicone primer">Silicone Primer</option>
-            <option value="silicone acrylic">Silicone Acrylic</option>
-            <option value="inorganic copolymer">Inorganic Copolymer</option>
-            <option value="heat resisting silicone aluminum paint">Heat Resisting Silicone Aluminum Paint</option>
-            <option value="primed coat with 80 µ">Primed Coat with 80 µ</option>
-            <option value="Unknown">Unknown</option>
-          </select>
+          <div class="ac-wrap">
+            <input type="text" id="Coating_Prime" placeholder="e.g. phenolic epoxy" autocomplete="off"
+              oninput="ac('Coating_Prime','acPrime')" onfocus="acOpen('acPrime')" onblur="acClose('acPrime')"/>
+            <div class="ac-list" id="acPrime">
+              <div onmousedown="acPick('Coating_Prime','phenolic epoxy')">phenolic epoxy</div>
+              <div onmousedown="acPick('Coating_Prime','zinc ethyl silicate')">zinc ethyl silicate</div>
+              <div onmousedown="acPick('Coating_Prime','rich zinc epoxy')">rich zinc epoxy</div>
+              <div onmousedown="acPick('Coating_Prime','inorganic zinc')">inorganic zinc</div>
+              <div onmousedown="acPick('Coating_Prime','inorganic zinc self-cure')">inorganic zinc self-cure</div>
+              <div onmousedown="acPick('Coating_Prime','Inorganic Copolymer')">Inorganic Copolymer</div>
+              <div onmousedown="acPick('Coating_Prime','Epoxy')">Epoxy</div>
+              <div onmousedown="acPick('Coating_Prime','non primer')">non primer</div>
+              <div onmousedown="acPick('Coating_Prime','Silicone primer')">Silicone primer</div>
+              <div onmousedown="acPick('Coating_Prime','Silicone acrylic')">Silicone acrylic</div>
+              <div onmousedown="acPick('Coating_Prime','heat resisting silicone aluminum paint')">heat resisting silicone aluminum paint</div>
+              <div onmousedown="acPick('Coating_Prime','Primed coat with 80 µ')">Primed coat with 80 µ</div>
+              <div onmousedown="acPick('Coating_Prime','Unknown')">Unknown</div>
+            </div>
+          </div>
         </div>
 
         <div class="field">
           <label>Secondary Coating</label>
-          <select id="Coating_Second">
-            <option value="">— Select —</option>
-            <option value="phenolic epoxy">Phenolic Epoxy</option>
-            <option value="zinc silicate">Zinc Silicate</option>
-            <option value="modified epoxy">Modified Epoxy</option>
-            <option value="non 2nd coat">Non 2nd Coat</option>
-            <option value="Unknown">Unknown</option>
-          </select>
+          <div class="ac-wrap">
+            <input type="text" id="Coating_Second" placeholder="e.g. phenolic epoxy" autocomplete="off"
+              oninput="ac('Coating_Second','acSec')" onfocus="acOpen('acSec')" onblur="acClose('acSec')"/>
+            <div class="ac-list" id="acSec">
+              <div onmousedown="acPick('Coating_Second','phenolic epoxy')">phenolic epoxy</div>
+              <div onmousedown="acPick('Coating_Second','zinc silicate')">zinc silicate</div>
+              <div onmousedown="acPick('Coating_Second','Epoxy')">Epoxy</div>
+              <div onmousedown="acPick('Coating_Second','Silicone')">Silicone</div>
+              <div onmousedown="acPick('Coating_Second','Silicone MIO')">Silicone MIO</div>
+              <div onmousedown="acPick('Coating_Second','Silicone acrylic')">Silicone acrylic</div>
+              <div onmousedown="acPick('Coating_Second','sillicone acrylic mio')">sillicone acrylic mio</div>
+              <div onmousedown="acPick('Coating_Second','non 2nd coat')">non 2nd coat</div>
+              <div onmousedown="acPick('Coating_Second','Unknown')">Unknown</div>
+            </div>
+          </div>
         </div>
 
         <div class="field">
           <label>Top Coat</label>
-          <select id="Top_Coat">
-            <option value="">— Select —</option>
-            <option value="non top coat">Non Top Coat</option>
-            <option value="zinc silicate">Zinc Silicate</option>
-            <option value="polyurethane">Polyurethane</option>
-            <option value="2 component polyurethane">2 Component Polyurethane</option>
-            <option value="epoxy polyamide">Epoxy Polyamide</option>
-            <option value="silicone aluminum">Silicone Aluminum</option>
-            <option value="phenolic epoxy">Phenolic Epoxy</option>
-            <option value="FBE">FBE</option>
-            <option value="Unknown">Unknown</option>
-          </select>
+          <div class="ac-wrap">
+            <input type="text" id="Top_Coat" placeholder="e.g. polyurethane" autocomplete="off"
+              oninput="ac('Top_Coat','acTop')" onfocus="acOpen('acTop')" onblur="acClose('acTop')"/>
+            <div class="ac-list" id="acTop">
+              <div onmousedown="acPick('Top_Coat','non top coat')">non top coat</div>
+              <div onmousedown="acPick('Top_Coat','zinc silicate')">zinc silicate</div>
+              <div onmousedown="acPick('Top_Coat','polyurethane')">polyurethane</div>
+              <div onmousedown="acPick('Top_Coat','2 component polyurethane')">2 component polyurethane</div>
+              <div onmousedown="acPick('Top_Coat','Acrylic aliphatic polyurethane')">Acrylic aliphatic polyurethane</div>
+              <div onmousedown="acPick('Top_Coat','silicone aluminum')">silicone aluminum</div>
+              <div onmousedown="acPick('Top_Coat','silicone acrylic')">silicone acrylic</div>
+              <div onmousedown="acPick('Top_Coat','Silicone acrylic Aluminium')">Silicone acrylic Aluminium</div>
+              <div onmousedown="acPick('Top_Coat','Silicone are blasted after Aluminium')">Silicone are blasted after Aluminium</div>
+              <div onmousedown="acPick('Top_Coat','phenolic epoxy')">phenolic epoxy</div>
+              <div onmousedown="acPick('Top_Coat','Epoxy')">Epoxy</div>
+              <div onmousedown="acPick('Top_Coat','Inorganic Copolymer')">Inorganic Copolymer</div>
+              <div onmousedown="acPick('Top_Coat','silicone')">silicone</div>
+              <div onmousedown="acPick('Top_Coat','fbe')">fbe</div>
+              <div onmousedown="acPick('Top_Coat','Unknown')">Unknown</div>
+            </div>
+          </div>
         </div>
 
         <div class="field">
           <label>Insulation Type</label>
-          <select id="Insulation_Type">
-            <option value="">— Select —</option>
-            <option value="mineral fiber">Mineral Fiber</option>
-            <option value="cellular glass">Cellular Glass</option>
-            <option value="flexible aerogel blanket">Flexible Aerogel Blanket</option>
-            <option value="polyisocyanurate">Polyisocyanurate</option>
-            <option value="perlite">Perlite</option>
-            <option value="calcium silicate">Calcium Silicate</option>
-            <option value="Unknown">Unknown</option>
-          </select>
+          <div class="ac-wrap">
+            <input type="text" id="Insulation_Type" placeholder="e.g. Mineral fiber" autocomplete="off"
+              oninput="ac('Insulation_Type','acIns')" onfocus="acOpen('acIns')" onblur="acClose('acIns')"/>
+            <div class="ac-list" id="acIns">
+              <div onmousedown="acPick('Insulation_Type','Mineral fiber')">Mineral fiber</div>
+              <div onmousedown="acPick('Insulation_Type','mineral fiber')">mineral fiber</div>
+              <div onmousedown="acPick('Insulation_Type','Cellular glass')">Cellular glass</div>
+              <div onmousedown="acPick('Insulation_Type','cellular glass')">cellular glass</div>
+              <div onmousedown="acPick('Insulation_Type','flexible aerogel blanket')">flexible aerogel blanket</div>
+              <div onmousedown="acPick('Insulation_Type','Polyisocyanurate')">Polyisocyanurate</div>
+              <div onmousedown="acPick('Insulation_Type','Unknown')">Unknown</div>
+            </div>
+          </div>
         </div>
 
         <div class="field">
           <label>Vapor Barrier</label>
-          <select id="Vapor_Barrier">
-            <option value="Unknown">Unknown</option>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-          </select>
+          <div class="ac-wrap">
+            <input type="text" id="Vapor_Barrier" placeholder="Unknown" autocomplete="off"
+              oninput="ac('Vapor_Barrier','acVapor')" onfocus="acOpen('acVapor')" onblur="acClose('acVapor')"/>
+            <div class="ac-list" id="acVapor">
+              <div onmousedown="acPick('Vapor_Barrier','Unknown')">Unknown</div>
+            </div>
+          </div>
         </div>
 
         <div class="field">
           <label>Jacket Damage</label>
-          <select id="Jacket_Damage">
-            <option value="">— Select —</option>
-            <option value="No">No</option>
-            <option value="Yes">Yes</option>
-            <option value="Unknown">Unknown</option>
-          </select>
+          <div class="ac-wrap">
+            <input type="text" id="Jacket_Damage" placeholder="e.g. No" autocomplete="off"
+              oninput="ac('Jacket_Damage','acJacket')" onfocus="acOpen('acJacket')" onblur="acClose('acJacket')"/>
+            <div class="ac-list" id="acJacket">
+              <div onmousedown="acPick('Jacket_Damage','No')">No</div>
+              <div onmousedown="acPick('Jacket_Damage','Yes')">Yes</div>
+              <div onmousedown="acPick('Jacket_Damage','Unknown')">Unknown</div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -422,17 +472,19 @@
 
         <!-- Filled -->
         <div id="resultFilled" style="display:none;">
-          <!-- Main badge -->
+          <!-- Main badge — Option 5: label left, confidence pill right -->
           <div class="result-badge-wrap">
             <div class="result-badge" id="resultBadge">
-              <div class="badge-icon" id="badgeIcon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" id="badgeSvg"></svg>
+              <div class="badge-left">
+                <div class="badge-icon" id="badgeIcon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" id="badgeSvg"></svg>
+                </div>
+                <div>
+                  <div class="badge-label" id="badgeLabel">—</div>
+                  <div class="badge-predset" id="badgePredset" style="display:none;"></div>
+                </div>
               </div>
-              <div>
-                <div class="badge-label" id="badgeLabel">—</div>
-                <div class="badge-pill" id="badgePill">—</div>
-                <div class="badge-predset" id="badgePredset" style="display:none;"></div>
-              </div>
+              <div class="badge-pill" id="badgePill">—</div>
             </div>
           </div>
 
@@ -476,7 +528,7 @@
 
           <!-- Unknown detail -->
           <div class="unknown-detail" id="unknownDetail" style="display:none;">
-            <div style="font-size:12px;color:var(--slate-500);">พบค่าที่ไม่เคยอยู่ใน training data:</div>
+            <div style="font-size:12px;color:var(--slate-500);">Unseen values found in training data:</div>
             <div class="unknown-col-list" id="unknownCols"></div>
           </div>
 
@@ -511,7 +563,7 @@
 </main>
 
 <footer>
-  <div class="footer-copy">© GCME &amp; CHULA Prediction Systems Project 2025–2026</div>
+  <div class="footer-copy">© GCME &amp; Chulalongkorn University — CUI Prediction System 2025–2026</div>
   <div class="footer-links">
     <a href="#">Documentation</a>
     <a href="#">Support</a>
@@ -561,11 +613,12 @@ function renderResult(data) {
 
   if (isUnknown) {
     badge.className = 'result-badge unknown';
-    badgeLabel.textContent = 'ไม่สามารถทำนายได้';
-    badgePill.textContent  = 'Unknown';
+    badgeLabel.textContent = 'Unable to Predict';
+    badgePill.textContent  = 'Unknown Input';
     const cols = data.unknown_cols || [];
     if (cols.length > 0) {
       unknownDet.style.display = 'block';
+      document.getElementById('unknownDetail').querySelector('div').textContent = 'Unseen values found in training data:';
       document.getElementById('unknownCols').innerHTML =
         cols.map(c => `<span class="unknown-col-pill">${c}</span>`).join('');
     }
@@ -585,20 +638,20 @@ function renderResult(data) {
   const configs = {
     'yes-sure': {
       cls: 'corrosion-sure',
-      label: 'กัดกร่อน',
-      pill: 'มั่นใจ',
+      label: 'CUI Detected',
+      pill: 'High Confidence',
       tier: 1,
     },
     'no-sure': {
       cls: 'no-corrosion',
-      label: 'ไม่กัดกร่อน',
-      pill: 'มั่นใจ',
+      label: 'No CUI Detected',
+      pill: 'High Confidence',
       tier: 3,
     },
     'yes-unsure': {
       cls: 'corrosion-unsure',
-      label: 'กัดกร่อน',
-      pill: 'ไม่มั่นใจ — Safety-first',
+      label: 'CUI Suspected',
+      pill: 'Low Confidence — Safety-first',
       tier: 2,
     },
   };
