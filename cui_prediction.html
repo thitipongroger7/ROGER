@@ -74,16 +74,15 @@
     }
     .field select { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; padding-right:32px; cursor:pointer; }
     .field select:focus, .field input[type="number"]:focus, .field input[type="text"]:focus { border-color:var(--sky); box-shadow:0 0 0 3px rgba(0,172,233,0.12); }
-    .ac-wrap { position:relative; display:flex; align-items:stretch; }
-    .ac-wrap input { border-radius:8px 0 0 8px !important; border-right:none !important; flex:1; min-width:0; }
-    .ac-wrap input:focus { z-index:1; }
-    .ac-arrow { height:42px; width:36px; border:1px solid var(--slate-200); border-left:none; border-radius:0 8px 8px 0; background:white; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:background .15s; }
-    .ac-arrow:hover { background:var(--slate-50); }
-    .ac-arrow svg { width:14px; height:14px; stroke:var(--slate-400); transition:transform .2s; }
-    .ac-arrow.open svg { transform:rotate(180deg); }
-    .ac-list { display:none; position:absolute; top:100%; left:0; right:0; margin-top:2px; background:white; border:1px solid var(--slate-200); border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,0.12); z-index:500; overflow:hidden; max-height:220px; overflow-y:auto; }
+    .ac-wrap { display:flex; position:relative; }
+    .ac-wrap input { flex:1; min-width:0; border-radius:8px 0 0 8px !important; border-right:none !important; height:42px; padding:0 12px; border:1px solid var(--slate-200); font-family:'DM Sans',sans-serif; font-size:13px; color:var(--slate-900); background:white; outline:none; transition:border-color .18s,box-shadow .18s; }
+    .ac-wrap input:focus { border-color:var(--sky); box-shadow:0 0 0 3px rgba(0,172,233,0.12); }
+    .ac-toggle { flex-shrink:0; width:36px; height:42px; border:1px solid var(--slate-200); border-left:none; border-radius:0 8px 8px 0; background:white; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .15s; }
+    .ac-toggle:hover { background:var(--slate-100); }
+    .ac-toggle svg { width:13px; height:13px; stroke:var(--slate-400); pointer-events:none; }
+    .ac-list { display:none; position:absolute; top:44px; left:0; right:0; background:white; border:1px solid var(--slate-200); border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,0.12); z-index:9999; max-height:220px; overflow-y:auto; }
     .ac-list.open { display:block; }
-    .ac-list div { padding:9px 13px; font-size:13px; color:var(--slate-900); cursor:pointer; transition:background .1s; }
+    .ac-list div { padding:9px 13px; font-size:13px; color:var(--slate-900); cursor:pointer; }
     .ac-list div:hover { background:var(--slate-50); color:var(--navy); font-weight:600; }
     .ac-list div+div { border-top:1px solid var(--slate-100); }
 
@@ -267,7 +266,7 @@
           <div class="ac-wrap">
             <input type="text" id="Substrate" placeholder="e.g. CS" autocomplete="off"
               oninput="ac('Substrate','acSub')" onfocus="acOpen('acSub')" onblur="acClose('acSub')"/>
-            <button type="button" class="ac-arrow" onclick="acToggle('acSub',this)" tabindex="-1">
+            <button type="button" class="ac-toggle" onmousedown="acToggle('acSub')" tabindex="-1">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
             </button>
             <div class="ac-list" id="acSub">
@@ -289,7 +288,7 @@
           <div class="ac-wrap">
             <input type="text" id="Operating_Temperature_C" placeholder="e.g. 80 - <90" autocomplete="off"
               oninput="ac('Operating_Temperature_C','acTemp')" onfocus="acOpen('acTemp')" onblur="acClose('acTemp')"/>
-            <button type="button" class="ac-arrow" onclick="acToggle('acTemp',this)" tabindex="-1">
+            <button type="button" class="ac-toggle" onmousedown="acToggle('acTemp')" tabindex="-1">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
             </button>
             <div class="ac-list" id="acTemp">
@@ -328,7 +327,7 @@
           <div class="ac-wrap">
             <input type="text" id="Environment" placeholder="e.g. Marine" autocomplete="off"
               oninput="ac('Environment','acEnv')" onfocus="acOpen('acEnv')" onblur="acClose('acEnv')"/>
-            <button type="button" class="ac-arrow" onclick="acToggle('acEnv',this)" tabindex="-1">
+            <button type="button" class="ac-toggle" onmousedown="acToggle('acEnv')" tabindex="-1">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
             </button>
             <div class="ac-list" id="acEnv">
@@ -343,7 +342,7 @@
           <div class="ac-wrap">
             <input type="text" id="Coating_Prime" placeholder="e.g. phenolic epoxy" autocomplete="off"
               oninput="ac('Coating_Prime','acPrime')" onfocus="acOpen('acPrime')" onblur="acClose('acPrime')"/>
-            <button type="button" class="ac-arrow" onclick="acToggle('acPrime',this)" tabindex="-1">
+            <button type="button" class="ac-toggle" onmousedown="acToggle('acPrime')" tabindex="-1">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
             </button>
             <div class="ac-list" id="acPrime">
@@ -369,7 +368,7 @@
           <div class="ac-wrap">
             <input type="text" id="Coating_Second" placeholder="e.g. phenolic epoxy" autocomplete="off"
               oninput="ac('Coating_Second','acSec')" onfocus="acOpen('acSec')" onblur="acClose('acSec')"/>
-            <button type="button" class="ac-arrow" onclick="acToggle('acSec',this)" tabindex="-1">
+            <button type="button" class="ac-toggle" onmousedown="acToggle('acSec')" tabindex="-1">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
             </button>
             <div class="ac-list" id="acSec">
@@ -391,7 +390,7 @@
           <div class="ac-wrap">
             <input type="text" id="Top_Coat" placeholder="e.g. polyurethane" autocomplete="off"
               oninput="ac('Top_Coat','acTop')" onfocus="acOpen('acTop')" onblur="acClose('acTop')"/>
-            <button type="button" class="ac-arrow" onclick="acToggle('acTop',this)" tabindex="-1">
+            <button type="button" class="ac-toggle" onmousedown="acToggle('acTop')" tabindex="-1">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
             </button>
             <div class="ac-list" id="acTop">
@@ -419,7 +418,7 @@
           <div class="ac-wrap">
             <input type="text" id="Insulation_Type" placeholder="e.g. Mineral fiber" autocomplete="off"
               oninput="ac('Insulation_Type','acIns')" onfocus="acOpen('acIns')" onblur="acClose('acIns')"/>
-            <button type="button" class="ac-arrow" onclick="acToggle('acIns',this)" tabindex="-1">
+            <button type="button" class="ac-toggle" onmousedown="acToggle('acIns')" tabindex="-1">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
             </button>
             <div class="ac-list" id="acIns">
@@ -439,7 +438,7 @@
           <div class="ac-wrap">
             <input type="text" id="Vapor_Barrier" placeholder="Unknown" autocomplete="off"
               oninput="ac('Vapor_Barrier','acVapor')" onfocus="acOpen('acVapor')" onblur="acClose('acVapor')"/>
-            <button type="button" class="ac-arrow" onclick="acToggle('acVapor',this)" tabindex="-1">
+            <button type="button" class="ac-toggle" onmousedown="acToggle('acVapor')" tabindex="-1">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
             </button>
             <div class="ac-list" id="acVapor">
@@ -453,7 +452,7 @@
           <div class="ac-wrap">
             <input type="text" id="Jacket_Damage" placeholder="e.g. No" autocomplete="off"
               oninput="ac('Jacket_Damage','acJacket')" onfocus="acOpen('acJacket')" onblur="acClose('acJacket')"/>
-            <button type="button" class="ac-arrow" onclick="acToggle('acJacket',this)" tabindex="-1">
+            <button type="button" class="ac-toggle" onmousedown="acToggle('acJacket')" tabindex="-1">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
             </button>
             <div class="ac-list" id="acJacket">
