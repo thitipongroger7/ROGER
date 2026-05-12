@@ -278,7 +278,7 @@ class ModelManager:
         return unknown_cols
 
     # ------------------------------------------------------------------
-    def predict(self, input_dict: dict) -> dict:
+    def predict(self, input_dict: dict, model: str = "hybrid") -> dict:
         if not self.is_trained():
             raise RuntimeError("โมเดลยังไม่ได้ Train")
 
@@ -309,7 +309,21 @@ class ModelManager:
         # RF Probability
         rf_prob = float(self.model.predict_proba(X_input)[0, 1])
 
-        # Bayesian Prior
+        # ── RF Only ──────────────────────────────────────────────────
+        if model == "rf":
+            prediction = "Yes" if rf_prob >= THRESHOLD else "No"
+            pred_set   = "{Yes}" if rf_prob >= THRESHOLD else "{No}"
+            return {
+                "prediction":  prediction,
+                "pred_set":    pred_set,
+                "rf_prob":     round(rf_prob * 100, 1),
+                "prior_prob":  None,
+                "bayes_prob":  None,
+                "q_value":     round(self.q_value, 4),
+                "unknown_cols": [],
+            }
+
+        # ── Hybrid (RF + Bayesian Prior + Conformal) ─────────────────
         try:
             import prior_v2 as P2
             prior_prob = P2.compute_prior(
@@ -393,4 +407,3 @@ class ModelManager:
             print(f"[ModelManager] โหลด Model สำเร็จ — Accuracy: {self.stats.get('accuracy')}%")
         except Exception as e:
             print(f"[ModelManager] โหลด Model ไม่สำเร็จ ({e}) — ต้อง Train ใหม่")
-
