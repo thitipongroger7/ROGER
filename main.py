@@ -96,8 +96,10 @@ class PredictRequest(BaseModel):
     Top_Coat:                str
     Insulation_Type:         str
     Vapor_Barrier:           str
+    model:                   str = "hybrid"  # "rf" หรือ "hybrid"
     Environment:             str
     Jacket_Damage:           str
+    model:                   str = "hybrid"  # "rf" or "hybrid"
 
 class LoginRequest(BaseModel):
     username: str
@@ -181,7 +183,7 @@ def predict(data: PredictRequest):
         )
     try:
         input_dict = data.dict()
-        result     = manager.predict(input_dict)
+        result     = manager.predict(input_dict, model=data.model)
 
         # ── Unknown ──────────────────────────────────────────────────
         if result["prediction"] == "Unknown":
@@ -342,4 +344,3 @@ threading.Thread(target=_self_ping, daemon=True).start()
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
-
