@@ -406,13 +406,13 @@
 
   async function loadHistory() {
     const tbody = document.getElementById('historyBody');
-    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--slate-400);padding:32px;">Loading...</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;color:var(--slate-400);padding:32px;">Loading...</td></tr>`;
     try {
       const res = await fetch(`${API_BASE}/api/history`);
       allHistory = await res.json();
       renderHistory();
     } catch {
-      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--slate-400);padding:32px;">Cannot load history.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;color:var(--slate-400);padding:32px;">Cannot load history.</td></tr>`;
     }
   }
 
@@ -422,7 +422,7 @@
     const filtered = filterVal ? sorted.filter(h => h.date.toLowerCase().includes(filterVal)) : sorted;
     const tbody = document.getElementById('historyBody');
     if (filtered.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--slate-400);padding:32px;">${filterVal ? 'No records found.' : 'No prediction history yet.'}</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;color:var(--slate-400);padding:32px;">${filterVal ? 'No records found.' : 'No prediction history yet.'}</td></tr>`;
       return;
     }
     tbody.innerHTML = filtered.map((h, i) => {
@@ -449,7 +449,6 @@
         <td><span class="${predCls}">${predLabel}</span></td>
         <td style="text-align:center;font-size:12px;font-weight:600;">${confLabel}</td>
         <td style="text-align:center;font-weight:600;">${bayes}</td>
-        <td><span class="badge ${tierCls}">${tier}</span></td>
         <td><button class="detail-btn" onclick="openDetail(${h.id})">Details</button></td>
         <td style="text-align:center;"><button class="icon-btn" onclick="openNote(${h.id})" title="Note">${noteIcon}</button></td>
         <td style="text-align:center;"><button class="icon-btn" onclick="deleteRecord(${h.id})" title="Delete"><svg width='18' height='18' viewBox='0 0 18 18' fill='none'><rect x='2' y='5' width='14' height='12' rx='2' fill='#FEF2F2' stroke='#EF4444' stroke-width='1.2'/><rect x='1' y='3' width='16' height='3.5' rx='1.5' fill='#EF4444'/><rect x='6' y='1' width='6' height='3' rx='1' fill='#EF4444'/><line x1='6' y1='8.5' x2='6' y2='14' stroke='#EF4444' stroke-width='1.5' stroke-linecap='round'/><line x1='9' y1='8.5' x2='9' y2='14' stroke='#EF4444' stroke-width='1.5' stroke-linecap='round'/><line x1='12' y1='8.5' x2='12' y2='14' stroke='#EF4444' stroke-width='1.5' stroke-linecap='round'/></svg></button></td>
