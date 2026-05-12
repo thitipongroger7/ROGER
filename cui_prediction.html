@@ -731,13 +731,17 @@ function renderResult(data) {
     setBar('rfOnlyBar', 'rfOnlyPct', data.rf_probability || (data.probability * 100) || 0);
   }
 
-  // Tier
-  tierSec.style.display = 'block';
-  const tier = cfg.tier;
-  [1,2,3].forEach(t => {
-    document.getElementById('tier-row-' + t).className =
-      t === tier ? 'tier-row active-t' + t : 'tier-row inactive';
-  });
+  // Tier — แสดงเฉพาะ Hybrid
+  if (selectedModel === 'hybrid') {
+    tierSec.style.display = 'block';
+    const tier = cfg.tier;
+    [1,2,3].forEach(t => {
+      document.getElementById('tier-row-' + t).className =
+        t === tier ? 'tier-row active-t' + t : 'tier-row inactive';
+    });
+  } else {
+    tierSec.style.display = 'none';
+  }
 
   sessionStorage.setItem('lastResult', JSON.stringify({ input: getPayload(), model: selectedModel, ...data }));
 }
