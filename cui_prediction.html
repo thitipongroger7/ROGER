@@ -119,13 +119,13 @@
     .result-badge.no-corrosion     { background:#F0FDF4; border:1px solid #BBF7D0; }
     .result-badge.corrosion-unsure { background:#FFFBEB; border:1px solid #FDE68A; }
     .result-badge.unknown          { background:var(--slate-50); border:1px solid var(--slate-200); }
-    .badge-left { display:flex; align-items:center; gap:10px; flex:1; min-width:0; }
+    .badge-left { display:flex; align-items:center; gap:10px; flex:1; min-width:120px; }
     .badge-icon { width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
     .corrosion-sure .badge-icon    { background:#FEE2E2; }
     .no-corrosion .badge-icon      { background:#DCFCE7; }
     .corrosion-unsure .badge-icon  { background:#FEF3C7; }
     .unknown .badge-icon           { background:var(--slate-100); }
-    .badge-label { font-size:16px; font-weight:700; white-space:nowrap; }
+    .badge-label { font-size:15px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .corrosion-sure .badge-label   { color:#991B1B; }
     .no-corrosion .badge-label     { color:#14532D; }
     .corrosion-unsure .badge-label { color:#78350F; }
