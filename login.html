@@ -305,10 +305,13 @@ async function doLogin() {
 
     if (res.ok && data.success) {
       sessionStorage.setItem('cui_logged_in', 'true');
+      sessionStorage.setItem('cui_username', username);
       if (remember) {
         localStorage.setItem('cui_remember', 'true');
+        localStorage.setItem('cui_username', username);
       } else {
         localStorage.removeItem('cui_remember');
+        localStorage.removeItem('cui_username');
       }
       window.location.replace('cui_prediction.html');
     } else {
