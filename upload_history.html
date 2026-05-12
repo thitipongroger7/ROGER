@@ -103,9 +103,9 @@
     .badge.tier1 { background:#FEE2E2; color:#991B1B; white-space:nowrap; }
     .badge.tier2 { background:#FEF3C7; color:#92400E; white-space:nowrap; }
     .badge.tier3 { background:#D1FAE5; color:#065F46; white-space:nowrap; }
-    .pred-cui    { background:#FEE2E2; color:#991B1B; border-radius:5px; padding:2px 8px; font-size:12px; font-weight:600; }
-    .pred-unc    { background:#FEF3C7; color:#92400E; border-radius:5px; padding:2px 8px; font-size:12px; font-weight:600; }
-    .pred-no     { background:#D1FAE5; color:#065F46; border-radius:5px; padding:2px 8px; font-size:12px; font-weight:600; }
+    .pred-cui    { background:#FEE2E2; color:#991B1B; border-radius:5px; padding:2px 8px; font-size:12px; font-weight:600; white-space:nowrap; display:inline-block; }
+    .pred-unc    { background:#FEF3C7; color:#92400E; border-radius:5px; padding:2px 8px; font-size:12px; font-weight:600; white-space:nowrap; display:inline-block; }
+    .pred-no     { background:#D1FAE5; color:#065F46; white-space:nowrap; display:inline-block; border-radius:5px; padding:2px 8px; font-size:12px; font-weight:600; }
     .icon-btn { background: none; border: none; cursor: pointer; padding: 6px; border-radius: 6px; transition: background .15s; font-size: 18px; }
     .icon-btn:hover { background: var(--slate-100); }
     .detail-btn { background: var(--slate-100); border: none; border-radius: 6px; padding: 5px 12px; font-size: 12px; font-weight: 600; color: var(--navy); cursor: pointer; transition: background .15s; }
@@ -257,7 +257,7 @@
             <th>Date</th>
             <th>Time</th>
             <th>Model</th>
-            <th>CUI Prediction</th>
+            <th style="min-width:130px;">CUI Prediction</th>
             <th>Confidence</th>
             <th>Bayes %</th>
             <th>Details</th>
@@ -277,8 +277,9 @@
 <div class="confirm-overlay" id="clearOverlay">
   <div class="confirm-box">
     <div class="confirm-title">Clear All History</div>
-    <div class="confirm-sub">Enter your login password to confirm deletion of all prediction history.</div>
-    <input type="password" class="confirm-input" id="clearPwd" placeholder="Enter login password"/>
+    <div class="confirm-sub">Enter your login credentials to confirm deletion of all prediction history.</div>
+    <input type="text" class="confirm-input" id="clearUser" placeholder="Username" style="margin-bottom:8px;"/>
+    <input type="password" class="confirm-input" id="clearPwd" placeholder="Password"/>
     <div class="confirm-err" id="clearErr">Incorrect password. Please try again.</div>
     <div class="confirm-btns">
       <button class="confirm-cancel" onclick="hideClearModal()">Cancel</button>
@@ -407,6 +408,7 @@
 
   function showClearModal() {
     document.getElementById('clearPwd').value = '';
+    if(document.getElementById('clearUser')) document.getElementById('clearUser').value = '';
     document.getElementById('clearErr').classList.remove('show');
     document.getElementById('clearOverlay').classList.add('show');
     setTimeout(() => document.getElementById('clearPwd').focus(), 100);
@@ -418,13 +420,14 @@
 
   async function doClearAll() {
     const pwd = document.getElementById('clearPwd').value.trim();
+    const uname = sessionStorage.getItem('cui_username') || localStorage.getItem('cui_username') || document.getElementById('clearUser')?.value?.trim() || 'admin';
     document.getElementById('clearErr').classList.remove('show');
     try {
       // verify password ผ่าน /api/login ก่อน
       const loginRes = await fetch(API_BASE + '/api/login', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ username: loginUser || 'admin', password: pwd })
+        body: JSON.stringify({ username: uname, password: pwd })
       });
       if (!loginRes.ok) {
         document.getElementById('clearErr').textContent = 'Incorrect password. Please try again.';
@@ -450,13 +453,19 @@
 
   async function loadHistory() {
     const tbody = document.getElementById('historyBody');
-    tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;color:var(--slate-400);padding:32px;">Loading...</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;color:var(--slate-400);padding:32px;">Loading history...</td></tr>`;
     try {
-      const res = await fetch(`${API_BASE}/api/history`);
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 30000);
+      const res = await fetch(`${API_BASE}/api/history`, { signal: controller.signal });
+      clearTimeout(timeout);
+      if (!res.ok) throw new Error('Server error ' + res.status);
       allHistory = await res.json();
       renderHistory();
-    } catch {
-      tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;color:var(--slate-400);padding:32px;">Cannot load history.</td></tr>`;
+    } catch(e) {
+      tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;color:var(--slate-400);padding:32px;">
+        ${e.name === 'AbortError' ? 'Timeout — history is taking too long to load. Please refresh.' : 'Cannot load history: ' + e.message}
+      </td></tr>`;
     }
   }
 
