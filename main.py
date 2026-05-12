@@ -6,6 +6,7 @@
 import os
 import json
 import threading
+import concurrent.futures
 import time
 import requests as req_lib
 from datetime import datetime
@@ -283,14 +284,22 @@ def get_history():
     if not sb:
         raise HTTPException(status_code=500, detail="Supabase not connected")
     try:
-        files   = sb.storage.from_("models").list("history")
-        records = []
-        for f in files:
+        files = sb.storage.from_("models").list("history")
+        if not files:
+            return []
+
+        def fetch_one(fname):
             try:
-                data = sb.storage.from_("models").download(f"history/{f['name']}")
-                records.append(json.loads(data.decode()))
+                data = sb.storage.from_("models").download(f"history/{fname}")
+                return json.loads(data.decode())
             except Exception as e:
-                print(f"[history] skip {f['name']}: {e}")
+                print(f"[history] skip {fname}: {e}")
+                return None
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as pool:
+            results = list(pool.map(fetch_one, [f["name"] for f in files]))
+
+        records = [r for r in results if r is not None]
         records.sort(key=lambda x: x.get("id", 0), reverse=True)
         return records
     except Exception as e:
