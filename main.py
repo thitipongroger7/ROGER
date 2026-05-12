@@ -196,11 +196,11 @@ def predict(data: PredictRequest):
             }
 
         # ── Prediction Set → Final Result ─────────────────────────────
-        pred_set   = result["pred_set"]
-        bayes_pct  = result["bayes_prob"]
-        prediction = result["prediction"]  # Yes / No (Safety-first applied)
+        pred_set   = result["pred_set"] or ("{Yes}" if result["prediction"] == "Yes" else "{No}")
+        bayes_pct  = result["bayes_prob"] if result["bayes_prob"] is not None else result["rf_prob"]
+        prediction = result["prediction"]
 
-        # Risk level จาก Bayes%
+        # Risk level จาก bayes_pct
         if bayes_pct >= 60:   risk_level = "High"
         elif bayes_pct >= 30: risk_level = "Medium"
         else:                 risk_level = "Low"
@@ -210,7 +210,7 @@ def predict(data: PredictRequest):
 
         # Next inspection year
         current_year = datetime.now().year
-        next_yr = current_year + (1 if tier == 1 else 3 if tier == 2 else 5)
+        next_yr = current_year + (1 if tier == 1 else 3 if tier == 2 else 5) if tier else current_year + 5
 
         return {
             "status":               "success",
