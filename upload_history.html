@@ -277,8 +277,8 @@
 <div class="confirm-overlay" id="clearOverlay">
   <div class="confirm-box">
     <div class="confirm-title">Clear All History</div>
-    <div class="confirm-sub">Enter your password to confirm deletion of all prediction history.</div>
-    <input type="password" class="confirm-input" id="clearPwd" placeholder="Password"/>
+    <div class="confirm-sub">Enter your login password to confirm deletion of all prediction history.</div>
+    <input type="password" class="confirm-input" id="clearPwd" placeholder="Enter login password"/>
     <div class="confirm-err" id="clearErr">Incorrect password. Please try again.</div>
     <div class="confirm-btns">
       <button class="confirm-cancel" onclick="hideClearModal()">Cancel</button>
@@ -324,6 +324,7 @@
 
 <script>
   const API_BASE = "https://mtcu-cui.onrender.com";
+  const loginUser = sessionStorage.getItem('cui_username') || localStorage.getItem('cui_username') || 'admin';
   let currentNoteId = null;
 
   function showToast(msg, type = 'info') {
@@ -423,7 +424,7 @@
       const loginRes = await fetch(API_BASE + '/api/login', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ username: 'admin', password: pwd })
+        body: JSON.stringify({ username: loginUser || 'admin', password: pwd })
       });
       if (!loginRes.ok) {
         document.getElementById('clearErr').textContent = 'Incorrect password. Please try again.';
