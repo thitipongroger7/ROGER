@@ -112,14 +112,14 @@
     .result-empty svg { opacity:.2; margin-bottom:10px; }
     .result-empty-text { font-size:13px; color:var(--slate-400); }
 
-    /* Main result badge — Option 5 style */
+    /* Main result badge — label left, confidence right */
     .result-badge-wrap { padding:16px 18px; border-bottom:1px solid var(--slate-100); }
     .result-badge { border-radius:10px; padding:14px 16px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
     .result-badge.corrosion-sure   { background:#FEF2F2; border:1px solid #FECACA; }
     .result-badge.no-corrosion     { background:#F0FDF4; border:1px solid #BBF7D0; }
     .result-badge.corrosion-unsure { background:#FFFBEB; border:1px solid #FDE68A; }
     .result-badge.unknown          { background:var(--slate-50); border:1px solid var(--slate-200); }
-    .badge-left { display:flex; align-items:center; gap:10px; }
+    .badge-left { display:flex; align-items:center; gap:10px; flex:1; min-width:0; }
     .badge-icon { width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
     .corrosion-sure .badge-icon    { background:#FEE2E2; }
     .no-corrosion .badge-icon      { background:#DCFCE7; }
@@ -130,7 +130,18 @@
     .no-corrosion .badge-label     { color:#14532D; }
     .corrosion-unsure .badge-label { color:#78350F; }
     .unknown .badge-label          { color:var(--slate-500); }
-    .badge-predset { font-size:11px; color:var(--slate-500); margin-top:3px; font-family:'DM Mono',monospace; }
+    .badge-predset { font-size:11px; margin-top:3px; font-family:'DM Mono',monospace; }
+    .corrosion-sure .badge-predset   { color:#A32D2D; }
+    .no-corrosion .badge-predset     { color:#15803D; }
+    .corrosion-unsure .badge-predset { color:#92400E; }
+    .unknown .badge-predset          { color:var(--slate-400); }
+    .badge-right { text-align:right; flex-shrink:0; }
+    .badge-conf { font-size:12px; font-weight:600; }
+    .corrosion-sure .badge-conf    { color:#991B1B; }
+    .no-corrosion .badge-conf      { color:#15803D; }
+    .corrosion-unsure .badge-conf  { color:#92400E; }
+    .unknown .badge-conf           { color:var(--slate-500); }
+    .badge-safety { font-size:11px; margin-top:3px; font-style:italic; color:#B45309; }
     .badge-pill { padding:4px 12px; border-radius:99px; font-size:11px; font-weight:600; white-space:nowrap; flex-shrink:0; }
     .corrosion-sure .badge-pill    { background:#FEE2E2; color:#B91C1C; }
     .no-corrosion .badge-pill      { background:#DCFCE7; color:#15803D; }
@@ -504,7 +515,7 @@
 
         <!-- Filled -->
         <div id="resultFilled" style="display:none;">
-          <!-- Main badge — Option 5: label left, confidence pill right -->
+          <!-- Main badge: label+predset left, conf+safety right -->
           <div class="result-badge-wrap">
             <div class="result-badge" id="resultBadge">
               <div class="badge-left">
@@ -516,7 +527,10 @@
                   <div class="badge-predset" id="badgePredset" style="display:none;"></div>
                 </div>
               </div>
-              <div class="badge-pill" id="badgePill">—</div>
+              <div class="badge-right">
+                <div class="badge-conf" id="badgeConf">—</div>
+                <div class="badge-safety" id="badgeSafety" style="display:none;">Safety-first</div>
+              </div>
             </div>
           </div>
 
@@ -626,7 +640,8 @@ function renderResult(data) {
 
   const badge       = document.getElementById('resultBadge');
   const badgeLabel  = document.getElementById('badgeLabel');
-  const badgePill   = document.getElementById('badgePill');
+  const badgeConf   = document.getElementById('badgeConf');
+  const badgeSafety = document.getElementById('badgeSafety');
   const badgePredset= document.getElementById('badgePredset');
   const probSection = document.getElementById('probSection');
   const rfOnlySec   = document.getElementById('rfOnlySection');
@@ -646,7 +661,8 @@ function renderResult(data) {
   if (isUnknown) {
     badge.className = 'result-badge unknown';
     badgeLabel.textContent = 'Unable to Predict';
-    badgePill.textContent  = 'Unknown Input';
+    badgeConf.textContent  = 'Unknown Input';
+    badgeSafety.style.display = 'none';
     const cols = data.unknown_cols || [];
     if (cols.length > 0) {
       unknownDet.style.display = 'block';
@@ -671,31 +687,37 @@ function renderResult(data) {
     'yes-sure': {
       cls: 'corrosion-sure',
       label: 'CUI Detected',
-      pill: 'High Confidence',
+      conf: 'High Confidence',
+      safety: false,
       tier: 1,
     },
     'no-sure': {
       cls: 'no-corrosion',
       label: 'No CUI Detected',
-      pill: 'High Confidence',
+      conf: 'High Confidence',
+      safety: false,
       tier: 3,
     },
     'yes-unsure': {
       cls: 'corrosion-unsure',
       label: 'CUI Suspected',
-      pill: 'Low Confidence — Safety-first',
+      conf: 'Uncertain',
+      safety: true,
       tier: 2,
     },
   };
 
   const cfg = configs[dispType];
-  badge.className   = 'result-badge ' + cfg.cls;
+  badge.className        = 'result-badge ' + cfg.cls;
   badgeLabel.textContent = cfg.label;
-  badgePill.textContent  = cfg.pill;
+  badgeConf.textContent  = cfg.conf;
+  badgeSafety.style.display = cfg.safety ? 'block' : 'none';
 
   if (selectedModel === 'hybrid' && predSet) {
     badgePredset.style.display = 'block';
     badgePredset.textContent   = 'Prediction Set = ' + predSet;
+  } else {
+    badgePredset.style.display = 'none';
   }
 
   // Prob bars
