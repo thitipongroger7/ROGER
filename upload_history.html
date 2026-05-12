@@ -538,7 +538,9 @@
   window.addEventListener('DOMContentLoaded', function() {
     var session  = sessionStorage.getItem('cui_logged_in') === 'true';
     var remember = localStorage.getItem('cui_remember') === 'true';
-    if (!session && !remember) window.location.replace("login.html");
+    if (!session && !remember) { window.location.replace("login.html"); return; }
+    loadHistory();
+    loadStats();
   });
 </script>
 </body>
